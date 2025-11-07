@@ -12,7 +12,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
     Button btnGoInfo;
+    Button btnGoGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +28,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         btnGoInfo = findViewById(R.id.goInfoBtn);
+        btnGoGame = findViewById(R.id.goGameBtn);
         btnGoInfo.setOnClickListener(this);
+        btnGoGame.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
+
         if (v == btnGoInfo){
             Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+            startActivity(intent);
+        }
+        else if (v == btnGoGame){
+            Intent intent = new Intent(MainActivity.this, GameActivity.class);
             startActivity(intent);
         }
     }
