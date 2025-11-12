@@ -6,7 +6,7 @@ plugins {
 android {
     namespace = "com.arielfriedman.arminesweeperproject"
     compileSdk {
-        version = release(34)
+        version = release(35)
     }
 
     defaultConfig {
