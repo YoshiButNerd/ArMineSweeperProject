@@ -270,7 +270,7 @@ public class DatabaseService {
     /// @see DatabaseCallback
     /// @see FirebaseAuth
 
-    public void LoginUser(@NotNull final String email,final String password,
+    public static void LoginUser(@NotNull final String email,final String password,
                           @Nullable final DatabaseCallback<String> callback) {
 
         FirebaseAuth mAuth = FirebaseAuth.getInstance();

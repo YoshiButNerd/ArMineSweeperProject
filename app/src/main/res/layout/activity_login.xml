@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login">
+    tools:context=".LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,15 +21,15 @@
             app:srcCompat="@mipmap/minesweeperlogo" />
 
         <EditText
-            android:id="@+id/editTextText"
+            android:id="@+id/etLoginEmail"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:ems="10"
             android:inputType="text"
-            android:hint="שם משתמש"/>
+            android:hint="אימייל"/>
 
         <EditText
-            android:id="@+id/editTextTextPassword"
+            android:id="@+id/etLoginPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:ems="10"
@@ -42,11 +42,11 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btnLoginLog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:text="login" />
 
             <Button
                 android:id="@+id/button2"
@@ -54,6 +54,22 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Button" />
+
+            <TextView
+                android:id="@+id/tvRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="register" />
+
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="100dp"
+            android:layout_height="107dp"
+            android:layout_weight="1"
+            android:text="TextView" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
