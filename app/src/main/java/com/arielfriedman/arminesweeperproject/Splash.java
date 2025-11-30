@@ -13,7 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class splash extends AppCompatActivity {
+public class Splash extends AppCompatActivity {
 
     private ImageView myImageView;
 
@@ -34,9 +34,9 @@ public class splash extends AppCompatActivity {
             public void run(){
                 try{
                     synchronized (this){
-                        MediaPlayer music = MediaPlayer.create(splash.this, R.raw.elevmusic);
+                        MediaPlayer music = MediaPlayer.create(Splash.this, R.raw.elevmusic);
                         music.start();
-                        Animation myFadeInAnimation = AnimationUtils.loadAnimation(splash.this, R.anim.tween);
+                        Animation myFadeInAnimation = AnimationUtils.loadAnimation(Splash.this, R.anim.tween);
                         wait(2500);
                         music.stop();
                     }
@@ -45,7 +45,7 @@ public class splash extends AppCompatActivity {
                 }
                 finish();
 
-                Intent intent = new Intent(splash.this, LoginActivity.class);
+                Intent intent = new Intent(Splash.this, LoginActivity.class);
                 startActivity(intent);
             }
 

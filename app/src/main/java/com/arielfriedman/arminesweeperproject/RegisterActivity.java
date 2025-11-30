@@ -1,6 +1,8 @@
 package com.arielfriedman.arminesweeperproject;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,8 +34,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private EditText etEmail, etPassword, etFName, etLName, etPhone;
     private Button btnRegister, btnLogin;
-    private TextView tvLogin;
     private DatabaseService databaseService;
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return insets;
         });
 
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         databaseService = DatabaseService.getInstance();
         /// get the views
@@ -57,7 +62,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         etPhone = findViewById(R.id.etPhone);
         btnRegister = findViewById(R.id.btnRegister);
         btnLogin = findViewById(R.id.btnLogin);
-        tvLogin = findViewById(R.id.btnLogin);
 
         /// set the click listener
         btnRegister.setOnClickListener(this);
@@ -87,7 +91,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             registerUser(fName, lName, phone, email, password);
         } else if (v.getId() == btnLogin.getId()) {
             /// Navigate back to Login Activity
-            finish();
+            Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(loginIntent);
         }
     }
 
@@ -114,11 +119,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 Log.d("TAG", "createUserInDatabase: User created successfully");
                 /// save the user to shared preferences
                 user.setId(uid);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                editor.putString("email", user.getEmail());
+                editor.putString("password", user.getPassword());
+
+                editor.commit();
                 Log.d("TAG", "createUserInDatabase: Redirecting to MainActivity");
                 /// Redirect to MainActivity and clear back stack to prevent user from going back to register screen
                 Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
                 /// clear the back stack (clear history) and start the MainActivity
                 mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
                 startActivity(mainIntent);
             }
 

@@ -1,5 +1,7 @@
 package com.arielfriedman.arminesweeperproject;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.content.Intent;
@@ -30,9 +32,10 @@ import com.arielfriedman.arminesweeperproject.services.DatabaseService;
         private static final String TAG = "LoginActivity";
         private DatabaseService databaseService;
         private EditText etEmail, etPassword;
-        private Button btnLogin;
-        private TextView tvRegister;
+        private Button btnLogin, btnGoRegister;
 
+        public static final String MyPREFERENCES = "MyPrefs" ;
+        SharedPreferences sharedpreferences;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +48,22 @@ import com.arielfriedman.arminesweeperproject.services.DatabaseService;
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
                 return insets;
             });
+            sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
             /// get the views
             databaseService = DatabaseService.getInstance();
             etEmail = findViewById(R.id.etLoginEmail);
             etPassword = findViewById(R.id.etLoginPassword);
             btnLogin = findViewById(R.id.btnLoginLog);
-            tvRegister = findViewById(R.id.tvRegister);
+            btnGoRegister = findViewById(R.id.btnGoRegisterReg);
+            String email2 = sharedpreferences.getString("email", "");
+            String pass2 = sharedpreferences.getString("password", "");
+            etEmail.setText(email2);
+            etPassword.setText(pass2);
 
             /// set the click listener
             btnLogin.setOnClickListener(this);
-            tvRegister.setOnClickListener(this);
+            btnGoRegister.setOnClickListener(this);
         }
 
         @Override
@@ -77,7 +85,7 @@ import com.arielfriedman.arminesweeperproject.services.DatabaseService;
 
                 /// Login user
                 loginUser(email, password);
-            } else if (v.getId() == tvRegister.getId()) {
+            } else if (v.getId() == btnGoRegister.getId()) {
                 /// Navigate to Register Activity
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(registerIntent);

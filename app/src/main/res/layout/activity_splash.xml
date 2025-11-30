@@ -5,31 +5,37 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".splash">
+    tools:context=".Splash">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
+        tools:layout_editor_absoluteY="1dp"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="טוען את המשחק"
+            android:textSize="50sp"
+            android:textStyle="bold"/>
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="177dp"
             android:layout_height="190dp"
-            app:srcCompat="@mipmap/minesweeperlogo" />
+            app:srcCompat="@mipmap/minesweeperlogo"
+            android:layout_marginTop="10dp"/>
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="150dp"
+            android:layout_marginTop="20dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
