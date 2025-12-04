@@ -29,12 +29,17 @@ import com.arielfriedman.arminesweeperproject.services.DatabaseService;
     /// When the user is logged in, they are redirected to the main activity
     public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+
+
         private static final String TAG = "LoginActivity";
         private DatabaseService databaseService;
         private EditText etEmail, etPassword;
         private Button btnLogin, btnGoRegister;
 
         public static final String MyPREFERENCES = "MyPrefs" ;
+
+        static final String ADMINEMAIL = "gigaadmin@gmail.com";
+        static final String ADMINPASS = "adminpass123";
         SharedPreferences sharedpreferences;
 
         @Override
@@ -85,6 +90,10 @@ import com.arielfriedman.arminesweeperproject.services.DatabaseService;
 
                 /// Login user
                 loginUser(email, password);
+                if (email == ADMINEMAIL && password == ADMINPASS){
+                    Intent registerIntent = new Intent(LoginActivity.this, AdminMainActivity.class);
+                    startActivity(registerIntent);
+                }
             } else if (v.getId() == btnGoRegister.getId()) {
                 /// Navigate to Register Activity
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);

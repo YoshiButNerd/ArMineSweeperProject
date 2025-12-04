@@ -1,6 +1,9 @@
 package com.arielfriedman.arminesweeperproject;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,7 +11,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class AdminMainActivity extends AppCompatActivity {
+public class AdminMainActivity extends AppCompatActivity implements View.OnClickListener{
+
+    Button aBtnGoInfo;
+    Button aBtnGoGame;
+    Button aBtnGoUserInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +27,28 @@ public class AdminMainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        aBtnGoInfo = findViewById(R.id.aGoInfoBtn);
+        aBtnGoGame = findViewById(R.id.aGoGameBtn);
+        aBtnGoUserInfo = findViewById(R.id.usersInfoBtn);
+        aBtnGoInfo.setOnClickListener(this);
+        aBtnGoGame.setOnClickListener(this);
     }
-}
+        @Override
+        public void onClick(View v) {
+
+            if (v == aBtnGoInfo){
+                Intent intent = new Intent(AdminMainActivity.this, InfoActivity.class);
+                startActivity(intent);
+            }
+            else if (v == aBtnGoGame){
+                Intent intent = new Intent(AdminMainActivity.this, GameActivity.class);
+                startActivity(intent);
+            }//change intent destination below
+            else if (v == aBtnGoUserInfo){
+                Intent intent = new Intent(AdminMainActivity.this, InfoActivity.class);
+                startActivity(intent);
+            }
+
+        }
+    }

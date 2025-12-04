@@ -7,4 +7,46 @@
     android:layout_height="match_parent"
     tools:context=".AdminMainActivity">
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/AdminTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Admin Page"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="45sp"
+            android:layout_marginTop="125dp"/>
+
+        <Button
+            android:id="@+id/aGoGameBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="שחק"
+            android:layout_marginTop="75dp"/>
+
+        <Button
+            android:id="@+id/usersInfoBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="פרטי משתמשים"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:id="@+id/aGoInfoBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="אודות"
+            android:layout_marginTop="20dp"/>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

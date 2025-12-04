@@ -22,19 +22,24 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="MineSweeperThing"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="45sp"
+            android:layout_marginTop="125dp"/>
 
         <Button
             android:id="@+id/goGameBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="שחק" />
+            android:text="שחק"
+            android:layout_marginTop="75dp"/>
 
         <Button
             android:id="@+id/goInfoBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="אודות" />
+            android:text="אודות"
+            android:layout_marginTop="20dp"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
