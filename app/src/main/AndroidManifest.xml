@@ -12,9 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ArMineSweeperProject">
         <activity
-            android:name=".ActShowData"
-            android:exported="false" />
-        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
