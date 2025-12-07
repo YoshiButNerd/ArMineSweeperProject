@@ -80,19 +80,22 @@ import com.arielfriedman.arminesweeperproject.services.DatabaseService;
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
 
-                /// log the email and password
-                Log.d(TAG, "onClick: Email: " + email);
-                Log.d(TAG, "onClick: Password: " + password);
-
-                Log.d(TAG, "onClick: Validating input...");
-                /// Validate input
-                Log.d(TAG, "onClick: Logging in user...");
-
-                /// Login user
-                loginUser(email, password);
-                if (email == ADMINEMAIL && password == ADMINPASS){
+                if (email.equals(ADMINEMAIL) && password.equals(ADMINPASS)) {
+                    Log.d(TAG, "user is admin");
                     Intent registerIntent = new Intent(LoginActivity.this, AdminMainActivity.class);
                     startActivity(registerIntent);
+                }
+                else {
+                    /// log the email and password
+                    Log.d(TAG, "onClick: Email: " + email);
+                    Log.d(TAG, "onClick: Password: " + password);
+
+                    Log.d(TAG, "onClick: Validating input...");
+                    /// Validate input
+                    Log.d(TAG, "onClick: Logging in user...");
+
+                    /// Login user
+                    loginUser(email, password);
                 }
             } else if (v.getId() == btnGoRegister.getId()) {
                 /// Navigate to Register Activity
