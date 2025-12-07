@@ -50,7 +50,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Initviews();
+    }
 
+    public void Initviews() {
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         databaseService = DatabaseService.getInstance();

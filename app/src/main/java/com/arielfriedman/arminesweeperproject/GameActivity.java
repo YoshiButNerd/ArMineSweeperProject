@@ -18,7 +18,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     final static int ROWS = 20;
     final static int COLS = 10;
-    int mineCount = ROWS * COLS /2;
+    int mineCount = ROWS * COLS /4;
     boolean firstClick = true;
 
     Tile[][] tilesArr = new Tile[ROWS][COLS];
@@ -35,7 +35,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
         GridLayout mineGridLayout = findViewById(R.id.gridLayout);
         mineGridLayout.setColumnCount(COLS);
         mineGridLayout.setRowCount(ROWS);
@@ -105,7 +104,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tile.setWasRevealed(true);
         btn.setEnabled(false);
 
-        if (tile.getIsMine()) {
+        if (firstClick) {
+            TileFirstClick(tile, btn);
+        }
+        else if (tile.getIsMine()) {
             btn.setText("X");
             btn.setBackgroundColor(getColor(R.color.red));
         } else {
@@ -113,6 +115,40 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             btn.setText(count == 0 ? "" : String.valueOf(count));
             btn.setBackgroundColor(getColor(R.color.light_gray));
         }
+    }
+    //does'nt work
+    public void TileFirstClick(Tile tile, Button btn) {
+      /*  for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c < COLS; c++) {
+                if (tilesArr[r][c].getIsMine()) {
+                    int placed = 0;
+                    Random moveRandom = new Random();
+                    while (placed < 1) {
+                        int row = moveRandom.nextInt(ROWS);
+                        int col = moveRandom.nextInt(COLS);
+
+                        if (!tilesArr[row][col].getIsMine()) {
+                            tilesArr[row][col].setMine(true);
+                            placed++;
+                        }
+                    }
+                }
+                int count = 0;
+                for (int dr = -1; dr <= 1; dr++) {
+                    for (int dc = -1; dc <= 1; dc++) {
+                        int nr = r + dr;
+                        int nc = c + dc;
+                        if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+                            onTileClicked(nr, nc);
+                        }
+                    }
+                }
+
+                tilesArr[r][c].setMinesAround(count);
+            }
+        }
+
+       */
     }
 
     public boolean onTileLongPressed(int row, int col) {
@@ -129,13 +165,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void placeMines() {
         Random random = new Random();
         int placed = 0;
-
         while (placed < mineCount) {
-            int r = random.nextInt(ROWS);
-            int c = random.nextInt(COLS);
+            int row = random.nextInt(ROWS);
+            int col = random.nextInt(COLS);
 
-            if (!tilesArr[r][c].getIsMine()) {
-                tilesArr[r][c].setMine(true);
+            if (!tilesArr[row][col].getIsMine()) {
+                tilesArr[row][col].setMine(true);
                 placed++;
             }
         }

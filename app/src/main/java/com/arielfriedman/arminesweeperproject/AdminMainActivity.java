@@ -27,13 +27,17 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        aBtnGoInfo = findViewById(R.id.aGoInfoBtn);
-        aBtnGoGame = findViewById(R.id.aGoGameBtn);
-        aBtnGoUserInfo = findViewById(R.id.usersInfoBtn);
-        aBtnGoInfo.setOnClickListener(this);
-        aBtnGoGame.setOnClickListener(this);
+        Initviews();
     }
+
+        public void Initviews() {
+            aBtnGoInfo = findViewById(R.id.aGoInfoBtn);
+            aBtnGoGame = findViewById(R.id.aGoGameBtn);
+            aBtnGoUserInfo = findViewById(R.id.usersInfoBtn);
+            aBtnGoInfo.setOnClickListener(this);
+            aBtnGoGame.setOnClickListener(this);
+        }
+
         @Override
         public void onClick(View v) {
 

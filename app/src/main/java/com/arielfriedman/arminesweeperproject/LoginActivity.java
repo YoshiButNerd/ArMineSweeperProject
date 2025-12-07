@@ -53,6 +53,10 @@ import com.arielfriedman.arminesweeperproject.services.DatabaseService;
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
                 return insets;
             });
+            Initviews();
+        }
+
+        public void Initviews() {
             sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
             /// get the views

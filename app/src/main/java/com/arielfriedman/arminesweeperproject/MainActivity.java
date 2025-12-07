@@ -26,7 +26,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Initviews();
+    }
 
+    public void Initviews() {
         btnGoInfo = findViewById(R.id.goInfoBtn);
         btnGoGame = findViewById(R.id.goGameBtn);
         btnGoInfo.setOnClickListener(this);
