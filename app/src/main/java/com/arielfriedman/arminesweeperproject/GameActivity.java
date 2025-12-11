@@ -41,7 +41,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         buildBoard(mineGridLayout);
         placeMines();
-        calculateMineCounts();
+        calculateAllMineCounts();
     }
 
     public void buildBoard(GridLayout mineGridLayout) {
@@ -104,51 +104,46 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tile.setWasRevealed(true);
         btn.setEnabled(false);
 
-        if (firstClick) {
-            TileFirstClick(tile, btn);
-        }
-        else if (tile.getIsMine()) {
+        if (tile.getIsMine() && !firstClick) {
             btn.setText("X");
             btn.setBackgroundColor(getColor(R.color.red));
         } else {
+            tile.setMine(false);
+            //calculateTileMineCount(tile);
             int count = tile.getMinesAround();
             btn.setText(count == 0 ? "" : String.valueOf(count));
             btn.setBackgroundColor(getColor(R.color.light_gray));
         }
+        if (firstClick) {
+            firstClick = false;
+            TileFirstClick(tile, btn);
+        }
     }
-    //does'nt work
+
     public void TileFirstClick(Tile tile, Button btn) {
-      /*  for (int r = 0; r < ROWS; r++) {
-            for (int c = 0; c < COLS; c++) {
-                if (tilesArr[r][c].getIsMine()) {
-                    int placed = 0;
-                    Random moveRandom = new Random();
-                    while (placed < 1) {
-                        int row = moveRandom.nextInt(ROWS);
-                        int col = moveRandom.nextInt(COLS);
-
-                        if (!tilesArr[row][col].getIsMine()) {
-                            tilesArr[row][col].setMine(true);
-                            placed++;
-                        }
-                    }
+        int row = tile.getRow();
+        int col = tile.getCol();
+        for (int dr = -1; dr <= 1; dr++) {
+            for (int dc = -1; dc <= 1; dc++) {
+                int nr = row + dr;
+                int nc = col + dc;
+                if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && tilesArr[nr][nc].getIsMine()) {
+                    tilesArr[nr][nc].setMine(false);
                 }
-                int count = 0;
-                for (int dr = -1; dr <= 1; dr++) {
-                    for (int dc = -1; dc <= 1; dc++) {
-                        int nr = r + dr;
-                        int nc = c + dc;
-                        if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
-                            onTileClicked(nr, nc);
-                        }
-                    }
-                }
-
-                tilesArr[r][c].setMinesAround(count);
             }
         }
-
-       */
+        calculateAllMineCounts();
+        row = tile.getRow();
+        col = tile.getCol();
+        for (int dr = -1; dr <= 1; dr++) {
+            for (int dc = -1; dc <= 1; dc++) {
+                int nr = row + dr;
+                int nc = col + dc;
+                if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS){
+                    onTileClicked(nr, nc);
+                }
+            }
+        }
     }
 
     public boolean onTileLongPressed(int row, int col) {
@@ -176,24 +171,47 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void calculateMineCounts() {
-        for (int r = 0; r < ROWS; r++) {
-            for (int c = 0; c < COLS; c++) {
-                if (tilesArr[r][c].getIsMine()) continue;
+    public void calculateTileMineCount(Tile tile) {
+        int row = tile.getRow();
+        int col = tile.getCol();
+
+        int count = 0;
+
+        for (int dr = -1; dr <= 1; dr++) {
+            for (int dc = -1; dc <= 1; dc++) {
+                int nr = row + dr;
+                int nc = col + dc;
+                if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && tilesArr[nr][nc].getIsMine()) {
+                    count++;
+                }
+            }
+        }
+        tile.setMinesAround(count);
+    }
+    public void calculateAllMineCounts() {
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                tilesArr[row][col].setMinesAround(0);
+            }
+        }
+
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                if (tilesArr[row][col].getIsMine()) continue;
 
                 int count = 0;
 
                 for (int dr = -1; dr <= 1; dr++) {
                     for (int dc = -1; dc <= 1; dc++) {
-                        int nr = r + dr;
-                        int nc = c + dc;
+                        int nr = row + dr;
+                        int nc = col + dc;
                         if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && tilesArr[nr][nc].getIsMine()) {
                             count++;
                         }
                     }
                 }
 
-                tilesArr[r][c].setMinesAround(count);
+                tilesArr[row][col].setMinesAround(count);
             }
         }
     }

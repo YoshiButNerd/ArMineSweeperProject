@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.arielfriedman.arminesweeperproject.model.Tile;
-import com.arielfriedman.arminesweeperproject.model.Item;
+//import com.arielfriedman.arminesweeperproject.model.Item;
 import com.arielfriedman.arminesweeperproject.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -401,7 +401,7 @@ public class DatabaseService {
 
     // region Item section
 
-    /// create a new Item in the database
+  /*  /// create a new Item in the database
     /// @param Item the Item object to create
     /// @param callback the callback to call when the operation is completed
     ///              the callback will receive void
@@ -450,7 +450,7 @@ public class DatabaseService {
     }
 
     // endregion Item section
-
+*/
     // region Tile section
 
     /// create a new Tile in the database

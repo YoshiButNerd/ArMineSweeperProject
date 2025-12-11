@@ -1,4 +1,4 @@
-package com.arielfriedman.arminesweeperproject.model;
+package com.arielfriedman.arminesweeperproject.Items;
 
 public class Item {
     private String id;
@@ -47,5 +47,3 @@ public class Item {
                 '}';
     }
 }
-
-

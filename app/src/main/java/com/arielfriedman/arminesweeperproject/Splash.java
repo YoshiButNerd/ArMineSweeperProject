@@ -37,7 +37,7 @@ public class Splash extends AppCompatActivity {
                         MediaPlayer music = MediaPlayer.create(Splash.this, R.raw.elevmusic);
                         music.start();
                         Animation myFadeInAnimation = AnimationUtils.loadAnimation(Splash.this, R.anim.tween);
-                        wait(2500);
+                        wait(1000);
                         music.stop();
                     }
                 }
