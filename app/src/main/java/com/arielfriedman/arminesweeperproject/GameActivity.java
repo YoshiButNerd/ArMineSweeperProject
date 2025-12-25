@@ -21,7 +21,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     final static int ROWS = 20;
     final static int COLS = 10;
-    int mineCount = ROWS * COLS /4;
+    int mineCount = ROWS * COLS /5;
     boolean firstClick = true;
 
     Tile[][] tilesArr = new Tile[ROWS][COLS];
