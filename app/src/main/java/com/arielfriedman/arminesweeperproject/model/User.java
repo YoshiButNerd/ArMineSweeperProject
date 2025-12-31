@@ -56,6 +56,8 @@ public class User {
         this.lname = lname;
     }
 
+    public String getFullName() { return fname + " " + lname; }
+
     public String getPhone() {
         return phone;
     }
