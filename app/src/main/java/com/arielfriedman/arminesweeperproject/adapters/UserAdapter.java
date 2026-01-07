@@ -19,16 +19,20 @@ import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
 
-    public interface OnUserClickListener {
-        void onUserClick(User user);
-        void onLongUserClick(User user);
-    }
+//    public interface OnUserClickListener {
+//        void onUserClick(User user);
+//        void onLongUserClick(User user);
+//    }
 
     private final List<User> userList;
-    private final OnUserClickListener onUserClickListener;
-    public UserAdapter(@Nullable final OnUserClickListener onUserClickListener) {
+//    private final OnUserClickListener onUserClickListener;
+    public UserAdapter() {
         userList = new ArrayList<>();
-        this.onUserClickListener = onUserClickListener;
+
+    }
+    public UserAdapter(ArrayList users) {
+        userList =users;
+
     }
 
     @NonNull
@@ -66,16 +70,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
 
         holder.itemView.setOnClickListener(v -> {
-            if (onUserClickListener != null) {
-                onUserClickListener.onUserClick(user);
-            }
+          //  if (onUserClickListener != null) {
+         //       onUserClickListener.onUserClick(user);
+         //   }
         });
 
         holder.itemView.setOnLongClickListener(v -> {
-            if (onUserClickListener != null) {
-                onUserClickListener.onLongUserClick(user);
-            }
-            return true;
+        //    if (onUserClickListener != null) {
+        //        onUserClickListener.onLongUserClick(user);
+        //    }
+                return true;
         });
 
     }

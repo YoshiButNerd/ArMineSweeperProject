@@ -18,6 +18,7 @@ import com.arielfriedman.arminesweeperproject.adapters.UserAdapter;
 import com.arielfriedman.arminesweeperproject.model.User;
 import com.arielfriedman.arminesweeperproject.services.DatabaseService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsersListActivity extends AppCompatActivity {
@@ -25,6 +26,9 @@ public class UsersListActivity extends AppCompatActivity {
     private static final String TAG = "UsersListActivity";
     private UserAdapter userAdapter;
     private TextView tvUserCount;
+    private DatabaseService databaseService;
+
+    ArrayList<User>users=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,25 +41,12 @@ public class UsersListActivity extends AppCompatActivity {
             return insets;
         });
 
+
+        databaseService=DatabaseService.getInstance();
         RecyclerView usersList = findViewById(R.id.rv_users_list);
         tvUserCount = findViewById(R.id.tv_user_count);
         usersList.setLayoutManager(new LinearLayoutManager(this));
-        userAdapter = new UserAdapter(new UserAdapter.OnUserClickListener() {
-      /*      @Override
-            public void onUserClick(User user) {
-                // Handle user click
-                Log.d(TAG, "User clicked: " + user);
-                Intent intent = new Intent(UsersListActivity.this, UserProfileActivity.class);
-                intent.putExtra("USER_UID", user.getId());
-                startActivity(intent);
-            }
-    */
-            @Override
-            public void onLongUserClick(User user) {
-                // Handle long user click
-                Log.d(TAG, "User long clicked: " + user);
-            }
-        });
+        userAdapter=new UserAdapter(users);
         usersList.setAdapter(userAdapter);
     }
 
@@ -63,7 +54,9 @@ public class UsersListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        databaseService.getUserList(new DatabaseService.DatabaseCallback<>() {
+        databaseService.getUserList(new DatabaseService.DatabaseCallback<List<User>>() {
+
+
             @Override
             public void onCompleted(List<User> users) {
                 userAdapter.setUserList(users);
