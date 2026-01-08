@@ -84,6 +84,13 @@ import com.arielfriedman.arminesweeperproject.services.DatabaseService;
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
 
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                editor.putString("email", email);
+                editor.putString("password", password);
+
+                editor.commit();
+
                 if (email.equals(ADMINEMAIL) && password.equals(ADMINPASS)) {
                     Log.d(TAG, "user is admin");
                     Intent registerIntent = new Intent(LoginActivity.this, AdminMainActivity.class);

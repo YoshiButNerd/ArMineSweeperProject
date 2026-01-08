@@ -20,7 +20,7 @@
             android:layout_height="0dp"
             tools:layout_editor_absoluteX="-33dp"
             tools:layout_editor_absoluteY="118dp"
-            android:layout_weight="20"/>
+            android:layout_weight="20" />
 
         <TextView
             android:id="@+id/tv_user_count"
@@ -30,7 +30,10 @@
             android:layout_weight="1"
             android:layout_marginTop="50dp"
             tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="268dp" />
+            tools:layout_editor_absoluteY="268dp"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:gravity="center"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
