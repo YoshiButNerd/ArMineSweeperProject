@@ -18,6 +18,7 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
     Button aBtnGoUserInfo;
 
     Button btnGoUsersList;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,19 +47,19 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
         public void onClick(View v) {
 
             if (v == aBtnGoInfo){
-                Intent intent = new Intent(AdminMainActivity.this, InfoActivity.class);
+                intent = new Intent(AdminMainActivity.this, InfoActivity.class);
                 startActivity(intent);
             }
             else if (v == aBtnGoGame){
-                Intent intent = new Intent(AdminMainActivity.this, GameActivity.class);
+                intent = new Intent(AdminMainActivity.this, GameActivity.class);
                 startActivity(intent);
             }
             else if (v == aBtnGoUserInfo){
-                Intent intent = new Intent(AdminMainActivity.this, InfoActivity.class);
+                intent = new Intent(AdminMainActivity.this, InfoActivity.class);
                 startActivity(intent);
             }
             else if (v == btnGoUsersList){
-                Intent intent = new Intent(AdminMainActivity.this, UsersListActivity.class);
+                intent = new Intent(AdminMainActivity.this, UsersListActivity.class);
                 startActivity(intent);
             }
         }

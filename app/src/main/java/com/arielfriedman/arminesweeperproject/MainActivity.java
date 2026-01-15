@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Button btnGoInfo;
     Button btnGoGame;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +41,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
 
         if (v == btnGoInfo){
-            Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+            intent = new Intent(MainActivity.this, InfoActivity.class);
             startActivity(intent);
         }
         else if (v == btnGoGame){
-            Intent intent = new Intent(MainActivity.this, GameActivity.class);
+            intent = new Intent(MainActivity.this, GameActivity.class);
             startActivity(intent);
         }
     }

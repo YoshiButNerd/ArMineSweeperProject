@@ -16,29 +16,34 @@
             android:id="@+id/tv_item_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="שם משתמש"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/tv_item_user_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="אימייל משתמש"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/tv_item_user_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="טלפון משתמש"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/tv_user_initials"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="אות פרטי ומשפחה"
+            android:gravity="center" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_user_role"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAlignment="center"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

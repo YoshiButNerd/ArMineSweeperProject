@@ -190,35 +190,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void calculateAllMineCounts() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                tilesArr[row][col].setMinesAround(0);
-            }
-        }
-        for (int row = 0; row < ROWS; row++) {
-            for (int col = 0; col < COLS; col++) {
                 if (tilesArr[row][col].getIsMine()) continue;
-
-                int count = 0;
-
-                for (int iRow = -1; iRow <= 1; iRow++) {
-                    for (int iCol = -1; iCol <= 1; iCol++) {
-                        int tileRow = row + iRow;
-                        int tileCol = col + iCol;
-                        if (tileRow >= 0 && tileRow < ROWS && tileCol >= 0 && tileCol < COLS && tilesArr[tileRow][tileCol].getIsMine()) {
-                            count++;
-                        }
-                    }
-                }
-
-                tilesArr[row][col].setMinesAround(count);
-             /* Button btn = tileBtnArr[row][col];
-                if (count == 0) {
-                    btn.setText("");
-                }
-                else {
-                    btn.setText(String.valueOf(count));
-                }
-
-             */
+                calculateTileMineCount(tilesArr[row][col]);
             }
         }
     }
@@ -228,19 +201,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 if (!tilesArr[row][col].getWasRevealed() || tilesArr[row][col].getIsMine()) continue;
-                int count = 0;
+                int count = calculateTileMineCount(tilesArr[row][col]);
 
-                for (int iRow = -1; iRow <= 1; iRow++) {
-                    for (int iCol = -1; iCol <= 1; iCol++) {
-                        int tileRow = row + iRow;
-                        int tileCol = col + iCol;
-                        if (tileRow >= 0 && tileRow < ROWS && tileCol >= 0 && tileCol < COLS && tilesArr[tileRow][tileCol].getIsMine()) {
-                            count++;
-                        }
-                    }
-                }
-
-                tilesArr[row][col].setMinesAround(count);
                 Button btn = tileBtnArr[row][col];
                 if (count == 0) {
                     btn.setText("");
@@ -248,7 +210,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 else {
                     btn.setText(String.valueOf(count));
                 }
-
 
             }
         }
@@ -259,15 +220,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         return (int) (dp * density);
     }
 
-
-
-
-
-
-
-
-    //dont have a use yet
-    public void calculateTileMineCount(Tile tile) {
+    public int calculateTileMineCount(Tile tile) {
         int row = tile.getRow();
         int col = tile.getCol();
 
@@ -283,6 +236,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         tile.setMinesAround(count);
+        return count;
     }
 }
 
