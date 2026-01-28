@@ -117,7 +117,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if (tile.getMinesAround() == 0) {
                 btn.setText("");
                 Log.d("GameActivity", "tile is empty (clear around)");
-                clearMinesAround(tile, btn);
+                clearMinesAround(tile);
             }
             else {
                 btn.setText(String.valueOf(tile.getMinesAround()));
@@ -128,11 +128,26 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("GameActivity", "first click activated");
             firstClick = false;
             btn.setText("");
-            clearMinesAround(tile, btn);
+            clearMinesAround(tile);
+            //try to make the board beatable but not break the game over it (so only 3 times)
+            for (int i = 1; i <=3; i++){
+                clearMineBricks();
+            }
         }
     }
 
-    public void clearMinesAround(Tile tile, Button btn) {
+    public boolean onTileLongPressed(int row, int col) {
+        Tile tile = tilesArr[row][col];
+        Button btn = tileBtnArr[row][col];
+
+        if (tile.getWasRevealed()) return true;
+
+        tile.toggleFlagged();
+        btn.setText(tile.isFlagged() ? "⚑" : "");
+        return true;
+    }
+
+    public void clearMinesAround(Tile tile) {
         int row = tile.getRow();
         int col = tile.getCol();
         int countMines = 0;
@@ -162,15 +177,23 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         calculateAllRevealedMineCounts();
     }
 
-    public boolean onTileLongPressed(int row, int col) {
-        Tile tile = tilesArr[row][col];
-        Button btn = tileBtnArr[row][col];
-
-        if (tile.getWasRevealed()) return true;
-
-        tile.toggleFlagged();
-        btn.setText(tile.isFlagged() ? "⚑" : "");
-        return true;
+    public void clearMineBricks() {
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                if (!tilesArr[row][col].getWasRevealed()) continue;
+                int count = calculateTileMineCount(tilesArr[row][col]);
+                if (row == 0 || row == ROWS-1) {
+                    count += 3;
+                }
+                if (col == 0 || col == COLS-1) {
+                    count += 3;
+                }
+                if (count >= 8) {
+                    clearMinesAround(tilesArr[row][col]);
+                    // another mine brick may be created
+                }
+            }
+        }
     }
 
     public void placeMines(int mineCount) {
