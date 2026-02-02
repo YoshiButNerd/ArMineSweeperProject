@@ -129,8 +129,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             firstClick = false;
             btn.setText("");
             clearMinesAround(tile);
-            //try to make the board beatable but not break the game over it (so only 4 times)
-            for (int i = 1; i <=4; i++){
+            //try to make the board beatable but not break the game over it (so only 3 times)
+            for (int i = 1; i <=3; i++){
                 clearMineBricks();
             }
         }

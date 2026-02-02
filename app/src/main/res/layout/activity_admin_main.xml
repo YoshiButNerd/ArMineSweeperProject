@@ -35,13 +35,6 @@
             android:layout_marginTop="75dp"/>
 
         <Button
-            android:id="@+id/usersInfoBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="פרטי משתמשים"
-            android:layout_marginTop="20dp"/>
-
-        <Button
             android:id="@+id/aGoInfoBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,6 +46,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="טבלת משתמשים"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:id="@+id/goLoginBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="התנתק"
             android:layout_marginTop="20dp"/>
     </LinearLayout>
 

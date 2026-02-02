@@ -2,6 +2,8 @@ package com.arielfriedman.arminesweeperproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,7 +11,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class InfoActivity extends AppCompatActivity {
+public class InfoActivity extends AppCompatActivity implements View.OnClickListener {
+
+    Button btnGoBack;
+    Intent intent;
+    String previousActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +28,18 @@ public class InfoActivity extends AppCompatActivity {
             return insets;
         });
 
+        btnGoBack = findViewById(R.id.goBackBtn);
+        btnGoBack.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        previousActivity = getIntent().getStringExtra("PREVIOUS_ACTIVITY");
+        if (previousActivity.equals("AdminMainActivity"))
+            intent = new Intent(InfoActivity.this, AdminMainActivity.class);
+        else if (previousActivity.equals("MainActivity"))
+            intent = new Intent(InfoActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }

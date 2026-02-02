@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Button btnGoInfo;
     Button btnGoGame;
+    Button btnGoLogin;
     Intent intent;
 
     @Override
@@ -33,8 +34,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void Initviews() {
         btnGoInfo = findViewById(R.id.goInfoBtn);
         btnGoGame = findViewById(R.id.goGameBtn);
+        btnGoLogin = findViewById(R.id.goLoginBtn);
         btnGoInfo.setOnClickListener(this);
         btnGoGame.setOnClickListener(this);
+        btnGoLogin.setOnClickListener(this);
     }
 
     @Override
@@ -42,11 +45,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (v == btnGoInfo){
             intent = new Intent(MainActivity.this, InfoActivity.class);
-            startActivity(intent);
+            intent.putExtra("PREVIOUS_ACTIVITY", InfoActivity.class.getSimpleName());
         }
         else if (v == btnGoGame){
             intent = new Intent(MainActivity.this, GameActivity.class);
-            startActivity(intent);
         }
+        else if (v == btnGoLogin){
+            intent = new Intent(MainActivity.this, LoginActivity.class);
+        }
+        startActivity(intent);
     }
 }

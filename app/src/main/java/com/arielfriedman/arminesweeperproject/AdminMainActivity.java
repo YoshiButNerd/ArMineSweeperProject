@@ -15,9 +15,9 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
 
     Button aBtnGoInfo;
     Button aBtnGoGame;
-    Button aBtnGoUserInfo;
+    Button aBtnGoLogin;
+    Button aBtnGoUsersList;
 
-    Button btnGoUsersList;
     Intent intent;
 
     @Override
@@ -36,31 +36,29 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
         public void Initviews() {
             aBtnGoInfo = findViewById(R.id.aGoInfoBtn);
             aBtnGoGame = findViewById(R.id.aGoGameBtn);
-            aBtnGoUserInfo = findViewById(R.id.usersInfoBtn);
-            btnGoUsersList = findViewById(R.id.goInfoUsersBtn);
+            aBtnGoUsersList = findViewById(R.id.goInfoUsersBtn);
+            aBtnGoLogin = findViewById(R.id.goLoginBtn);
             aBtnGoInfo.setOnClickListener(this);
             aBtnGoGame.setOnClickListener(this);
-            btnGoUsersList.setOnClickListener(this);
+            aBtnGoLogin.setOnClickListener(this);
+            aBtnGoUsersList.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-
             if (v == aBtnGoInfo){
                 intent = new Intent(AdminMainActivity.this, InfoActivity.class);
-                startActivity(intent);
+                intent.putExtra("PREVIOUS_ACTIVITY", InfoActivity.class.getSimpleName());
             }
             else if (v == aBtnGoGame){
                 intent = new Intent(AdminMainActivity.this, GameActivity.class);
-                startActivity(intent);
             }
-            else if (v == aBtnGoUserInfo){
-                intent = new Intent(AdminMainActivity.this, InfoActivity.class);
-                startActivity(intent);
+            else if (v == aBtnGoLogin){
+                intent = new Intent(AdminMainActivity.this, LoginActivity.class);
             }
-            else if (v == btnGoUsersList){
+            else if (v == aBtnGoUsersList){
                 intent = new Intent(AdminMainActivity.this, UsersListActivity.class);
-                startActivity(intent);
             }
+            startActivity(intent);
         }
     }
