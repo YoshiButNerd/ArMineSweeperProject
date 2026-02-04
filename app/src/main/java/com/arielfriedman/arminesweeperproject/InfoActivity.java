@@ -16,7 +16,6 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
     Button btnGoBack;
     Intent intent;
     String previousActivity;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,10 +26,12 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Initviews();
+    }
 
+    public void Initviews() {
         btnGoBack = findViewById(R.id.goBackBtn);
         btnGoBack.setOnClickListener(this);
-
     }
 
     @Override

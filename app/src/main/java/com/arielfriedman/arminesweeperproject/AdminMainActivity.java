@@ -48,7 +48,7 @@ public class AdminMainActivity extends AppCompatActivity implements View.OnClick
         public void onClick(View v) {
             if (v == aBtnGoInfo){
                 intent = new Intent(AdminMainActivity.this, InfoActivity.class);
-                intent.putExtra("PREVIOUS_ACTIVITY", InfoActivity.class.getSimpleName());
+                intent.putExtra("PREVIOUS_ACTIVITY", "AdminMainActivity");
             }
             else if (v == aBtnGoGame){
                 intent = new Intent(AdminMainActivity.this, GameActivity.class);

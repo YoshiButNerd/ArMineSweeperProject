@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (v == btnGoInfo){
             intent = new Intent(MainActivity.this, InfoActivity.class);
-            intent.putExtra("PREVIOUS_ACTIVITY", InfoActivity.class.getSimpleName());
+            intent.putExtra("PREVIOUS_ACTIVITY", "MainActivity");
         }
         else if (v == btnGoGame){
             intent = new Intent(MainActivity.this, GameActivity.class);
