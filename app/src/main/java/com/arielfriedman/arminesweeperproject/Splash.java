@@ -13,6 +13,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.arielfriedman.arminesweeperproject.BaseActivity.BaseActivity;
+
 public class Splash extends AppCompatActivity {
 
     private ImageView myImageView;
@@ -27,6 +29,7 @@ public class Splash extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         myImageView = findViewById(R.id.imageView);
 
         Thread mSplashThread = new Thread(){

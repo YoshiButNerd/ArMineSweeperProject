@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ArMineSweeperProject">
         <activity
+            android:name=".BaseActivity.BaseActivity"
+            android:exported="false" />
+        <activity
             android:name=".UsersListActivity"
             android:exported="false" />
         <activity

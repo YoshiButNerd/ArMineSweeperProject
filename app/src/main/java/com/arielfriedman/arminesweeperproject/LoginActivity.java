@@ -18,6 +18,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.arielfriedman.arminesweeperproject.BaseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.R;
 import com.arielfriedman.arminesweeperproject.model.User;
 import com.arielfriedman.arminesweeperproject.services.DatabaseService;
@@ -27,9 +28,7 @@ import com.arielfriedman.arminesweeperproject.services.DatabaseService;
     /// It contains fields for the user to enter their email and password
     /// It also contains a button to log in the user
     /// When the user is logged in, they are redirected to the main activity
-    public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-
-
+    public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
         private static final String TAG = "LoginActivity";
         private DatabaseService databaseService;
@@ -47,7 +46,7 @@ import com.arielfriedman.arminesweeperproject.services.DatabaseService;
             super.onCreate(savedInstanceState);
             EdgeToEdge.enable(this);
             /// set the layout for the activity
-            setContentView(R.layout.activity_login);
+            setContentLayout(R.layout.activity_login);
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
                 Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

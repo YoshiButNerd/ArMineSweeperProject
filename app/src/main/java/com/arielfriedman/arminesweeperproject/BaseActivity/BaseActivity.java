@@ -1,9 +1,9 @@
-package com.arielfriedman.arminesweeperproject;
+package com.arielfriedman.arminesweeperproject.BaseActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,19 +11,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.arielfriedman.arminesweeperproject.BaseActivity.BaseActivity;
+import com.arielfriedman.arminesweeperproject.R;
 
-public class InfoActivity extends BaseActivity implements View.OnClickListener {
+public class BaseActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnGoBack;
-    Intent intent;
-    String previousActivity;
+    ImageButton settingsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentLayout(R.layout.activity_info);
+        setContentView(R.layout.activity_base);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -33,17 +31,17 @@ public class InfoActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void initViews() {
-        btnGoBack = findViewById(R.id.goBackBtn);
-        btnGoBack.setOnClickListener(this);
+        settingsBtn = findViewById(R.id.settingsBtn);
+        settingsBtn.setOnClickListener(this);
+    }
+
+    protected void setContentLayout(int layoutResId) {
+        FrameLayout contentFrame = findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(layoutResId, contentFrame, true);
     }
 
     @Override
     public void onClick(View v) {
-        previousActivity = getIntent().getStringExtra("PREVIOUS_ACTIVITY");
-        if (previousActivity.equals("AdminMainActivity"))
-            intent = new Intent(InfoActivity.this, AdminMainActivity.class);
-        else if (previousActivity.equals("MainActivity"))
-            intent = new Intent(InfoActivity.this, MainActivity.class);
-        startActivity(intent);
+
     }
 }
