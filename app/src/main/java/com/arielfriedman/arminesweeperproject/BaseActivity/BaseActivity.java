@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.R;
+import com.arielfriedman.arminesweeperproject.SpecialClasses.DialogFragment;
 
 public class BaseActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,6 +43,11 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        openDialog();
+    }
 
+    public void openDialog() {
+        DialogFragment dialogFragment = new DialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), "settings");
     }
 }

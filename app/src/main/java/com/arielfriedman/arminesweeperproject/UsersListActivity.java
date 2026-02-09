@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.arielfriedman.arminesweeperproject.BaseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.adapters.UserAdapter;
 import com.arielfriedman.arminesweeperproject.model.User;
 import com.arielfriedman.arminesweeperproject.services.DatabaseService;
@@ -24,7 +25,7 @@ import com.arielfriedman.arminesweeperproject.services.DatabaseService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsersListActivity extends AppCompatActivity implements View.OnClickListener {
+public class UsersListActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "UsersListActivity";
     private UserAdapter userAdapter;
@@ -38,7 +39,7 @@ public class UsersListActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_user_list);
+        setContentLayout(R.layout.activity_user_list);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
