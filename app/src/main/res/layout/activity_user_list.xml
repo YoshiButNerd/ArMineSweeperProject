@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UsersListActivity">
+    tools:context=".UsersListActivity"
+    android:background="@color/material_dynamic_neutral_variant90">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,20 +21,36 @@
             android:layout_height="0dp"
             tools:layout_editor_absoluteX="-33dp"
             tools:layout_editor_absoluteY="118dp"
-            android:layout_weight="20" />
+            android:layout_weight="35" />
 
-        <TextView
-            android:id="@+id/tv_user_count"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:text="TextView"
-            android:layout_weight="1"
-            android:layout_marginTop="50dp"
-            tools:layout_editor_absoluteX="137dp"
-            tools:layout_editor_absoluteY="268dp"
-            android:textSize="20sp"
-            android:layout_gravity="center"
-            android:gravity="center"/>
+            android:orientation="horizontal"
+            android:layout_weight="2">
+
+            <TextView
+                android:id="@+id/tv_user_count"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:layout_height="match_parent"
+                android:text="כמות המשתמשים"
+                tools:layout_editor_absoluteX="137dp"
+                tools:layout_editor_absoluteY="268dp"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+
+            <Button
+                android:id="@+id/btnGoBack"
+                android:layout_weight="5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="חזור" />
+
+
+        </LinearLayout>
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

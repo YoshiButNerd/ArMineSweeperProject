@@ -11,9 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.arielfriedman.arminesweeperproject.BaseActivity.BaseActivity;
-
-public class AdminMainActivity extends BaseActivity implements View.OnClickListener{
+public class AdminMainActivity extends AppCompatActivity implements View.OnClickListener{
 
     Button aBtnGoInfo;
     Button aBtnGoGame;
@@ -26,7 +24,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentLayout(R.layout.activity_admin_main);
+        setContentView(R.layout.activity_admin_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -50,7 +48,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         public void onClick(View v) {
             if (v == aBtnGoInfo){
                 intent = new Intent(AdminMainActivity.this, InfoActivity.class);
-                intent.putExtra("PREVIOUS_ACTIVITY", AdminMainActivity.class.getSimpleName());
+                intent.putExtra("PREVIOUS_ACTIVITY", "AdminMainActivity");
             }
             else if (v == aBtnGoGame){
                 intent = new Intent(AdminMainActivity.this, GameActivity.class);

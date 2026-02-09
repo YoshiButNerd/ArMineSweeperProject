@@ -31,7 +31,6 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
         InitViews();
     }
 
