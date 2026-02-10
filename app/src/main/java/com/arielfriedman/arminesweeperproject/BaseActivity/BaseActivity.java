@@ -1,6 +1,7 @@
 package com.arielfriedman.arminesweeperproject.BaseActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -12,9 +13,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.R;
-import com.arielfriedman.arminesweeperproject.SpecialClasses.DialogFragment;
+import com.arielfriedman.arminesweeperproject.SpecialClasses.SettingsDialog;
 
-public class BaseActivity extends AppCompatActivity implements View.OnClickListener {
+public class BaseActivity extends AppCompatActivity {
 
     ImageButton settingsBtn;
 
@@ -33,7 +34,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     public void initViews() {
         settingsBtn = findViewById(R.id.settingsBtn);
-        settingsBtn.setOnClickListener(this);
+        settingsBtn.setOnClickListener(v -> openDialog());
     }
 
     protected void setContentLayout(int layoutResId) {
@@ -41,13 +42,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         getLayoutInflater().inflate(layoutResId, contentFrame, true);
     }
 
-    @Override
-    public void onClick(View v) {
-        openDialog();
-    }
-
     public void openDialog() {
-        DialogFragment dialogFragment = new DialogFragment();
-        dialogFragment.show(getSupportFragmentManager(), "settings");
+       SettingsDialog dialog = new SettingsDialog();
+       dialog.show(getSupportFragmentManager(), "settings");
     }
 }
