@@ -83,7 +83,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             String fName = etFName.getText().toString();
             String lName = etLName.getText().toString();
             String phone = etPhone.getText().toString();
-            boolean isAdmin = false;
 
             /// Validate input
             Log.d(TAG, "onClick: Validating input...");
@@ -92,7 +91,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             Log.d(TAG, "onClick: Registering user...");
 
             /// Register user
-            registerUser(fName, lName, phone, email, password, isAdmin);
+            registerUser(fName, lName, phone, email, password);
         } else if (v.getId() == btnLogin.getId()) {
             /// Navigate back to Login Activity
             Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -102,12 +101,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
 
     /// Register the user
-    private void registerUser(String fname, String lname, String phone, String email, String password, boolean isAdmin) {
+    private void registerUser(String fname, String lname, String phone, String email, String password) {
         Log.d(TAG, "registerUser: Registering user...");
 
 
         /// create a new user object
-        User user = new User("4545", fname, lname, phone, email, password, false);
+        User user = new User("4545", fname, lname, phone, email, password);
 
 
         /// proceed to create the user

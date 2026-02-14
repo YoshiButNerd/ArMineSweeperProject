@@ -8,28 +8,17 @@ public class User {
     private String email;
     private String password;
 
-    private boolean isAdmin;
 
-
-    public User(String id, String fname, String lname, String phone, String email, String password, boolean isAdmin) {
+    public User(String id, String fname, String lname, String phone, String email, String password,) {
         this.id = id;
         this.fname = fname;
         this.lname = lname;
         this.phone = phone;
         this.email = email;
         this.password = password;
-        this.isAdmin = isAdmin;
     }
 
     public User() {
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
     }
 
     public String getId() {
