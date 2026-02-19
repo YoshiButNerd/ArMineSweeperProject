@@ -9,23 +9,32 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.TextView;
 
 import com.arielfriedman.arminesweeperproject.BaseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.model.Tile;
+import com.google.firebase.events.EventHandler;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class GameActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener {
 
     final static int ROWS = 20;
     final static int COLS = 10;
     int mineCount = ROWS * COLS /5;
+    int minutes = 1;
+    int flagCount = mineCount;
+    TextView flagCountText;
+    TextView timerCountText;
     boolean firstClick = true;
-
+    CountDownTimer downTimer;
+    private static final String FORMAT = "%02d:%02d";
     Tile[][] tilesArr = new Tile[ROWS][COLS];
     Button[][] tileBtnArr = new Button[ROWS][COLS];
 
@@ -40,6 +49,9 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        flagCountText = findViewById(R.id.flagText);
+        timerCountText = findViewById(R.id.timerText);
+        flagCountText.setText(flagCount + " ⚑");
         GridLayout mineGridLayout = findViewById(R.id.gridLayout);
         mineGridLayout.setColumnCount(COLS);
         mineGridLayout.setRowCount(ROWS);
@@ -47,8 +59,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         buildBoard(mineGridLayout);
         placeMines(mineCount);
         calculateAllMineCounts();
+        timerHandler();
     }
-
     public void buildBoard(GridLayout mineGridLayout) {
         int tileSize = dpToPx(33);
 
@@ -113,6 +125,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
         if (tile.getIsMine() && !firstClick) {
             btn.setText("X");
+            flagCount--;
+            flagCountText.setText(flagCount + " ⚑");
             btn.setBackgroundColor(getColor(R.color.red));
         } else {
             tile.setMine(false);
@@ -145,7 +159,16 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         if (tile.getWasRevealed()) return true;
 
         tile.toggleFlagged();
-        btn.setText(tile.isFlagged() ? "⚑" : "");
+        if (tile.isFlagged()) {
+            btn.setText("⚑");
+            flagCount--;
+            flagCountText.setText(flagCount + " ⚑");
+        }
+        else {
+            btn.setText("");
+            flagCount++;
+            flagCountText.setText(flagCount + " ⚑");
+        }
         return true;
     }
 
@@ -263,7 +286,24 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         tile.setMinesAround(count);
         return count;
     }
+
+    public void timerHandler() {
+        minutes *= 60000;
+        downTimer = new CountDownTimer(minutes, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timerCountText.setText("" + String.format(FORMAT,
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
+                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))));
+            }
+
+            @Override
+            public void onFinish() { timerCountText.setText("Time Over!"); }
+        }.start();
+    }
 }
+
 
 
 

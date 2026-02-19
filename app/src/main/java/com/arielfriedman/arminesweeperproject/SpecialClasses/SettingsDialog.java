@@ -1,5 +1,7 @@
 package com.arielfriedman.arminesweeperproject.SpecialClasses;
 
+import static androidx.core.app.ActivityCompat.finishAffinity;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -7,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
-import android.widget.Switch;
+import androidx.appcompat.widget.SwitchCompat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,7 +26,7 @@ public class SettingsDialog extends AppCompatDialogFragment {
         Button btnSave = view.findViewById(R.id.saveBtn);
         SeekBar musicSlider = view.findViewById(R.id.volumeMusicBar);
         SeekBar sfxSlider = view.findViewById(R.id.volumeSfxBar);
-        Switch notifSwitch = view.findViewById(R.id.notifCheck);
+        SwitchCompat notifSwitch = view.findViewById(R.id.notifCheck);
         btnSave.setOnClickListener(v -> {
             boolean notify = notifSwitch.isChecked();
             dismiss();

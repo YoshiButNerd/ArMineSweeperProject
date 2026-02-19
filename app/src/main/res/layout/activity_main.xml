@@ -15,14 +15,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginHorizontal="7dp">
 
         <TextView
             android:id="@+id/gameTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="MineSweeperThing"
+            android:text="MineStopper"
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="45sp"
