@@ -27,16 +27,20 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
     final static int ROWS = 20;
     final static int COLS = 10;
-    int mineCount = ROWS * COLS /5;
-    int minutes = 1;
+    int mineCount = 40;
+    int secondsCountDown = 60;
     int flagCount = mineCount;
     TextView flagCountText;
     TextView timerCountText;
+    TextView pointsCountText;
     boolean firstClick = true;
     CountDownTimer downTimer;
     private static final String FORMAT = "%02d:%02d";
     Tile[][] tilesArr = new Tile[ROWS][COLS];
     Button[][] tileBtnArr = new Button[ROWS][COLS];
+
+    //player will not be able to see points
+    int totalPoints = 0;
 
 
     @Override
@@ -51,6 +55,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         });
         flagCountText = findViewById(R.id.flagText);
         timerCountText = findViewById(R.id.timerText);
+        pointsCountText = findViewById(R.id.pointsText);
         flagCountText.setText(flagCount + " ⚑");
         GridLayout mineGridLayout = findViewById(R.id.gridLayout);
         mineGridLayout.setColumnCount(COLS);
@@ -122,6 +127,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
         tile.setWasRevealed(true);
         btn.setEnabled(false);
+        totalPoints++;
+        pointsCountText.setText("נקודות: " + totalPoints);
 
         if (tile.getIsMine() && !firstClick) {
             btn.setText("X");
@@ -160,11 +167,19 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
         tile.toggleFlagged();
         if (tile.isFlagged()) {
+            if (tile.getIsMine()) {
+                totalPoints++;
+                pointsCountText.setText("נקודות: " + totalPoints);
+            }
             btn.setText("⚑");
             flagCount--;
             flagCountText.setText(flagCount + " ⚑");
         }
         else {
+            if (tile.getIsMine()) {
+                totalPoints--;
+                pointsCountText.setText("נקודות: " + totalPoints);
+            }
             btn.setText("");
             flagCount++;
             flagCountText.setText(flagCount + " ⚑");
@@ -288,6 +303,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void timerHandler() {
+        int minutes = secondsCountDown / 60;
         minutes *= 60000;
         downTimer = new CountDownTimer(minutes, 1000) {
             @Override
