@@ -1,5 +1,7 @@
 package com.arielfriedman.arminesweeperproject;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.nfc.Tag;
 import android.os.Bundle;
 
@@ -28,17 +30,22 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     final static int ROWS = 20;
     final static int COLS = 10;
     int mineCount = 40;
-    int secondsCountDown = 60;
+    int secondsCountDown = 150;
+    final static int WINPOINTS = ROWS*COLS;
     int flagCount = mineCount;
     TextView flagCountText;
     TextView timerCountText;
     TextView pointsCountText;
+    TextView roundCountText;
     boolean firstClick = true;
     CountDownTimer downTimer;
     private static final String FORMAT = "%02d:%02d";
     Tile[][] tilesArr = new Tile[ROWS][COLS];
     Button[][] tileBtnArr = new Button[ROWS][COLS];
-
+    boolean lost = false;
+    private SharedPreferences prefs;
+    private int round;
+    Intent intent;
     //player will not be able to see points
     int totalPoints = 0;
 
@@ -53,9 +60,22 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        prefs = getSharedPreferences("GameData", MODE_PRIVATE);
+        if (!prefs.contains("round")) {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt("round", 1);
+            editor.apply();
+        }
+        round = prefs.getInt("round", 1);
+       // editor.putInt("round", round);
+       // editor.apply();
+
+       // round = prefs.getInt("round", 1);
         flagCountText = findViewById(R.id.flagText);
         timerCountText = findViewById(R.id.timerText);
         pointsCountText = findViewById(R.id.pointsText);
+        roundCountText = findViewById(R.id.roundText);
+        roundCountText.setText("סיבוב: " + round);
         flagCountText.setText(flagCount + " ⚑");
         GridLayout mineGridLayout = findViewById(R.id.gridLayout);
         mineGridLayout.setColumnCount(COLS);
@@ -127,16 +147,15 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
         tile.setWasRevealed(true);
         btn.setEnabled(false);
-        totalPoints++;
-        pointsCountText.setText("נקודות: " + totalPoints);
+        addPoints(1);
 
         if (tile.getIsMine() && !firstClick) {
             btn.setText("X");
-            flagCount--;
-            flagCountText.setText(flagCount + " ⚑");
+            changeFlagCount(-1);
             btn.setBackgroundColor(getColor(R.color.red));
-        } else {
-            tile.setMine(false);
+            return;
+        }
+        else {
             if (tile.getMinesAround() == 0) {
                 btn.setText("");
                 Log.d("GameActivity", "tile is empty (clear around)");
@@ -168,21 +187,17 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         tile.toggleFlagged();
         if (tile.isFlagged()) {
             if (tile.getIsMine()) {
-                totalPoints++;
-                pointsCountText.setText("נקודות: " + totalPoints);
+                addPoints(1);
             }
             btn.setText("⚑");
-            flagCount--;
-            flagCountText.setText(flagCount + " ⚑");
+            changeFlagCount(-1);
         }
         else {
             if (tile.getIsMine()) {
-                totalPoints--;
-                pointsCountText.setText("נקודות: " + totalPoints);
+                addPoints(-1);
             }
             btn.setText("");
-            flagCount++;
-            flagCountText.setText(flagCount + " ⚑");
+            changeFlagCount(1);
         }
         return true;
     }
@@ -273,7 +288,6 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 else {
                     btn.setText(String.valueOf(count));
                 }
-
             }
         }
     }
@@ -315,8 +329,38 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             }
 
             @Override
-            public void onFinish() { timerCountText.setText("Time Over!"); }
+            public void onFinish() {
+                timerCountText.setText("Time Over!");
+                gameLost();
+            }
         }.start();
+    }
+
+    public void addPoints(int i) {
+        totalPoints += i;
+        pointsCountText.setText("נקודות: " + totalPoints);
+        if (totalPoints >= WINPOINTS && !lost) {
+            gameWin();
+        }
+
+    }
+
+    public void changeFlagCount(int i) {
+        flagCount += i;
+        flagCountText.setText(flagCount + " ⚑");
+    }
+
+    public void gameWin() {
+        round++;
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("round", round);
+        editor.apply();
+        intent = new Intent(GameActivity.this, ShopActivity.class);
+        startActivity(intent);
+    }
+
+    public void gameLost() {
+        lost = true;
     }
 }
 

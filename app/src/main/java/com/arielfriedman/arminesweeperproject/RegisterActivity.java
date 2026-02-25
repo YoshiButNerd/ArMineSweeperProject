@@ -129,13 +129,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 editor.putString("password", user.getPassword());
 
                 editor.commit();
-                Log.d("TAG", "createUserInDatabase: Redirecting to MainActivity");
-                /// Redirect to MainActivity and clear back stack to prevent user from going back to register screen
-                Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                /// clear the back stack (clear history) and start the MainActivity
-                mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                Log.d("TAG", "createUserInDatabase: Redirecting to LoginActivity");
+                /// Redirect to LoginActivity and clear back stack to prevent user from going back to register screen
+                Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+                /// clear the back stack (clear history) and start the LoginActivity
+                loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-                startActivity(mainIntent);
+                startActivity(loginIntent);
             }
 
             @Override
