@@ -27,27 +27,34 @@ import java.util.concurrent.TimeUnit;
 
 public class GameActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener {
 
+    //Constants
     final static int ROWS = 20;
     final static int COLS = 10;
+    final static int WINPOINTS = ROWS*COLS;
+    private static final String FORMAT = "%02d:%02d";
+
+    //Game variables
     int mineCount = 40;
     int secondsCountDown = 150;
-    final static int WINPOINTS = ROWS*COLS;
     int flagCount = mineCount;
+    boolean firstClick = true;
+    boolean lost = false;
+    private int round;
+    int totalPoints = 0;  //player will not be able to see points
+
+    //Setting up tile array
+    Tile[][] tilesArr = new Tile[ROWS][COLS];
+    Button[][] tileBtnArr = new Button[ROWS][COLS];
+
+    //UI + Other variables set up for later
     TextView flagCountText;
     TextView timerCountText;
     TextView pointsCountText;
     TextView roundCountText;
-    boolean firstClick = true;
     CountDownTimer downTimer;
-    private static final String FORMAT = "%02d:%02d";
-    Tile[][] tilesArr = new Tile[ROWS][COLS];
-    Button[][] tileBtnArr = new Button[ROWS][COLS];
-    boolean lost = false;
     private SharedPreferences prefs;
-    private int round;
+    GridLayout mineGridLayout;
     Intent intent;
-    //player will not be able to see points
-    int totalPoints = 0;
 
 
     @Override
@@ -61,31 +68,33 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             return insets;
         });
         prefs = getSharedPreferences("GameData", MODE_PRIVATE);
-        if (!prefs.contains("round")) {
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt("round", 1);
-            editor.apply();
-        }
         round = prefs.getInt("round", 1);
-       // editor.putInt("round", round);
-       // editor.apply();
-
-       // round = prefs.getInt("round", 1);
-        flagCountText = findViewById(R.id.flagText);
-        timerCountText = findViewById(R.id.timerText);
-        pointsCountText = findViewById(R.id.pointsText);
-        roundCountText = findViewById(R.id.roundText);
+        initViews();
+        setGameDiff(round);
         roundCountText.setText("סיבוב: " + round);
         flagCountText.setText(flagCount + " ⚑");
-        GridLayout mineGridLayout = findViewById(R.id.gridLayout);
         mineGridLayout.setColumnCount(COLS);
         mineGridLayout.setRowCount(ROWS);
-
         buildBoard(mineGridLayout);
         placeMines(mineCount);
         calculateAllMineCounts();
         timerHandler();
     }
+
+    public void initViews() {
+        flagCountText = findViewById(R.id.flagText);
+        timerCountText = findViewById(R.id.timerText);
+        pointsCountText = findViewById(R.id.pointsText);
+        roundCountText = findViewById(R.id.roundText);
+        mineGridLayout = findViewById(R.id.gridLayout);
+    }
+
+    public void setGameDiff(int round) {
+        mineCount += 5*(round-1);
+        secondsCountDown -= 10*(round-1);
+        flagCount = mineCount;
+    }
+
     public void buildBoard(GridLayout mineGridLayout) {
         int tileSize = dpToPx(33);
 
@@ -149,11 +158,21 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         btn.setEnabled(false);
         addPoints(1);
 
-        if (tile.getIsMine() && !firstClick) {
+        if (firstClick) {
+            Log.d("GameActivity", "first click activated");
+            firstClick = false;
+            btn.setText("");
+            btn.setBackgroundColor(getColor(R.color.light_gray));
+            clearMinesAround(tile);
+            //try to make the board beatable but not break the game over it (so only 3 times)
+            for (int i = 1; i <=3; i++){
+                clearMineBricks();
+            }
+        }
+        else if (tile.getIsMine()) {
             btn.setText("X");
             changeFlagCount(-1);
             btn.setBackgroundColor(getColor(R.color.red));
-            return;
         }
         else {
             if (tile.getMinesAround() == 0) {
@@ -165,16 +184,6 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 btn.setText(String.valueOf(tile.getMinesAround()));
             }
             btn.setBackgroundColor(getColor(R.color.light_gray));
-        }
-        if (firstClick) {
-            Log.d("GameActivity", "first click activated");
-            firstClick = false;
-            btn.setText("");
-            clearMinesAround(tile);
-            //try to make the board beatable but not break the game over it (so only 3 times)
-            for (int i = 1; i <=3; i++){
-                clearMineBricks();
-            }
         }
     }
 
@@ -252,17 +261,33 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void placeMines(int mineCount) {
+        int tilesLeft = calculateClearTiles();
         Random random = new Random();
         int placed = 0;
         while (placed < mineCount) {
+            if (tilesLeft <= 0) {   //if no room, escape the loop
+                changeFlagCount(-(mineCount-placed));   //change flagCount to match the deleted mines
+                return;
+            }
             int row = random.nextInt(ROWS);
             int col = random.nextInt(COLS);
 
             if (!tilesArr[row][col].getIsMine() && !tilesArr[row][col].getWasRevealed()) {
                 tilesArr[row][col].setMine(true);
                 placed++;
+                tilesLeft--;
             }
         }
+    }
+
+    public int calculateClearTiles() {
+        int clearTiles = 0;
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                if (!tilesArr[row][col].getIsMine() && !tilesArr[row][col].getWasRevealed()) clearTiles++;
+            }
+        }
+        return clearTiles;
     }
 
     public void calculateAllMineCounts() {
@@ -317,9 +342,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void timerHandler() {
-        int minutes = secondsCountDown / 60;
-        minutes *= 60000;
-        downTimer = new CountDownTimer(minutes, 1000) {
+        int millis = secondsCountDown * 1000; // convert seconds into milliseconds
+        downTimer = new CountDownTimer(millis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 timerCountText.setText("" + String.format(FORMAT,
@@ -342,7 +366,6 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         if (totalPoints >= WINPOINTS && !lost) {
             gameWin();
         }
-
     }
 
     public void changeFlagCount(int i) {
