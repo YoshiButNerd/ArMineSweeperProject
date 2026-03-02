@@ -1,6 +1,4 @@
-package com.arielfriedman.arminesweeperproject.SpecialClasses;
-
-import static androidx.core.app.ActivityCompat.finishAffinity;
+package com.arielfriedman.arminesweeperproject.specialClasses;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

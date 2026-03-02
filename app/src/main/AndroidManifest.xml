@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ArMineSweeperProject">
         <activity
-            android:name=".BaseActivity.BaseActivity"
+            android:name=".baseActivity.BaseActivity"
             android:exported="false" />
         <activity
             android:name=".UsersListActivity"

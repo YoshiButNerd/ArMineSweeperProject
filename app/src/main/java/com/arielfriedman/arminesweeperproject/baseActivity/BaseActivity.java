@@ -1,8 +1,6 @@
-package com.arielfriedman.arminesweeperproject.BaseActivity;
+package com.arielfriedman.arminesweeperproject.baseActivity;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
@@ -13,7 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.R;
-import com.arielfriedman.arminesweeperproject.SpecialClasses.SettingsDialog;
+import com.arielfriedman.arminesweeperproject.specialClasses.SettingsDialog;
 
 public class BaseActivity extends AppCompatActivity {
 

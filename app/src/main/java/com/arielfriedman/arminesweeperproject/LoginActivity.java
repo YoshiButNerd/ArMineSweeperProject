@@ -5,22 +5,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.arielfriedman.arminesweeperproject.BaseActivity.BaseActivity;
-import com.arielfriedman.arminesweeperproject.R;
-import com.arielfriedman.arminesweeperproject.model.User;
+import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.services.DatabaseService;
 
     /// Activity for logging in the user
