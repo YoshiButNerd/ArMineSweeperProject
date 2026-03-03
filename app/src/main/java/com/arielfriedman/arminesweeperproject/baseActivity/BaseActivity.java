@@ -27,10 +27,10 @@ public class BaseActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        initViews();
+        initBaseViews();
     }
 
-    public void initViews() {
+    public void initBaseViews() {
         settingsBtn = findViewById(R.id.settingsBtn);
         settingsBtn.setOnClickListener(v -> openDialog());
     }

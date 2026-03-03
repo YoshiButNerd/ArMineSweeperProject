@@ -46,27 +46,8 @@
                 android:text="מוזיקה"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <SeekBar
-                android:id="@+id/volumeMusicBar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:max="100"
-                android:progress="50"
-                app:layout_constraintStart_toEndOf="@id/volumeMusicTxt"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="16dp"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="60dp"
-            android:layout_marginVertical="20dp">
+                app:layout_constraintTop_toTopOf="@+id/volumeMusicBar"
+                app:layout_constraintBottom_toBottomOf="@+id/volumeMusicBar" />
 
             <TextView
                 android:id="@+id/volumeSfxTxt"
@@ -75,20 +56,39 @@
                 android:text="אפקטים"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="@+id/volumeSfxBar"
+                app:layout_constraintBottom_toBottomOf="@+id/volumeSfxBar" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/volumeBarrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="volumeMusicTxt,volumeSfxTxt" />
+
+            <SeekBar
+                android:id="@+id/volumeMusicBar"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:max="100"
+                android:progress="50"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/volumeBarrier"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <SeekBar
                 android:id="@+id/volumeSfxBar"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:max="100"
                 android:progress="50"
-                app:layout_constraintStart_toEndOf="@id/volumeSfxTxt"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="16dp"/>
+                app:layout_constraintStart_toEndOf="@id/volumeBarrier"
+                app:layout_constraintTop_toBottomOf="@id/volumeMusicBar" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

@@ -66,7 +66,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         });
         prefs = getSharedPreferences("GameData", MODE_PRIVATE);
         round = prefs.getInt("round", 1);
-        initViews();
+        InitViews();
         setGameDiff(round);
         roundCountText.setText("סיבוב: " + round);
         flagCountText.setText(flagCount + " ⚑");
@@ -78,7 +78,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         timerHandler();
     }
 
-    public void initViews() {
+    public void InitViews() {
         flagCountText = findViewById(R.id.flagText);
         timerCountText = findViewById(R.id.timerText);
         pointsCountText = findViewById(R.id.pointsText);
@@ -383,9 +383,3 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         lost = true;
     }
 }
-
-
-
-
-
-
