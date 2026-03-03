@@ -10,13 +10,20 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.arielfriedman.arminesweeperproject.Items.Item;
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
+import com.arielfriedman.arminesweeperproject.gameHandler.ItemPool;
+import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ShopActivity extends BaseActivity implements View.OnClickListener {
 
-    Button btnItem1;
-    Button btnItem2;
-    Button btnItem3;
+    Button btnItem1, btnItem2, btnItem3;
+    List<Item> itemList;
+    List<Item> ownedItemsList;
 
     Button btnGoNext;
 
@@ -31,6 +38,19 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
             return insets;
         });
         InitViews();
+        List<Item> shopItems = setItems(3);
+        Button[] itemBtns = { btnItem1, btnItem2, btnItem3 };
+        int i = 0;
+        for (Item item : shopItems) {
+            Button btn = itemBtns[i];
+            btn.setText(item.getName());
+            btn.setOnClickListener(v -> {
+                RunState.getInstance().addItem(item);
+                // optionally deduct money etc.
+                btn.setEnabled(false);
+            });
+            i++;
+        }
     }
 
     public void InitViews() {
@@ -39,6 +59,28 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
         btnItem3 = findViewById(R.id.item3Btn);
         btnGoNext = findViewById(R.id.goNextBtn);
         btnGoNext.setOnClickListener(this);
+        itemList = new ArrayList<>(ItemPool.getAllItems());
+        ownedItemsList = new ArrayList<>(RunState.getInstance().getItems());
+    }
+
+    public List<Item> setItems(int amount) {
+        List<Item> availableItems = new ArrayList<>();
+
+        for (Item item : itemList) {
+            boolean alreadyOwned = false;
+            for (Item owned : ownedItemsList) {
+                if (item.getId().equals(owned.getId())) {
+                    alreadyOwned = true;
+                    break;
+                }
+            }
+            if (!alreadyOwned) {
+                availableItems.add(item);
+            }
+        }
+
+        Collections.shuffle(availableItems);
+        return new ArrayList<>(availableItems.subList(0, Math.min(amount, availableItems.size())));
     }
 
     @Override

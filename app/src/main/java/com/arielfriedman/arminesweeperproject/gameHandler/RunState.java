@@ -9,11 +9,25 @@ public class RunState {
     private int money;
     private int health;
     private List<Item> items;
+    private static RunState instance;
 
-    public RunState() {
+    public void setNewRun() {
+        this.money = 0;
+        this.health = 3;
+        this.items.clear();
+    }
+
+    private RunState() {
         this.money = 0;
         this.health = 3;
         items = new ArrayList<>();
+    }
+
+    public static RunState getInstance() {
+        if (instance == null) {
+            instance = new RunState();
+        }
+        return instance;
     }
 
     public int getMoney() {

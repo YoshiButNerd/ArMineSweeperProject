@@ -6,7 +6,7 @@ public class GameManager {
     private RunState runState;
 
     private GameManager() {
-        runState = new RunState();
+        runState = RunState.getInstance();
     }
 
     public static GameManager getInstance() {

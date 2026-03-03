@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
+import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -51,15 +52,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             intent.putExtra("PREVIOUS_ACTIVITY", "MainActivity");
         }
         else if (v == btnGoGame){
-            prefs = getSharedPreferences("GameData", MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putInt("round", 1);
-            editor.apply();
+            startNewRun();
             intent = new Intent(MainActivity.this, GameActivity.class);
         }
         else if (v == btnGoLogin){
             intent = new Intent(MainActivity.this, LoginActivity.class);
         }
         startActivity(intent);
+    }
+
+    public void startNewRun() {
+        prefs = getSharedPreferences("GameData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("round", 1);
+        editor.apply();
+        RunState runState = RunState.getInstance();
+        runState.setNewRun();
     }
 }
