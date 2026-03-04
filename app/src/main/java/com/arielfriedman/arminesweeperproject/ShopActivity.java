@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ShopActivity extends BaseActivity implements View.OnClickListener {
 
     Button btnItem1, btnItem2, btnItem3;
+    TextView moneyCountTxt;
     List<Item> itemList;
     List<Item> ownedItemsList;
 
@@ -43,11 +45,17 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
         int i = 0;
         for (Item item : shopItems) {
             Button btn = itemBtns[i];
-            btn.setText(item.getName());
+            btn.setText(
+                    item.getName() + "\n\n" + "מחיר: " +
+                    item.getPrice() + "\n\n" + "יכולת: " + "\n" +
+                    item.getDesc()
+            );
             btn.setOnClickListener(v -> {
-                RunState.getInstance().addItem(item);
-                // optionally deduct money etc.
-                btn.setEnabled(false);
+                if (RunState.getInstance().getMoney() >= item.getPrice()){
+                    RunState.getInstance().addItem(item);
+                    moneyChange(-(item.getPrice()));
+                    btn.setEnabled(false);
+                }
             });
             i++;
         }
@@ -58,6 +66,8 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
         btnItem2 = findViewById(R.id.item2Btn);
         btnItem3 = findViewById(R.id.item3Btn);
         btnGoNext = findViewById(R.id.goNextBtn);
+        moneyCountTxt = findViewById(R.id.moneyTxt);
+        moneyCountTxt.setText("כסף: " + RunState.getInstance().getMoney());
         btnGoNext.setOnClickListener(this);
         itemList = new ArrayList<>(ItemPool.getAllItems());
         ownedItemsList = new ArrayList<>(RunState.getInstance().getItems());
@@ -78,9 +88,13 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
                 availableItems.add(item);
             }
         }
-
         Collections.shuffle(availableItems);
         return new ArrayList<>(availableItems.subList(0, Math.min(amount, availableItems.size())));
+    }
+
+    public void moneyChange(int i) {
+        RunState.getInstance().changeMoney(i);
+        moneyCountTxt.setText("כסף: " + RunState.getInstance().getMoney());
     }
 
     @Override

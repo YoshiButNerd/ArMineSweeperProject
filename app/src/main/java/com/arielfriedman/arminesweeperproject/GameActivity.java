@@ -17,6 +17,8 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
+import com.arielfriedman.arminesweeperproject.gameHandler.GameEventType;
+import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 import com.arielfriedman.arminesweeperproject.model.Tile;
 
 import java.util.Random;
@@ -31,9 +33,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     private static final String FORMAT = "%02d:%02d";
 
     //Game variables
-    int mineCount = 40;
+    int mineCount, flagCount;
     int secondsCountDown = 150;
-    int flagCount = mineCount;
     boolean firstClick = true;
     boolean lost = false;
     private int round;
@@ -48,6 +49,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     TextView timerCountText;
     TextView pointsCountText;
     TextView roundCountText;
+    TextView moneyCountText;
     CountDownTimer downTimer;
     private SharedPreferences prefs;
     GridLayout mineGridLayout;
@@ -64,18 +66,17 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        prefs = getSharedPreferences("GameData", MODE_PRIVATE);
-        round = prefs.getInt("round", 1);
         InitViews();
-        setGameDiff(round);
-        roundCountText.setText("סיבוב: " + round);
-        flagCountText.setText(flagCount + " ⚑");
+        setGameDiff();
         mineGridLayout.setColumnCount(COLS);
         mineGridLayout.setRowCount(ROWS);
         buildBoard(mineGridLayout);
+        flagCountText.setText(flagCount + " ⚑");
+        roundCountText.setText("סיבוב: " + round);
         placeMines(mineCount);
         calculateAllMineCounts();
         timerHandler();
+        moneyCountText.setText("כסף: " + RunState.getInstance().getMoney());
     }
 
     public void InitViews() {
@@ -83,16 +84,20 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         timerCountText = findViewById(R.id.timerText);
         pointsCountText = findViewById(R.id.pointsText);
         roundCountText = findViewById(R.id.roundText);
+        moneyCountText = findViewById(R.id.moneyText);
         mineGridLayout = findViewById(R.id.gridLayout);
     }
 
-    public void setGameDiff(int round) {
-        mineCount += 5*(round-1);
-        secondsCountDown -= 10*(round-1);
-        flagCount = mineCount;
+    public void setGameDiff() {
+        round = RunState.getInstance().getRound();
+        RunState.getInstance().setMineCount(40 + 5*(round-1));
+        secondsCountDown += 10*(round-1);
     }
 
     public void buildBoard(GridLayout mineGridLayout) {
+        RunState.getInstance().triggerEvent(GameEventType.NEWROUND);
+        mineCount = RunState.getInstance().getMineCount();
+        flagCount = mineCount;
         int tileSize = dpToPx(33);
 
         for (int row = 0; row < ROWS; row++) {
@@ -370,11 +375,15 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         flagCountText.setText(flagCount + " ⚑");
     }
 
+    public void changeMoneyCount(int i) {
+        RunState runstate = RunState.getInstance();
+        runstate.changeMoney(i);
+        moneyCountText.setText("כסף: " + runstate.getMoney());
+    }
+
     public void gameWin() {
-        round++;
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("round", round);
-        editor.apply();
+        RunState.getInstance().increaseRound();
+        changeMoneyCount(10);
         intent = new Intent(GameActivity.this, ShopActivity.class);
         startActivity(intent);
     }

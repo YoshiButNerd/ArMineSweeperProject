@@ -1,6 +1,6 @@
 package com.arielfriedman.arminesweeperproject.Items;
 
-import com.arielfriedman.arminesweeperproject.gameHandler.GameEvent;
+import com.arielfriedman.arminesweeperproject.gameHandler.GameEventType;
 import com.arielfriedman.arminesweeperproject.gameHandler.ItemEffect;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 
@@ -21,9 +21,9 @@ public class Item {
         this.effects = effects;
     }
 
-    public void trigger(GameEvent event, RunState runState) {
+    public void trigger(GameEventType type, RunState runState) {
         for (ItemEffect effect : effects) {
-            effect.onEvent(event, runState);
+            effect.onEvent(type, runState);
         }
     }
 

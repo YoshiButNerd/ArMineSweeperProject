@@ -68,10 +68,6 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         }
 
     public void startNewRun() {
-        prefs = getSharedPreferences("GameData", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("round", 1);
-        editor.apply();
         RunState runState = RunState.getInstance();
         runState.setNewRun();
     }

@@ -62,10 +62,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void startNewRun() {
-        prefs = getSharedPreferences("GameData", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt("round", 1);
-        editor.apply();
         RunState runState = RunState.getInstance();
         runState.setNewRun();
     }
