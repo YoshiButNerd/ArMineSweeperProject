@@ -9,8 +9,9 @@ public class ItemPool {
     private static final List<Item> allItems = new ArrayList<>();
 
     static {
-        allItems.add(ItemFactory.createMoneyMult());
-        allItems.add(ItemFactory.createMineCleaner());
+        allItems.add(ItemFactory.createGoldShower());
+        allItems.add(ItemFactory.createGoldenBombs());
+        allItems.add(ItemFactory.createMineMissile());
     }
 
     public static List<Item> getAllItems() {

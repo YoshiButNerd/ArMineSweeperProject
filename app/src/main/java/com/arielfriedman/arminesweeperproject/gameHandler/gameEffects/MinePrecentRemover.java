@@ -7,17 +7,16 @@ import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 public class MinePrecentRemover implements ItemEffect {
 
     private int minesPrecentToChange;
-    private final RunState runstate = RunState.getInstance();
 
     public MinePrecentRemover(int minesPrecentToChange) {
         this.minesPrecentToChange = minesPrecentToChange;
     }
 
     @Override
-    public void onEvent(GameEventType type, RunState runState) {
+    public void onEvent(GameEventType type, RunState runstate) {
         if (type == GameEventType.NEWROUND) {
             double minesChanged = Math.ceil((double)runstate.getMineCount()/minesPrecentToChange);
-            runState.changeMines(-((int)minesChanged));
+            runstate.changeMines(-((int)minesChanged));
         }
     }
 }

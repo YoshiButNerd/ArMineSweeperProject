@@ -4,17 +4,17 @@ import com.arielfriedman.arminesweeperproject.gameHandler.GameEventType;
 import com.arielfriedman.arminesweeperproject.gameHandler.ItemEffect;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 
-public class MoneyGivesMoney implements ItemEffect {
-    private int moneyToGain;
+public class MineGivesMoney implements ItemEffect {
+    private int moneyAmount;
 
-    public MoneyGivesMoney(int moneyToGain) {
-        this.moneyToGain = moneyToGain;
+    public MineGivesMoney(int moneyAmount) {
+        this.moneyAmount = moneyAmount;
     }
 
     @Override
     public void onEvent(GameEventType type, RunState runstate) {
-        if (type == GameEventType.MONEYGAIN) {
-            runstate.moneyItemGain(moneyToGain);
+        if (type == GameEventType.MINECLICK) {
+            runstate.changeMoney(moneyAmount);
         }
     }
 }

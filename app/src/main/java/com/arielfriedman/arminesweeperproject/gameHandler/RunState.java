@@ -13,12 +13,45 @@ public class RunState {
     private List<Item> items;
     private static RunState instance;
 
+    //
+    public interface StateListener {
+        void onMoneyChanged(int money);
+        void onHealthChanged(int health);
+    }
+
+    private List<StateListener> listeners = new ArrayList<>();
+
+    public void addListener(StateListener listener) {
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    public void removeListener(StateListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void notifyMoneyChanged() {
+        for (StateListener listener : new ArrayList<>(listeners)) {
+            listener.onMoneyChanged(money);
+        }
+    }
+
+    private void notifyHealthChanged() {
+        for (StateListener listener : new ArrayList<>(listeners)) {
+            listener.onHealthChanged(health);
+        }
+    }
+    //
+
     public void setNewRun() {
         this.money = 0;
         this.health = 3;
         this.mineCount = 40;
         this.round = 1;
         this.items.clear();
+        notifyMoneyChanged();
+        notifyHealthChanged();
     }
 
     private RunState() {
@@ -65,11 +98,13 @@ public class RunState {
         if (amount > 0) {
             triggerEvent(GameEventType.MONEYGAIN);
         }
+        notifyMoneyChanged();
     }
 
     public void changeHealth(int amount){
         this.health += amount;
         triggerEvent(GameEventType.HealthChange);
+        notifyHealthChanged();
     }
 
     public void changeMines(int amount){
@@ -121,6 +156,7 @@ public class RunState {
     //Functions for items
     public void moneyItemGain(int amount) {
         this.money += amount;
+        notifyMoneyChanged();
     }
 
 }

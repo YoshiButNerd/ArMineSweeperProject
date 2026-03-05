@@ -35,10 +35,12 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     //Game variables
     int mineCount, flagCount;
     int secondsCountDown = 150;
+    int endOfRoundMoney = 30;
     boolean firstClick = true;
     boolean lost = false;
     private int round;
     int totalPoints = 0;  //player will not be able to see points
+    RunState runstate;
 
     //Setting up tile array
     Tile[][] tilesArr = new Tile[ROWS][COLS];
@@ -55,6 +57,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     GridLayout mineGridLayout;
     Intent intent;
 
+    // Listener variable
+    private RunState.StateListener runStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +70,21 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        runstate = RunState.getInstance();
         InitViews();
+
+        runStateListener = new RunState.StateListener() {
+            @Override
+            public void onMoneyChanged(int money) {
+                moneyCountText.setText("כסף: " + money);
+            }
+
+            @Override
+            public void onHealthChanged(int health) {
+                // update health UI here if you have one
+            }
+        };
+
         setGameDiff();
         mineGridLayout.setColumnCount(COLS);
         mineGridLayout.setRowCount(ROWS);
@@ -76,7 +94,19 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         placeMines(mineCount);
         calculateAllMineCounts();
         timerHandler();
-        moneyCountText.setText("כסף: " + RunState.getInstance().getMoney());
+        moneyCountText.setText("כסף: " + runstate.getMoney());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        runstate.addListener(runStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        runstate.removeListener(runStateListener);
     }
 
     public void InitViews() {
@@ -89,14 +119,15 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void setGameDiff() {
-        round = RunState.getInstance().getRound();
-        RunState.getInstance().setMineCount(40 + 5*(round-1));
+        round = runstate.getRound();
+        int startingMines = runstate.getMineCount();
+        runstate.setMineCount(startingMines + 5*(round-1));
         secondsCountDown += 10*(round-1);
     }
 
     public void buildBoard(GridLayout mineGridLayout) {
-        RunState.getInstance().triggerEvent(GameEventType.NEWROUND);
-        mineCount = RunState.getInstance().getMineCount();
+        runstate.triggerEvent(GameEventType.NEWROUND);
+        mineCount = runstate.getMineCount();
         flagCount = mineCount;
         int tileSize = dpToPx(33);
 
@@ -137,7 +168,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         int[] pos = (int[]) v.getTag();
         int row = pos[0];
         int col = pos[1];
-        Log.d("GameActivity", "clicked: " + "row-"+ row + " col-" + col);
+        Log.d("GameActivity", "Clicked: " + "row-"+ row + " col-" + col);
         onTileClicked(row, col);
     }
 
@@ -146,7 +177,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         int[] pos = (int[]) v.getTag();
         int row = pos[0];
         int col = pos[1];
-        Log.d("GameActivity", "long clicked: " + "row-"+ row + " col-" + col);
+        Log.d("GameActivity", "Long clicked: " + "row-"+ row + " col-" + col);
         return onTileLongPressed(row, col);
     }
 
@@ -161,7 +192,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         addPoints(1);
 
         if (firstClick) {
-            Log.d("GameActivity", "first click activated");
+            Log.d("GameActivity", "First click activated");
             firstClick = false;
             btn.setText("");
             btn.setBackgroundColor(getColor(R.color.light_gray));
@@ -175,11 +206,12 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             btn.setText("X");
             changeFlagCount(-1);
             btn.setBackgroundColor(getColor(R.color.red));
+            mineClicked();
         }
         else {
             if (tile.getMinesAround() == 0) {
                 btn.setText("");
-                Log.d("GameActivity", "tile is empty (clear around)");
+                Log.d("GameActivity", "Tile is empty (clear around)");
                 clearMinesAround(tile);
             }
             else {
@@ -224,6 +256,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 if (tileRow >= 0 && tileRow < ROWS && tileCol >= 0 && tileCol < COLS && tilesArr[tileRow][tileCol].getIsMine()) {
                     countMines++;
                     tilesArr[tileRow][tileCol].setMine(false);
+                    Log.d("GameActivity", "Mine detected on first click");
                 }
             }
         }
@@ -240,6 +273,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             }
         }
         placeMines(countMines);
+        Log.d("GameActivity", countMines + " detected mines moved (if there was room)");
+        calculateAllMineCounts();
         calculateAllRevealedMineCounts();
     }
 
@@ -268,7 +303,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         int placed = 0;
         while (placed < mineCount) {
             if (tilesLeft <= 0) {   //if no room, escape the loop
-                changeFlagCount(-(mineCount-placed));   //change flagCount to match the deleted mines
+                changeFlagCount(-(mineCount-placed));
+                Log.d("GameActivity", "No room to move more mines");//change flagCount to match the deleted mines
                 return;
             }
             int row = random.nextInt(ROWS);
@@ -370,20 +406,23 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
+    public void mineClicked() {
+        runstate.triggerEvent(GameEventType.MINECLICK);
+        runstate.changeHealth(-1);
+    }
+
     public void changeFlagCount(int i) {
         flagCount += i;
         flagCountText.setText(flagCount + " ⚑");
     }
 
     public void changeMoneyCount(int i) {
-        RunState runstate = RunState.getInstance();
         runstate.changeMoney(i);
-        moneyCountText.setText("כסף: " + runstate.getMoney());
     }
 
     public void gameWin() {
-        RunState.getInstance().increaseRound();
-        changeMoneyCount(10);
+        runstate.increaseRound();
+        changeMoneyCount(endOfRoundMoney);
         intent = new Intent(GameActivity.this, ShopActivity.class);
         startActivity(intent);
     }

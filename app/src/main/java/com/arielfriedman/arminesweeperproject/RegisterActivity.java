@@ -18,8 +18,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.model.User;
 import com.arielfriedman.arminesweeperproject.services.DatabaseService;
-//import com.example.testapp.utils.SharedPreferencesUtil;
-//import com.example.testapp.utils.Validator;
 
 /// Activity for registering the user
 /// This activity is used to register the user
