@@ -5,24 +5,24 @@ import com.arielfriedman.arminesweeperproject.gameHandler.ItemEffect;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 
 public class ChargeBombClick implements  ItemEffect{
-        private int currentClicks = 0;
-        private int firstClickAdd = 0;
-        private final int threshold;
+    private int currentClicks = 0;
+    private int firstClickAdd;
+    private final int threshold;
 
-        public ChargeBombClick(int threshold, int firstClickAdd) {
-            this.threshold = threshold;
-            this.firstClickAdd = firstClickAdd;
-        }
+    public ChargeBombClick(int threshold, int firstClickAdd) {
+        this.threshold = threshold;
+        this.firstClickAdd = firstClickAdd;
+    }
 
-        @Override
-        public void onEvent(GameEventType type, RunState runstate) {
-            if (type == GameEventType.TILECLICK) {
-                currentClicks++;
-                if (currentClicks >= threshold) {
-                    runstate.changeFirstClicks(firstClickAdd);
-                    currentClicks = 0;
-                }
+    @Override
+    public void onEvent(GameEventType type, RunState runstate) {
+        if (type == GameEventType.TILECLICK) {
+            currentClicks++;
+            if (currentClicks >= threshold) {
+                runstate.changeFirstClicks(firstClickAdd);
+                currentClicks = 0;
             }
         }
+    }
 }
 

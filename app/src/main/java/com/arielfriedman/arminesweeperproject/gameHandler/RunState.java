@@ -46,7 +46,7 @@ public class RunState {
     //
 
     public void setNewRun() {
-        this.money = 0;
+        this.money = 100;
         this.health = 3;
         this.mineCount = 40;
         this.round = 1;
@@ -57,7 +57,7 @@ public class RunState {
     }
 
     private RunState() {
-        this.money = 0;
+        this.money = 100;
         this.health = 3;
         this.mineCount = 40;
         this.round = 1;
@@ -150,6 +150,8 @@ public class RunState {
     }
 
     public void triggerEvent(GameEventType event) {
+        items.sort((a, b) -> Integer.compare(b.getPriority(), a.getPriority()));
+
         for (Item item : items) {
             item.trigger(event, this);
         }

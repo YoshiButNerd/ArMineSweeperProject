@@ -90,6 +90,10 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         setGameDiff();
         mineGridLayout.setColumnCount(COLS);
         mineGridLayout.setRowCount(ROWS);
+
+        //runstate.addItem(ItemFactory.createGoldMissile()); //TEST AN ITEM
+        //runstate.addItem(ItemFactory.createMineMissile()); //TEST AN ITEM
+
         buildBoard(mineGridLayout);
         flagCountText.setText(flagCount + " ⚑");
         roundCountText.setText("סיבוב: " + round);
@@ -98,8 +102,6 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         timerHandler();
         moneyCountText.setText("כסף: " + runstate.getMoney());
         healthCountText.setText("לבבות: " + runstate.getHealth());
-
-        runstate.addItem(ItemFactory.createChargeBombClick()); //TEST AN ITEM
     }
 
     @Override
