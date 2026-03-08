@@ -10,6 +10,7 @@ public class RunState {
     private int health;
     private int mineCount;
     private int round;
+    private int firstClicks;
     private List<Item> items;
     private static RunState instance;
 
@@ -49,6 +50,7 @@ public class RunState {
         this.health = 3;
         this.mineCount = 40;
         this.round = 1;
+        this.firstClicks = 1;
         this.items.clear();
         notifyMoneyChanged();
         notifyHealthChanged();
@@ -59,6 +61,7 @@ public class RunState {
         this.health = 3;
         this.mineCount = 40;
         this.round = 1;
+        this.firstClicks = 1;
         items = new ArrayList<>();
     }
 
@@ -93,6 +96,10 @@ public class RunState {
         this.items = items;
     }
 
+    public int getFirstClicks() { return firstClicks;}
+
+    public void setFirstClicks(int firstClicks) { this.firstClicks = firstClicks;}
+
     public void changeMoney(int amount) {
         this.money += amount;
         if (amount > 0) {
@@ -103,8 +110,13 @@ public class RunState {
 
     public void changeHealth(int amount){
         this.health += amount;
-        triggerEvent(GameEventType.HealthChange);
+        triggerEvent(GameEventType.HEALTHCHANGE);
         notifyHealthChanged();
+    }
+
+    public void changeFirstClicks(int amount) {
+        this.firstClicks += amount;
+        triggerEvent(GameEventType.FIRSTCLICK);
     }
 
     public void changeMines(int amount){
@@ -133,6 +145,7 @@ public class RunState {
 
     public void increaseRound() {
         this.round++;
+        changeFirstClicks(1);
         triggerEvent(GameEventType.ENDROUND);
     }
 
@@ -149,6 +162,7 @@ public class RunState {
                 ", health=" + health +
                 ", mineCount=" + mineCount +
                 ", round=" + round +
+                ", firstClicks=" + firstClicks +
                 ", items=" + items +
                 '}';
     }

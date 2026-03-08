@@ -2,10 +2,10 @@ package com.arielfriedman.arminesweeperproject.gameHandler;
 
 public enum GameEventType {
     MONEYGAIN,
-    HealthChange,
+    HEALTHCHANGE,
     MINECLICK,
     FIRSTCLICK,
-    NORMALCLICK,
+    TILECLICK,
     LONGCLICK,
     NEWROUND,
     ENDROUND

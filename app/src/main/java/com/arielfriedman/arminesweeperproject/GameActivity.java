@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.GameEventType;
+import com.arielfriedman.arminesweeperproject.gameHandler.ItemFactory;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 import com.arielfriedman.arminesweeperproject.model.Tile;
 
@@ -36,8 +37,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     int mineCount, flagCount;
     int secondsCountDown = 150;
     int endOfRoundMoney = 30;
-    boolean firstClick = true;
     boolean lost = false;
+    boolean trueFirstClick = true;
     private int round;
     int totalPoints = 0;  //player will not be able to see points
     RunState runstate;
@@ -52,12 +53,13 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     TextView pointsCountText;
     TextView roundCountText;
     TextView moneyCountText;
+    TextView healthCountText;
     CountDownTimer downTimer;
     private SharedPreferences prefs;
     GridLayout mineGridLayout;
     Intent intent;
 
-    // Listener variable
+    //Listener variable
     private RunState.StateListener runStateListener;
 
     @Override
@@ -81,7 +83,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
             @Override
             public void onHealthChanged(int health) {
-                // update health UI here if you have one
+                healthCountText.setText("לבבות: " + health);
             }
         };
 
@@ -95,6 +97,9 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         calculateAllMineCounts();
         timerHandler();
         moneyCountText.setText("כסף: " + runstate.getMoney());
+        healthCountText.setText("לבבות: " + runstate.getHealth());
+
+        runstate.addItem(ItemFactory.createChargeBombClick()); //TEST AN ITEM
     }
 
     @Override
@@ -115,6 +120,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         pointsCountText = findViewById(R.id.pointsText);
         roundCountText = findViewById(R.id.roundText);
         moneyCountText = findViewById(R.id.moneyText);
+        healthCountText = findViewById(R.id.healthText);
         mineGridLayout = findViewById(R.id.gridLayout);
     }
 
@@ -189,17 +195,23 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
         tile.setWasRevealed(true);
         btn.setEnabled(false);
-        addPoints(1);
 
-        if (firstClick) {
-            Log.d("GameActivity", "First click activated");
-            firstClick = false;
+
+        if (runstate.getFirstClicks() > 0) { //add an if and a bool if its true first click
+            runstate.changeFirstClicks(-1);
             btn.setText("");
             btn.setBackgroundColor(getColor(R.color.light_gray));
-            clearMinesAround(tile);
-            //try to make the board beatable but not break the game over it (so only 3 times)
-            for (int i = 1; i <=3; i++){
-                clearMineBricks();
+            Log.d("GameActivity", "First click activated");
+            if (trueFirstClick) {
+                trueFirstClick = false;
+                clearMinesAroundAndMove(tile);
+                //try to make the board beatable but not break the game over it (so only 3 times)
+                for (int i = 1; i <=3; i++){
+                    clearMineBricks();
+                }
+            }
+            else {
+                clearMinesAroundAndDelete(tile);
             }
         }
         else if (tile.getIsMine()) {
@@ -212,13 +224,15 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             if (tile.getMinesAround() == 0) {
                 btn.setText("");
                 Log.d("GameActivity", "Tile is empty (clear around)");
-                clearMinesAround(tile);
+                clearMinesAroundAndDelete(tile);
             }
             else {
                 btn.setText(String.valueOf(tile.getMinesAround()));
             }
             btn.setBackgroundColor(getColor(R.color.light_gray));
         }
+        addPoints(1);
+        tileClicked(); // the trigger happens before click takes effect
     }
 
     public boolean onTileLongPressed(int row, int col) {
@@ -245,25 +259,27 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         return true;
     }
 
-    public void clearMinesAround(Tile tile) {
+    public void clearMinesAround(Tile tile, boolean move) {
         int row = tile.getRow();
         int col = tile.getCol();
         int countMines = 0;
-        for (int iRow = -1; iRow <= 1; iRow++) {
+        for (int iRow = -1; iRow <= 1; iRow++) {  //Remove mine status from tiles around and calc how many mines there were
             for (int iCol = -1; iCol <= 1; iCol++) {
                 int tileRow = row + iRow;
                 int tileCol = col + iCol;
                 if (tileRow >= 0 && tileRow < ROWS && tileCol >= 0 && tileCol < COLS && tilesArr[tileRow][tileCol].getIsMine()) {
-                    countMines++;
+                    if (!tilesArr[tileRow][tileCol].getWasRevealed()) { //If revealed we dont need to count (move/remove flag)
+                        countMines++;
+                    }
                     tilesArr[tileRow][tileCol].setMine(false);
-                    Log.d("GameActivity", "Mine detected on first click");
                 }
             }
         }
+        Log.d("GameActivity", countMines + " mines detected around click");
         calculateAllMineCounts();
         row = tile.getRow();
         col = tile.getCol();
-        for (int iRow = -1; iRow <= 1; iRow++) {
+        for (int iRow = -1; iRow <= 1; iRow++) {  //Click the tiles around
             for (int iCol = -1; iCol <= 1; iCol++) {
                 int tileRow = row + iRow;
                 int tileCol = col + iCol;
@@ -272,9 +288,14 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 }
             }
         }
-        placeMines(countMines);
-        Log.d("GameActivity", countMines + " detected mines moved (if there was room)");
-        calculateAllMineCounts();
+        if (move) {
+            placeMines(countMines);
+            Log.d("GameActivity", countMines + " detected mines moved (if there was room)");
+            calculateAllMineCounts();
+        }
+        else {
+            changeFlagCount(-countMines);
+        }
         calculateAllRevealedMineCounts();
     }
 
@@ -290,7 +311,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                     count += 3;
                 }
                 if (count >= 8) {
-                    clearMinesAround(tilesArr[row][col]);
+                    clearMinesAroundAndMove(tilesArr[row][col]);
                     // another mine brick may be created
                 }
             }
@@ -342,9 +363,10 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 if (!tilesArr[row][col].getWasRevealed() || tilesArr[row][col].getIsMine()) continue;
-                int count = calculateTileMineCount(tilesArr[row][col]);
 
+                int count = calculateTileMineCount(tilesArr[row][col]);
                 Button btn = tileBtnArr[row][col];
+                btn.setBackgroundColor(getColor(R.color.light_gray));
                 if (count == 0) {
                     btn.setText("");
                 }
@@ -416,18 +438,26 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         flagCountText.setText(flagCount + " ⚑");
     }
 
-    public void changeMoneyCount(int i) {
-        runstate.changeMoney(i);
+    public void tileClicked() {
+        runstate.triggerEvent(GameEventType.TILECLICK);
     }
 
     public void gameWin() {
         runstate.increaseRound();
-        changeMoneyCount(endOfRoundMoney);
+        runstate.changeMoney(endOfRoundMoney);
         intent = new Intent(GameActivity.this, ShopActivity.class);
         startActivity(intent);
     }
 
     public void gameLost() {
         lost = true;
+    }
+
+    public void clearMinesAroundAndMove(Tile tile) {
+        clearMinesAround(tile, true);
+    }
+
+    public void clearMinesAroundAndDelete(Tile tile) {
+        clearMinesAround(tile, false);
     }
 }

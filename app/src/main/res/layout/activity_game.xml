@@ -24,19 +24,31 @@
 
             <TextView
                 android:id="@+id/moneyText"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
+                android:layout_weight="1"
                 android:gravity="left"
                 android:text="כסף: 0" />
 
             <TextView
+                android:id="@+id/healthText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="לבבות: 0" />
+
+            <TextView
                 android:id="@+id/roundText"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:gravity="right"
                 android:text="סיבוב: 0" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -63,7 +75,7 @@
                 android:textSize="25sp"
                 android:textColor="@color/green"
                 android:layout_weight="3"
-                android:text="נקודות: " />
+                android:text="נקודות: 0" />
 
             <TextView
                 android:id="@+id/flagText"
