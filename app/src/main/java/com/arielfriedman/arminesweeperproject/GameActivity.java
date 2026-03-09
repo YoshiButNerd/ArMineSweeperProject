@@ -1,7 +1,6 @@
 package com.arielfriedman.arminesweeperproject;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -55,7 +54,6 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     TextView moneyCountText;
     TextView healthCountText;
     CountDownTimer downTimer;
-    private SharedPreferences prefs;
     GridLayout mineGridLayout;
     Intent intent;
 
@@ -91,8 +89,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         mineGridLayout.setColumnCount(COLS);
         mineGridLayout.setRowCount(ROWS);
 
-        //runstate.addItem(ItemFactory.createGoldMissile()); //TEST AN ITEM
-        //runstate.addItem(ItemFactory.createMineMissile()); //TEST AN ITEM
+        //runstate.addItem(ItemFactory.createMineBombs()); //TEST AN ITEM
+        //runstate.addItem(ItemFactory.createChargeBombClick()); //TEST AN ITEM
 
         buildBoard(mineGridLayout);
         flagCountText.setText(flagCount + " ⚑");
@@ -220,13 +218,13 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             btn.setText("X");
             changeFlagCount(-1);
             btn.setBackgroundColor(getColor(R.color.red));
-            mineClicked();
+            mineClicked(tile);
         }
         else {
-            if (tile.getMinesAround() == 0) {
+            if (tile.getMinesAround() == 0) { //tile is blank
                 btn.setText("");
                 Log.d("GameActivity", "Tile is empty (clear around)");
-                clearMinesAroundAndDelete(tile);
+                clickTilesAround(tile);
             }
             else {
                 btn.setText(String.valueOf(tile.getMinesAround()));
@@ -234,7 +232,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             btn.setBackgroundColor(getColor(R.color.light_gray));
         }
         addPoints(1);
-        tileClicked(); // the trigger happens before click takes effect
+        tileClicked();
     }
 
     public boolean onTileLongPressed(int row, int col) {
@@ -261,7 +259,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         return true;
     }
 
-    public void clearMinesAround(Tile tile, boolean move) {
+    public void clearMinesAround(Tile tile, boolean move) { //If move, move mines instead of deleting
         int row = tile.getRow();
         int col = tile.getCol();
         int countMines = 0;
@@ -296,9 +294,23 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             calculateAllMineCounts();
         }
         else {
-            changeFlagCount(-countMines);
+            calculateFlagCount();
         }
         calculateAllRevealedMineCounts();
+    }
+
+    public void clickTilesAround(Tile tile) {
+        int row = tile.getRow();
+        int col = tile.getCol();
+        for (int iRow = -1; iRow <= 1; iRow++) {  //Click the tiles around
+            for (int iCol = -1; iCol <= 1; iCol++) {
+                int tileRow = row + iRow;
+                int tileCol = col + iCol;
+                if (tileRow >= 0 && tileRow < ROWS && tileCol >= 0 && tileCol < COLS) {
+                    onTileClicked(tileRow, tileCol);
+                }
+            }
+        }
     }
 
     public void clearMineBricks() {
@@ -306,10 +318,10 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             for (int col = 0; col < COLS; col++) {
                 if (!tilesArr[row][col].getWasRevealed()) continue;
                 int count = calculateTileMineCount(tilesArr[row][col]);
-                if (row == 0 || row == ROWS-1) {
+                if (row == 0 || row == ROWS-1) { //If at row edge account for missing tiles
                     count += 3;
                 }
-                if (col == 0 || col == COLS-1) {
+                if (col == 0 || col == COLS-1) { //If at Column edge account for missing tiles
                     count += 3;
                 }
                 if (count >= 8) {
@@ -360,6 +372,21 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
+    public void calculateFlagCount() {
+        int remainingMines = 0;
+
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                if (tilesArr[row][col].getIsMine() && !tilesArr[row][col].getWasRevealed()) {
+                    remainingMines++;
+                }
+            }
+        }
+
+        flagCount = remainingMines;
+        flagCountText.setText(flagCount + " ⚑");
+    }
+
     // could prob combine with the function above
     public void calculateAllRevealedMineCounts(){
         for (int row = 0; row < ROWS; row++) {
@@ -371,6 +398,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 btn.setBackgroundColor(getColor(R.color.light_gray));
                 if (count == 0) {
                     btn.setText("");
+                    clickTilesAround(tilesArr[row][col]);
                 }
                 else {
                     btn.setText(String.valueOf(count));
@@ -419,7 +447,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 timerCountText.setText("Time Over!");
                 gameLost();
             }
-        }.start();
+        } .start();
     }
 
     public void addPoints(int i) {
@@ -430,9 +458,12 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    public void mineClicked() {
+    public void mineClicked(Tile tile) {
         runstate.triggerEvent(GameEventType.MINECLICK);
         runstate.changeHealth(-1);
+        if (runstate.getMineBombs()) {
+            clearMinesAroundAndDelete(tile);
+        }
     }
 
     public void changeFlagCount(int i) {

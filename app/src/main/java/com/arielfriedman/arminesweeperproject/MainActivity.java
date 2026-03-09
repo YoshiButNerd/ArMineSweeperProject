@@ -3,6 +3,7 @@ package com.arielfriedman.arminesweeperproject;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -54,6 +55,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         else if (v == btnGoGame){
             startNewRun();
             intent = new Intent(MainActivity.this, GameActivity.class);
+            Log.d("MainActivity", "Set intent and runstate successfully");
         }
         else if (v == btnGoLogin){
             intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -62,7 +64,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void startNewRun() {
-        RunState runState = RunState.getInstance();
-        runState.setNewRun();
+        RunState runstate = RunState.getInstance();
+        runstate.setNewRun();
     }
 }

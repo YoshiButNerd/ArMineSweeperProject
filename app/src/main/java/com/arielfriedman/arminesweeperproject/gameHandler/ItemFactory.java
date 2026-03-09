@@ -2,10 +2,13 @@ package com.arielfriedman.arminesweeperproject.gameHandler;
 
 import com.arielfriedman.arminesweeperproject.Items.Item;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.ChargeBombClick;
+import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.ChargeMineHealth;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.MineGivesMoney;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.MinePrecentRemover;
+import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.MineRemovesTiles;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.MoneyGivesMoney;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.MoneyRemovesMine;
+import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.RoundGivesHeart;
 
 import java.util.List;
 
@@ -34,10 +37,28 @@ public class ItemFactory {
                 List.of(new MoneyRemovesMine(1, 10))
         );
     }
+    public static Item createHeartIncome() { //New Round
+        return new Item(
+                "heart_income", "Heart Factory", "Every new round get a heart", 15, 50,
+                List.of(new RoundGivesHeart(1))
+        );
+    }
     public static Item createChargeBombClick() { //Charge
         return new Item(
                 "bomb_click", "Power of the Fist", "Every 80 tiles clicked, your next click will clear all tiles around your click, destroying mines",
                 15, 10, List.of(new ChargeBombClick(80, 1))
+        );
+    }
+    public static Item createChargeMineHealth() { //Charge
+        return new Item(
+                "health_mines", "Mines of Medicine", "Every 3 mines clicked gain a heart",
+                12, 40, List.of(new ChargeMineHealth(3, 1))
+        );
+    }
+    public static Item createMineBombs() { //On Pickup
+        return new Item(
+                "mine_bombs", "Friendly Fire", "Mines clicked will clear all tiles around them destroying other mines (mines destroyed won't cause this)", 10, 100,
+                List.of(new MineRemovesTiles())
         );
     }
 }

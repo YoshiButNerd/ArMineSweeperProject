@@ -13,6 +13,8 @@ public class RunState {
     private int firstClicks;
     private List<Item> items;
     private static RunState instance;
+    //Booleans for special items
+    private boolean mineBombs;
 
     //
     public interface StateListener {
@@ -46,23 +48,27 @@ public class RunState {
     //
 
     public void setNewRun() {
-        this.money = 100;
+        this.money = 0;
         this.health = 3;
         this.mineCount = 40;
         this.round = 1;
         this.firstClicks = 1;
         this.items.clear();
+        //booleans for special items
+        this.mineBombs = false;
         notifyMoneyChanged();
         notifyHealthChanged();
     }
 
     private RunState() {
-        this.money = 100;
+        this.money = 0;
         this.health = 3;
         this.mineCount = 40;
         this.round = 1;
         this.firstClicks = 1;
         items = new ArrayList<>();
+        //booleans for special items
+        this.mineBombs = false;
     }
 
     public static RunState getInstance() {
@@ -125,6 +131,7 @@ public class RunState {
 
     public void addItem(Item item) {
         items.add(item);
+        triggerEvent(GameEventType.ONOBTAIN);
     }
 
     public int getMineCount() {
@@ -152,7 +159,7 @@ public class RunState {
     public void triggerEvent(GameEventType event) {
         items.sort((a, b) -> Integer.compare(b.getPriority(), a.getPriority()));
 
-        for (Item item : items) {
+        for (Item item : new ArrayList<>(items)) {
             item.trigger(event, this);
         }
     }
@@ -160,12 +167,13 @@ public class RunState {
     @Override
     public String toString() {
         return "RunState{" +
-                "money=" + money +
-                ", health=" + health +
-                ", mineCount=" + mineCount +
-                ", round=" + round +
-                ", firstClicks=" + firstClicks +
+                " mineBombs=" + mineBombs +
                 ", items=" + items +
+                ", firstClicks=" + firstClicks +
+                ", round=" + round +
+                ", mineCount=" + mineCount +
+                ", health=" + health +
+                ", money=" + money +
                 '}';
     }
 
@@ -173,6 +181,14 @@ public class RunState {
     public void moneyItemGain(int amount) {
         this.money += amount;
         notifyMoneyChanged();
+    }
+
+    public boolean getMineBombs() {
+        return mineBombs;
+    }
+
+    public void setMineBombs(boolean mineBombs) {
+        this.mineBombs = mineBombs;
     }
 
 }

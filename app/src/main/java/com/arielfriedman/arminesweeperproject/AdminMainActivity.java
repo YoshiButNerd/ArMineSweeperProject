@@ -3,6 +3,7 @@ package com.arielfriedman.arminesweeperproject;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -57,6 +58,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
             else if (v == aBtnGoGame){
                 startNewRun();
                 intent = new Intent(AdminMainActivity.this, GameActivity.class);
+                Log.d("MainActivity", "Set intent and runstate successfully");
             }
             else if (v == aBtnGoLogin){
                 intent = new Intent(AdminMainActivity.this, LoginActivity.class);
