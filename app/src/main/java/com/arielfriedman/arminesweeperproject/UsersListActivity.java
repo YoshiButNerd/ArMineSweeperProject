@@ -20,6 +20,7 @@ import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.adapters.UserAdapter;
 import com.arielfriedman.arminesweeperproject.model.User;
 import com.arielfriedman.arminesweeperproject.services.DatabaseService;
+import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,7 @@ public class UsersListActivity extends BaseActivity implements View.OnClickListe
         usersList.setAdapter(userAdapter);
         btnGoBack = findViewById(R.id.btnGoBack);
         btnGoBack.setOnClickListener(this);
+        btnGoBack.setSoundEffectsEnabled(false);
     }
 
     @Override
@@ -79,6 +81,7 @@ public class UsersListActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        SfxManager.play(this, R.raw.sfx_clickbtn);
         intent = new Intent(UsersListActivity.this, AdminMainActivity.class);
         startActivity(intent);
     }

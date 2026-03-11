@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
+import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
 public class InfoActivity extends BaseActivity implements View.OnClickListener {
 
@@ -33,10 +34,12 @@ public class InfoActivity extends BaseActivity implements View.OnClickListener {
     public void Initviews() {
         btnGoBack = findViewById(R.id.goBackBtn);
         btnGoBack.setOnClickListener(this);
+        btnGoBack.setSoundEffectsEnabled(false);
     }
 
     @Override
     public void onClick(View v) {
+        SfxManager.play(this, R.raw.sfx_clickbtn);
         previousActivity = getIntent().getStringExtra("PREVIOUS_ACTIVITY");
         if (previousActivity.equals("AdminMainActivity"))
             intent = new Intent(InfoActivity.this, AdminMainActivity.class);

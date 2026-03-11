@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.R;
+import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.SettingsDialog;
 
 public class BaseActivity extends AppCompatActivity {
@@ -32,7 +33,11 @@ public class BaseActivity extends AppCompatActivity {
 
     public void initBaseViews() {
         settingsBtn = findViewById(R.id.settingsBtn);
-        settingsBtn.setOnClickListener(v -> openDialog());
+        settingsBtn.setSoundEffectsEnabled(false);
+        settingsBtn.setOnClickListener(v -> {
+            SfxManager.play(this, R.raw.sfx_clickbtn);
+            openDialog();
+        });
     }
 
     protected void setContentLayout(int layoutResId) {

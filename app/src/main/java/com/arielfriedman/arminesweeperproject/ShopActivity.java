@@ -15,6 +15,7 @@ import com.arielfriedman.arminesweeperproject.Items.Item;
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.ItemPool;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
+import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,6 +53,7 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
             );
             btn.setOnClickListener(v -> {
                 if (RunState.getInstance().getMoney() >= item.getPrice()){
+                    SfxManager.play(this, R.raw.sfx_clickbtn);
                     RunState.getInstance().addItem(item);
                     moneyChange(-(item.getPrice()));
                     btn.setEnabled(false);
@@ -65,6 +67,9 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
         btnItem1 = findViewById(R.id.item1Btn);
         btnItem2 = findViewById(R.id.item2Btn);
         btnItem3 = findViewById(R.id.item3Btn);
+        btnItem1.setSoundEffectsEnabled(false);
+        btnItem2.setSoundEffectsEnabled(false);
+        btnItem3.setSoundEffectsEnabled(false);
         btnGoNext = findViewById(R.id.goNextBtn);
         moneyCountTxt = findViewById(R.id.moneyTxt);
         moneyCountTxt.setText("כסף: " + RunState.getInstance().getMoney());

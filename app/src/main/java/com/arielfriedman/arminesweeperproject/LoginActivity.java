@@ -17,8 +17,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.services.DatabaseService;
+import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
-    /// Activity for logging in the user
+/// Activity for logging in the user
     /// This activity is used to log in the user
     /// It contains fields for the user to enter their email and password
     /// It also contains a button to log in the user
@@ -67,10 +68,13 @@ import com.arielfriedman.arminesweeperproject.services.DatabaseService;
             /// set the click listener
             btnLogin.setOnClickListener(this);
             btnGoRegister.setOnClickListener(this);
+            btnLogin.setSoundEffectsEnabled(false);
+            btnGoRegister.setSoundEffectsEnabled(false);
         }
 
         @Override
         public void onClick(View v) {
+            SfxManager.play(this, R.raw.sfx_clickbtn);
             if (v.getId() == btnLogin.getId()) {
                 Log.d(TAG, "onClick: Login button clicked");
 

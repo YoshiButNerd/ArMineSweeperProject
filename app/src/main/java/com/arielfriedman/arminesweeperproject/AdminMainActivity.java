@@ -1,5 +1,7 @@
 package com.arielfriedman.arminesweeperproject;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,10 +16,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
+import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
+import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
+import com.arielfriedman.arminesweeperproject.specialClasses.NotificationReceiver;
 
 public class AdminMainActivity extends BaseActivity implements View.OnClickListener{
 
-    private SharedPreferences prefs;
     Button aBtnGoInfo;
     Button aBtnGoGame;
     Button aBtnGoLogin;
@@ -36,8 +40,27 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
             return insets;
         });
         Initviews();
-    }
+        requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
+        Intent intent = new Intent(this, NotificationReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE
+        );
+
+        int interval = 60 * 60 * 24 * 1000;
+
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + interval,
+                interval,
+                pendingIntent
+        );
+    }
         public void Initviews() {
             aBtnGoInfo = findViewById(R.id.aGoInfoBtn);
             aBtnGoGame = findViewById(R.id.aGoGameBtn);
@@ -47,10 +70,15 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
             aBtnGoGame.setOnClickListener(this);
             aBtnGoLogin.setOnClickListener(this);
             aBtnGoUsersList.setOnClickListener(this);
+            aBtnGoInfo.setSoundEffectsEnabled(false);
+            aBtnGoGame.setSoundEffectsEnabled(false);
+            aBtnGoLogin.setSoundEffectsEnabled(false);
+            aBtnGoUsersList.setSoundEffectsEnabled(false);
         }
 
         @Override
         public void onClick(View v) {
+            SfxManager.play(this, R.raw.sfx_clickbtn);
             if (v == aBtnGoInfo){
                 intent = new Intent(AdminMainActivity.this, InfoActivity.class);
                 intent.putExtra("PREVIOUS_ACTIVITY", "AdminMainActivity");
@@ -72,6 +100,9 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     public void startNewRun() {
         RunState runState = RunState.getInstance();
         runState.setNewRun();
+        SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
+        int musicVol = prefs.getInt("music_volume", 50);
+        float volume = musicVol / 100f;
+        MusicManager.getInstance().startMusic(this, R.raw.game_music, volume);
     }
-
-    }
+}

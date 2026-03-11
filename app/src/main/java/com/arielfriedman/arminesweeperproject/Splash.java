@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class Splash extends AppCompatActivity {
 
     private ImageView myImageView;
+    private TextView myTitleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class Splash extends AppCompatActivity {
         });
 
         myImageView = findViewById(R.id.imageView);
+        myTitleView = findViewById(R.id.splashTitle);
 
         Thread mSplashThread = new Thread(){
             @Override
@@ -38,8 +41,11 @@ public class Splash extends AppCompatActivity {
                         MediaPlayer music = MediaPlayer.create(Splash.this, R.raw.elevmusic);
                         music.start();
                         Animation myFadeInAnimation = AnimationUtils.loadAnimation(Splash.this, R.anim.tween);
-                        wait(1000);
+                        myImageView.startAnimation(myFadeInAnimation);
+                        myTitleView.startAnimation(myFadeInAnimation);
+                        wait(3000);
                         music.stop();
+                        music.release();
                     }
                 }
                 catch (InterruptedException ex){

@@ -20,6 +20,7 @@ import com.arielfriedman.arminesweeperproject.gameHandler.GameEventType;
 import com.arielfriedman.arminesweeperproject.gameHandler.ItemFactory;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 import com.arielfriedman.arminesweeperproject.model.Tile;
+import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -175,7 +176,10 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         int row = pos[0];
         int col = pos[1];
         Log.d("GameActivity", "Clicked: " + "row-"+ row + " col-" + col);
-        onTileClicked(row, col);
+        if (!tilesArr[row][col].isFlagged()) {
+            SfxManager.play(this, R.raw.sfx_clicktile);
+            onTileClicked(row, col);
+        }
     }
 
     @Override

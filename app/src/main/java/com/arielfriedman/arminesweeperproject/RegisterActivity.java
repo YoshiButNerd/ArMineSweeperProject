@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.model.User;
 import com.arielfriedman.arminesweeperproject.services.DatabaseService;
+import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
 /// Activity for registering the user
 /// This activity is used to register the user
@@ -65,10 +66,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         /// set the click listener
         btnRegister.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
+        btnRegister.setSoundEffectsEnabled(false);
+        btnLogin.setSoundEffectsEnabled(false);
     }
 
     @Override
     public void onClick(View v) {
+        SfxManager.play(this, R.raw.sfx_clickbtn);
         if (v.getId() == btnRegister.getId()) {
             Log.d(TAG, "onClick: Register button clicked");
 
