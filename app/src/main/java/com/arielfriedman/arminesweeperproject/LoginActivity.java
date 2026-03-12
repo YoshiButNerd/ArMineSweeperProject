@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import android.content.Intent;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +18,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
+import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 import com.arielfriedman.arminesweeperproject.services.DatabaseService;
+import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
 /// Activity for logging in the user
@@ -36,6 +40,10 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
         static final String ADMINEMAIL = "gigaadmin@gmail.com";
         static final String ADMINPASS = "adminpass123";
         SharedPreferences sharedpreferences;
+        GestureDetector gestureDetector;
+
+        public static final String SCREENPREFS = "LastScreenBeforeGame" ;
+        SharedPreferences sharedgameprefs;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +57,12 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                 return insets;
             });
             Initviews();
+            handelSwipe();
         }
 
         public void Initviews() {
             sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-
+            sharedgameprefs = getSharedPreferences(SCREENPREFS, Context.MODE_PRIVATE);
             /// get the views
             databaseService = DatabaseService.getInstance();
             etEmail = findViewById(R.id.etLoginEmail);
@@ -138,5 +147,55 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                     //SharedPreferencesUtil.signOutUser(LoginActivity.this);
                 }
             });
+        }
+
+        public void handelSwipe() {
+            gestureDetector = new GestureDetector(this,
+                    new GestureDetector.SimpleOnGestureListener() {
+                        @Override
+                        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+                            if (e1 != null && e2 != null && e1.getY() - e2.getY() > 50) {
+                                secretStartGame();
+                                return true;
+                            }
+
+                            return false;
+                        }
+                    });
+            View mainView = findViewById(R.id.main);
+
+            mainView.setOnTouchListener((v, event) -> {
+                gestureDetector.onTouchEvent(event);
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    v.performClick();
+                }
+                return false;
+            });
+        }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent event) {
+            return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
+        }
+
+        public void secretStartGame() {
+            startNewRun();
+            Intent intent = new Intent(LoginActivity.this, GameActivity.class);
+            Log.d("LoginActivity", "Set intent and runstate successfully");
+            startActivity(intent);
+        }
+
+        public void startNewRun() {
+            RunState runstate = RunState.getInstance();
+            runstate.setNewRun();
+            SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
+            int musicVol = prefs.getInt("music_volume", 50);
+            float volume = musicVol / 100f;
+            MusicManager.getInstance().startMusic(this, R.raw.game_music, volume);
+            //save screen to come back to after a loss
+            SharedPreferences.Editor editor = sharedgameprefs.edit();
+            editor.putString("lobby_screen", "LoginActivity");
+            editor.commit();
         }
     }

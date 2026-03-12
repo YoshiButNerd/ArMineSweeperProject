@@ -2,6 +2,7 @@ package com.arielfriedman.arminesweeperproject;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -26,8 +27,10 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     Button aBtnGoGame;
     Button aBtnGoLogin;
     Button aBtnGoUsersList;
-
     Intent intent;
+
+    public static final String SCREENPREFS = "LastScreenBeforeGame" ;
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         );
     }
         public void Initviews() {
+            sharedpreferences = getSharedPreferences(SCREENPREFS, Context.MODE_PRIVATE);
             aBtnGoInfo = findViewById(R.id.aGoInfoBtn);
             aBtnGoGame = findViewById(R.id.aGoGameBtn);
             aBtnGoUsersList = findViewById(R.id.goInfoUsersBtn);
@@ -104,5 +108,9 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         int musicVol = prefs.getInt("music_volume", 50);
         float volume = musicVol / 100f;
         MusicManager.getInstance().startMusic(this, R.raw.game_music, volume);
+        //save screen to come back to after a loss
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("lobby_screen", "AdminMainActivity");
+        editor.commit();
     }
 }

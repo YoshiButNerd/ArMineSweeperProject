@@ -33,8 +33,8 @@ public class ItemFactory {
     }
     public static Item createGoldMissile() { //New Round
         return new Item(
-                "mine_briber", "Mine Bribe", "For every 10 gold you hold at start of round one more mine is removed", 12, 5,
-                List.of(new MoneyRemovesMine(1, 10))
+                "mine_briber", "Mine Bribe", "For every 10 gold you hold at start of round one more mine is removed",
+                12, 5, List.of(new MoneyRemovesMine(1, 10))
         );
     }
     public static Item createHeartIncome() { //New Round
@@ -57,8 +57,8 @@ public class ItemFactory {
     }
     public static Item createMineBombs() { //On Pickup
         return new Item(
-                "mine_bombs", "Friendly Fire", "Mines clicked will clear all tiles around them destroying other mines (mines destroyed won't cause this)", 10, 100,
-                List.of(new MineRemovesTiles())
+                "mine_bombs", "Friendly Fire", "Mines clicked will clear all tiles around them destroying other mines (mines destroyed won't cause this)",
+                10, 100, List.of(new MineRemovesTiles())
         );
     }
 }

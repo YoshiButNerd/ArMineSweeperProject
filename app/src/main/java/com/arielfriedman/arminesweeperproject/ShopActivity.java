@@ -1,12 +1,17 @@
 package com.arielfriedman.arminesweeperproject;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -15,6 +20,7 @@ import com.arielfriedman.arminesweeperproject.Items.Item;
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.ItemPool;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
+import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
 import java.util.ArrayList;
@@ -23,12 +29,11 @@ import java.util.List;
 
 public class ShopActivity extends BaseActivity implements View.OnClickListener {
 
-    Button btnItem1, btnItem2, btnItem3;
-    TextView moneyCountTxt;
+    Button btnItem1, btnItem2, btnItem3, btnHeartUp, btnGoNext;
+    TextView moneyCountTxt, healthCountTxt;
     List<Item> itemList;
     List<Item> ownedItemsList;
-
-    Button btnGoNext;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,39 +46,27 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
             return insets;
         });
         InitViews();
-        List<Item> shopItems = setItems(3);
-        Button[] itemBtns = { btnItem1, btnItem2, btnItem3 };
-        int i = 0;
-        for (Item item : shopItems) {
-            Button btn = itemBtns[i];
-            btn.setText(
-                    item.getName() + "\n\n" + "מחיר: " +
-                    item.getPrice() + "\n\n" + "יכולת: " + "\n" +
-                    item.getDesc()
-            );
-            btn.setOnClickListener(v -> {
-                if (RunState.getInstance().getMoney() >= item.getPrice()){
-                    SfxManager.play(this, R.raw.sfx_clickbtn);
-                    RunState.getInstance().addItem(item);
-                    moneyChange(-(item.getPrice()));
-                    btn.setEnabled(false);
-                }
-            });
-            i++;
-        }
+        manageItemBtns();
+        manageBackPress();
     }
 
     public void InitViews() {
         btnItem1 = findViewById(R.id.item1Btn);
         btnItem2 = findViewById(R.id.item2Btn);
         btnItem3 = findViewById(R.id.item3Btn);
+        btnHeartUp = findViewById(R.id.heartUpBtn);
+        btnGoNext = findViewById(R.id.goNextBtn);
         btnItem1.setSoundEffectsEnabled(false);
         btnItem2.setSoundEffectsEnabled(false);
         btnItem3.setSoundEffectsEnabled(false);
-        btnGoNext = findViewById(R.id.goNextBtn);
+        btnHeartUp.setSoundEffectsEnabled(false);
+        btnGoNext.setSoundEffectsEnabled(false);
         moneyCountTxt = findViewById(R.id.moneyTxt);
+        healthCountTxt = findViewById(R.id.healthTxt);
         moneyCountTxt.setText("כסף: " + RunState.getInstance().getMoney());
+        healthCountTxt.setText("לבבות: " + RunState.getInstance().getHealth());
         btnGoNext.setOnClickListener(this);
+        btnHeartUp.setOnClickListener(this);
         itemList = new ArrayList<>(ItemPool.getAllItems());
         ownedItemsList = new ArrayList<>(RunState.getInstance().getItems());
     }
@@ -97,14 +90,76 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
         return new ArrayList<>(availableItems.subList(0, Math.min(amount, availableItems.size())));
     }
 
+    public void manageItemBtns() {
+        List<Item> shopItems = setItems(3);
+        Button[] itemBtns = { btnItem1, btnItem2, btnItem3 };
+        int i = 0;
+        for (Item item : shopItems) {
+            Button btn = itemBtns[i];
+            btn.setText(
+                    item.getName() + "\n\n" + "מחיר: " +
+                            item.getPrice() + "\n\n" + "יכולת: " + "\n" +
+                            item.getDesc()
+            );
+            btn.setOnClickListener(v -> {
+                if (RunState.getInstance().getMoney() >= item.getPrice()){
+                    SfxManager.play(this, R.raw.sfx_clickbtn);
+                    RunState.getInstance().addItem(item);
+                    moneyChange(-(item.getPrice()));
+                    btn.setEnabled(false);
+                }
+                else {
+                    Toast.makeText(ShopActivity.this, "אין לך מספיק כסף" , Toast.LENGTH_SHORT).show();
+                }
+            });
+            i++;
+        }
+    }
+
     public void moneyChange(int i) {
         RunState.getInstance().changeMoney(i);
         moneyCountTxt.setText("כסף: " + RunState.getInstance().getMoney());
     }
 
+    public void healthChange(int i) {
+        RunState.getInstance().changeHealth(i);
+        healthCountTxt.setText("לבבות: " + RunState.getInstance().getHealth());
+    }
+
+    public void manageBackPress() {
+        getOnBackPressedDispatcher().addCallback(this,
+                new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        new AlertDialog.Builder(ShopActivity.this)
+                                .setTitle("לצאת מהמשחק?")
+                                .setMessage("המשחק יסתיים")
+                                .setPositiveButton("כן", (dialog, which) -> {
+                                    dialog.dismiss();
+                                    MusicManager.getInstance().stopMusic();
+                                    finishAffinity();
+                                })
+                                .setNegativeButton("לא", (dialog, which) -> dialog.dismiss())
+                                .show();
+                    }
+                });
+    }
+
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent(ShopActivity.this, GameActivity.class);
-        startActivity(intent);
+        SfxManager.play(this, R.raw.sfx_clickbtn);
+        if (view == btnGoNext) {
+            intent = new Intent(ShopActivity.this, GameActivity.class);
+            startActivity(intent);
+        }
+        else if (view == btnHeartUp) {
+            if (RunState.getInstance().getMoney() >= 10){
+                moneyChange(-10);
+                healthChange(1);
+            }
+            else {
+                Toast.makeText(ShopActivity.this, "אין לך מספיק כסף" , Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

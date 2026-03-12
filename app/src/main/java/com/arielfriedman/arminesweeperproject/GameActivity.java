@@ -1,9 +1,12 @@
 package com.arielfriedman.arminesweeperproject;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -20,6 +23,7 @@ import com.arielfriedman.arminesweeperproject.gameHandler.GameEventType;
 import com.arielfriedman.arminesweeperproject.gameHandler.ItemFactory;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 import com.arielfriedman.arminesweeperproject.model.Tile;
+import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
 import java.util.Random;
@@ -35,13 +39,14 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
     //Game variables
     int mineCount, flagCount;
-    int secondsCountDown = 150;
-    int endOfRoundMoney = 30;
+    long secondsCountDown = 150 * 1000; //*1000 for millis
+    int endOfRoundMoney = 10;
     boolean lost = false;
     boolean trueFirstClick = true;
     private int round;
     int totalPoints = 0;  //player will not be able to see points
     RunState runstate;
+    private long millisRemaining;
 
     //Setting up tile array
     Tile[][] tilesArr = new Tile[ROWS][COLS];
@@ -83,6 +88,9 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onHealthChanged(int health) {
                 healthCountText.setText("לבבות: " + health);
+                if (runstate.getHealth() <= 0) {
+                   // gameLost();
+                }
             }
         };
 
@@ -98,9 +106,10 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         roundCountText.setText("סיבוב: " + round);
         placeMines(mineCount);
         calculateAllMineCounts();
-        timerHandler();
+        timerHandler(secondsCountDown);
         moneyCountText.setText("כסף: " + runstate.getMoney());
         healthCountText.setText("לבבות: " + runstate.getHealth());
+        manageBackPress();
     }
 
     @Override
@@ -110,9 +119,24 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
+    protected  void onRestart() {
+        super.onRestart();
+        SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
+        int musicVol = prefs.getInt("music_volume", 50);
+        float volume = musicVol / 100f;
+        MusicManager.getInstance().startMusic(this, R.raw.game_music, volume);
+        timerHandler(millisRemaining);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         runstate.removeListener(runStateListener);
+        if (downTimer != null) {
+            downTimer.cancel();
+        }
+        MusicManager.getInstance().stopMusic();
+        Log.d("GameActivity", "canceled timer and removed listeners");
     }
 
     public void InitViews() {
@@ -157,6 +181,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 btn.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 btn.setGravity(android.view.Gravity.CENTER);
                 btn.setTextSize(16);
+                btn.setSoundEffectsEnabled(false);
 
                 // Store coordinates in the tag
                 btn.setTag(new int[]{row, col});
@@ -203,6 +228,10 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
         if (runstate.getFirstClicks() > 0) { //add an if and a bool if its true first click
             runstate.changeFirstClicks(-1);
+            if (tile.getIsMine()) {
+                tile.setMine(false);
+                changeFlagCount(-1);
+            }
             btn.setText("");
             btn.setBackgroundColor(getColor(R.color.light_gray));
             Log.d("GameActivity", "First click activated");
@@ -435,11 +464,11 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         return count;
     }
 
-    public void timerHandler() {
-        int millis = secondsCountDown * 1000; // convert seconds into milliseconds
+    public void timerHandler(long millis) {
         downTimer = new CountDownTimer(millis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
+                millisRemaining = millisUntilFinished;
                 timerCountText.setText("" + String.format(FORMAT,
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
@@ -488,6 +517,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
     public void gameLost() {
         lost = true;
+        intent = new Intent(GameActivity.this, LossActivity.class);
+        startActivity(intent);
     }
 
     public void clearMinesAroundAndMove(Tile tile) {
@@ -496,5 +527,24 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
     public void clearMinesAroundAndDelete(Tile tile) {
         clearMinesAround(tile, false);
+    }
+
+    public void manageBackPress() {
+        getOnBackPressedDispatcher().addCallback(this,
+                new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        new AlertDialog.Builder(GameActivity.this)
+                                .setTitle("לצאת מהמשחק?")
+                                .setMessage("המשחק יסתיים")
+                                .setPositiveButton("כן", (dialog, which) -> {
+                                    dialog.dismiss();
+                                    MusicManager.getInstance().stopMusic();
+                                    finishAffinity();
+                                })
+                                .setNegativeButton("לא", (dialog, which) -> dialog.dismiss())
+                                .show();
+                    }
+                });
     }
 }

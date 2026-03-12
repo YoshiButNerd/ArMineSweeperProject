@@ -5,8 +5,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.arielfriedman.arminesweeperproject.model.Tile;
-//import com.arielfriedman.arminesweeperproject.model.Item;
 import com.arielfriedman.arminesweeperproject.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,9 +34,7 @@ public class DatabaseService {
 
     /// paths for different data types in the database
     /// @see DatabaseService#readData(String)
-    private static final String USERS_PATH = "users",
-            ItemS_PATH = "Items",
-            TileS_PATH = "Tiles";
+    private static final String USERS_PATH = "users";
 
     /// callback interface for database operations
     /// @param <T> the type of the object to return
@@ -395,11 +391,7 @@ public class DatabaseService {
             }
         });
     }
-
-
-    // endregion User Section
-
-    // region Item section
+    // region Item section  (maybe add score and put it here?)
 
   /*  /// create a new Item in the database
     /// @param Item the Item object to create
@@ -451,73 +443,6 @@ public class DatabaseService {
 
     // endregion Item section
 */
-    // region Tile section
-
-    /// create a new Tile in the database
-    /// @param Tile the Tile object to create
-    /// @param callback the callback to call when the operation is completed
-    ///               the callback will receive void
-    ///              if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see Tile
-    public void createNewTile(@NotNull final Tile Tile, @Nullable final DatabaseCallback<Void> callback) {
-        writeData(TileS_PATH + "/" + Tile.getId(), Tile, callback);
-    }
-
-    /// get a Tile from the database
-    /// @param TileId the id of the Tile to get
-    /// @param callback the callback to call when the operation is completed
-    ///                the callback will receive the Tile object
-    ///               if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see Tile
-    public void getTile(@NotNull final String TileId, @NotNull final DatabaseCallback<Tile> callback) {
-        getData(TileS_PATH + "/" + TileId, Tile.class, callback);
-    }
-
-    /// get all the Tiles from the database
-    /// @param callback the callback to call when the operation is completed
-    ///               the callback will receive a list of Tile objects
-    ///
-    public void getTileList(@NotNull final DatabaseCallback<List<Tile>> callback) {
-        getDataList(TileS_PATH, Tile.class, callback);
-    }
-
-    /// get all the Tiles of a specific user from the database
-    /// @param uid the id of the user to get the Tiles for
-    /// @param callback the callback to call when the operation is completed
-    public void getUserTileList(@NotNull String uid, @NotNull final DatabaseCallback<List<Tile>> callback) {
-        getTileList(new DatabaseCallback<>() {
-            @Override
-            public void onCompleted(List<Tile> Tiles) {
-                Tiles.removeIf(Tile -> !Objects.equals(Tile.getId(), uid));
-                callback.onCompleted(Tiles);
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                callback.onFailed(e);
-            }
-        });
-    }
-
-
-    /// generate a new id for a new Tile in the database
-    /// @return a new id for the Tile
-    /// @see #generateNewId(String)
-    /// @see Tile
-    public String generateTileId() {
-        return generateNewId(TileS_PATH);
-    }
-
-    /// delete a Tile from the database
-    /// @param TileId the id of the Tile to delete
-    /// @param callback the callback to call when the operation is completed
-    public void deleteTile(@NotNull final String TileId, @Nullable final DatabaseCallback<Void> callback) {
-        deleteData(TileS_PATH + "/" + TileId, callback);
-    }
-
-    // endregion Tile section
 
 }
 
