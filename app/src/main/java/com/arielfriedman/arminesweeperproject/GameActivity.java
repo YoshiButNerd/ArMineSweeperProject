@@ -13,7 +13,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
@@ -55,7 +58,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     //UI + Other variables set up for later
     TextView flagCountText;
     TextView timerCountText;
-    TextView pointsCountText;
+    //TextView pointsCountText;
     TextView roundCountText;
     TextView moneyCountText;
     TextView healthCountText;
@@ -109,6 +112,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         timerHandler(secondsCountDown);
         moneyCountText.setText("כסף: " + runstate.getMoney());
         healthCountText.setText("לבבות: " + runstate.getHealth());
+        getWindow().setDecorFitsSystemWindows(false);
+        manageHidingNavigationBar();
         manageBackPress();
     }
 
@@ -121,10 +126,6 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected  void onRestart() {
         super.onRestart();
-        SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
-        int musicVol = prefs.getInt("music_volume", 50);
-        float volume = musicVol / 100f;
-        MusicManager.getInstance().startMusic(this, R.raw.game_music, volume);
         timerHandler(millisRemaining);
     }
 
@@ -135,14 +136,13 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         if (downTimer != null) {
             downTimer.cancel();
         }
-        MusicManager.getInstance().stopMusic();
         Log.d("GameActivity", "canceled timer and removed listeners");
     }
 
     public void InitViews() {
         flagCountText = findViewById(R.id.flagText);
         timerCountText = findViewById(R.id.timerText);
-        pointsCountText = findViewById(R.id.pointsText);
+        //pointsCountText = findViewById(R.id.pointsText);
         roundCountText = findViewById(R.id.roundText);
         moneyCountText = findViewById(R.id.moneyText);
         healthCountText = findViewById(R.id.healthText);
@@ -160,7 +160,24 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         runstate.triggerEvent(GameEventType.NEWROUND);
         mineCount = runstate.getMineCount();
         flagCount = mineCount;
-        int tileSize = dpToPx(33);
+
+        //
+
+        // Dynamic tile size calculation to ensure it fits the screen
+      /*  DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int availableWidth = metrics.widthPixels + dpToPx(10);
+        int availableHeight = metrics.heightPixels - dpToPx(180); // overhead (headers + bars)
+
+        int tileWidth = availableWidth / COLS;
+        int tileHeight = availableHeight / ROWS;
+
+        int tileSize = Math.min(tileWidth, tileHeight);
+        // Clamp tileSize to reasonable values (original was 33dp)
+        //tileSize = Math.min(tileSize, dpToPx(33));
+        //tileSize = Math.max(tileSize, dpToPx(24)); */
+        int tileSize = dpToPx(30);
+
+        //
 
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
@@ -485,7 +502,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
     public void addPoints(int i) {
         totalPoints += i;
-        pointsCountText.setText("נקודות: " + totalPoints);
+        //pointsCountText.setText("נקודות: " + totalPoints);
         if (totalPoints >= WINPOINTS && !lost) {
             gameWin();
         }
@@ -546,5 +563,15 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                                 .show();
                     }
                 });
+    }
+
+    private void manageHidingNavigationBar() { //Hides navigation bar until user swipes from top
+        WindowInsetsController controller = getWindow().getInsetsController();
+        if (controller != null) {
+            controller.hide(WindowInsets.Type.systemBars());
+            controller.setSystemBarsBehavior(
+                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            );
+        }
     }
 }

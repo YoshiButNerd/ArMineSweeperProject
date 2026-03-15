@@ -27,7 +27,7 @@ public class ItemFactory {
     }
     public static Item createMineMissile() { //New Round
         return new Item(
-                "mine_missile", "Mine Missile", "Removes 10% of mines (rounded down)", 10, 100,
+                "mine_missile", "Mine Missile", "Removes 10% of mines (rounded up)", 10, 100,
                 List.of(new MinePrecentRemover(10))
         );
     }

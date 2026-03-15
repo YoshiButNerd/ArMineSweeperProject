@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +49,7 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
         });
         InitViews();
         manageItemBtns();
+        manageHidingNavigationBar();
         manageBackPress();
     }
 
@@ -143,6 +146,16 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
                                 .show();
                     }
                 });
+    }
+
+    private void manageHidingNavigationBar() { //Hides navigation bar until user swipes from top
+        WindowInsetsController controller = getWindow().getInsetsController();
+        if (controller != null) {
+            controller.hide(WindowInsets.Type.systemBars());
+            controller.setSystemBarsBehavior(
+                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            );
+        }
     }
 
     @Override
