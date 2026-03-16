@@ -12,8 +12,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
@@ -42,8 +45,9 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
     //Game variables
     int mineCount, flagCount;
-    long secondsCountDown = 150 * 1000; //*1000 for millis
+    long secondsCountDown = 180 * 1000; //* 1000 for millis
     int endOfRoundMoney = 10;
+    int longClickMillis = 200;
     boolean lost = false;
     boolean trueFirstClick = true;
     private int round;
@@ -92,7 +96,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             public void onHealthChanged(int health) {
                 healthCountText.setText("לבבות: " + health);
                 if (runstate.getHealth() <= 0) {
-                   // gameLost();
+                    gameLost();
                 }
             }
         };
@@ -185,6 +189,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 tilesArr[row][col] = tile;
 
                 Button btn = new Button(this);
+                manageShorterLongClicks(btn);
                 tileBtnArr[row][col] = btn;
 
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
@@ -565,7 +570,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 });
     }
 
-    private void manageHidingNavigationBar() { //Hides navigation bar until user swipes from top
+    private void manageHidingNavigationBar() { // Hides navigation bar until user swipes from top
         WindowInsetsController controller = getWindow().getInsetsController();
         if (controller != null) {
             controller.hide(WindowInsets.Type.systemBars());
@@ -573,5 +578,34 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                     WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             );
         }
+    }
+
+    private void manageShorterLongClicks(View tile) {
+        final Handler handler = new Handler(Looper.getMainLooper());
+        final boolean[] longPressed = {false}; // use array to mutate inside lambda
+
+        tile.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+
+                case MotionEvent.ACTION_DOWN:
+                    longPressed[0] = false; // reset
+                    handler.postDelayed(() -> {
+                        longPressed[0] = true;
+                        v.performLongClick(); }, longClickMillis); // fast long press
+                    return true;
+
+                case MotionEvent.ACTION_UP:
+                    handler.removeCallbacksAndMessages(null); // cancel pending long press
+                    if (!longPressed[0]) {
+                        v.performClick(); // normal click
+                    }
+                    return true;
+
+                case MotionEvent.ACTION_CANCEL:
+                    handler.removeCallbacksAndMessages(null); // cancel if system interrupts
+                    return true;
+            }
+            return false;
+        });
     }
 }
