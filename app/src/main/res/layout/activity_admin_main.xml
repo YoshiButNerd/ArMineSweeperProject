@@ -10,28 +10,31 @@
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="7dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp"
+        android:background="@color/trans_gray"
+        android:translationZ="10dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintWidth_percent="0.9">
 
         <TextView
             android:id="@+id/AdminTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="125dp"
+            android:layout_marginBottom="35dp"
             android:gravity="center"
             android:letterSpacing="0.01"
             android:shadowColor="#000000"
             android:shadowDx="2"
             android:shadowDy="2"
             android:shadowRadius="7"
-            android:text="Admin Page"
-            android:textAlignment="center"
+            android:text="דף מנהל"
             android:textColor="@color/dark_gray"
             android:textSize="45sp"
             android:textStyle="bold" />
@@ -41,36 +44,36 @@
             style="@style/BasicButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginBottom="22dp"
             android:text="שחק"
-            android:textSize="17sp" />
+            android:textSize="18sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/aGoInfoBtn"
             style="@style/BasicButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="22dp"
             android:text="אודות"
-            android:textSize="17sp" />
+            android:textSize="18sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/goInfoUsersBtn"
             style="@style/BasicButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="22dp"
             android:text="טבלת משתמשים"
-            android:textSize="17sp" />
+            android:textSize="18sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/goLoginBtn"
             style="@style/BasicButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:text="התנתק"
-            android:textSize="17sp" />
+            android:textSize="18sp" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@
     <color name="gray">#808080</color>
     <color name="light_gray">#C0C0C0</color>
     <color name="trans_gray">#24808080</color>
+    <color name="low_trans_gray">#56808080</color>
     <color name="minesweeper_gray">#C6C6C6</color>
     <color name="dark_gray">#1F1F1F</color>
 
