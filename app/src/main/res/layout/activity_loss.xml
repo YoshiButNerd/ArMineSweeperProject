@@ -37,7 +37,8 @@
         app:layout_constraintTop_toBottomOf="@+id/TitleLossTxt"
         app:srcCompat="@mipmap/minesweeperlogo" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
+        style="@style/BasicButton"
         android:id="@+id/returnHomeBtn"
         android:layout_width="173dp"
         android:layout_height="81dp"

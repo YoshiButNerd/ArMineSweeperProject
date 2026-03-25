@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisterActivity"
-    android:background="@color/background">
+    android:background="@drawable/background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -75,7 +75,8 @@
             android:gravity="center"
             android:layout_margin="20dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/BasicButton"
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,7 +84,8 @@
             android:gravity="center"
             android:layout_margin="10dp"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            style="@style/BasicButton"
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

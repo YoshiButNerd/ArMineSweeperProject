@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -78,7 +79,26 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
             aBtnGoGame.setSoundEffectsEnabled(false);
             aBtnGoLogin.setSoundEffectsEnabled(false);
             aBtnGoUsersList.setSoundEffectsEnabled(false);
+            addPressAnimation(aBtnGoGame);
+            addPressAnimation(aBtnGoInfo);
+            addPressAnimation(aBtnGoLogin);
+            addPressAnimation(aBtnGoUsersList);
         }
+
+    private void addPressAnimation(View view) {
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).start();
+                } else if (event.getAction() == MotionEvent.ACTION_UP ||
+                        event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
+                }
+                return false;
+            }
+        });
+    }
 
         @Override
         public void onClick(View v) {

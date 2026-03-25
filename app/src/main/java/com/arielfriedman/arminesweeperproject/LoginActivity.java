@@ -79,7 +79,24 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
             btnGoRegister.setOnClickListener(this);
             btnLogin.setSoundEffectsEnabled(false);
             btnGoRegister.setSoundEffectsEnabled(false);
+            addPressAnimation(btnGoRegister);
+            addPressAnimation(btnLogin);
         }
+
+    private void addPressAnimation(View view) {
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).start();
+                } else if (event.getAction() == MotionEvent.ACTION_UP ||
+                        event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
+                }
+                return false;
+            }
+        });
+    }
 
         @Override
         public void onClick(View v) {

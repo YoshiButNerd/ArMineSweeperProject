@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!-- Your repeating image -->
+<item>
+    <bitmap
+        android:src="@drawable/minesweeper_tile"
+        android:tileMode="repeat" />
+</item>
+
+<!-- Overlay -->
+<item>
+    <shape>
+        <solid android:color="#33000000"/> <!-- dark overlay -->
+    </shape>
+</item>
+
+</layer-list>

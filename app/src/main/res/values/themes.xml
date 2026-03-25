@@ -5,6 +5,5 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="colorPrimary">@color/lighter_red</item>
     </style>
-
     <style name="Theme.ArMineSweeperProject" parent="Base.Theme.ArMineSweeperProject" />
 </resources>

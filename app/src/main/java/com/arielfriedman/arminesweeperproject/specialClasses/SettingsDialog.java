@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -34,6 +35,7 @@ public class SettingsDialog extends AppCompatDialogFragment {
         // XML elements
         Button btnSave = view.findViewById(R.id.saveBtn);
         btnSave.setSoundEffectsEnabled(false);
+        addPressAnimation(btnSave);
         SeekBar musicSlider = view.findViewById(R.id.volumeMusicBar);
         SeekBar sfxSlider = view.findViewById(R.id.volumeSfxBar);
         SwitchCompat notifSwitch = view.findViewById(R.id.notifCheck);
@@ -64,6 +66,21 @@ public class SettingsDialog extends AppCompatDialogFragment {
         builder.setView(view);
 
         return builder.create();
+    }
+
+    private void addPressAnimation(View view) {
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).start();
+                } else if (event.getAction() == MotionEvent.ACTION_UP ||
+                        event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
+                }
+                return false;
+            }
+        });
     }
 
     @Override
