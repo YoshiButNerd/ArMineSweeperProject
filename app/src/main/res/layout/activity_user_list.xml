@@ -11,16 +11,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="417dp">
+        android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_users_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            tools:layout_editor_absoluteX="-33dp"
-            tools:layout_editor_absoluteY="118dp"
             android:layout_weight="35" />
 
         <LinearLayout
@@ -37,8 +33,6 @@
                 android:layout_weight="7"
                 android:layout_height="match_parent"
                 android:text="כמות המשתמשים"
-                tools:layout_editor_absoluteX="137dp"
-                tools:layout_editor_absoluteY="268dp"
                 android:textSize="20sp"
                 android:layout_gravity="center"
                 android:gravity="center"/>

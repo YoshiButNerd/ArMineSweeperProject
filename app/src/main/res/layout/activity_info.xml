@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/dark_gray"
             android:layout_marginTop="50dp"
             android:text="הפיצ'רים באפליקציה"
             android:textSize="30sp"
