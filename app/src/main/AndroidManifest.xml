@@ -14,6 +14,9 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.ArMineSweeperProject">
         <activity
+            android:name=".TutorialActivity"
+            android:exported="false" />
+        <activity
             android:name=".LossActivity"
             android:exported="false" />
         <activity

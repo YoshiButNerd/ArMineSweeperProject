@@ -3,24 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
             android:id="@+id/tv_item_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="שם משתמש"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_item_user_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="אימייל משתמש"
             android:gravity="center"/>
 
@@ -28,6 +35,7 @@
             android:id="@+id/tv_item_user_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="טלפון משתמש"
             android:gravity="center"/>
 
@@ -35,13 +43,24 @@
             android:id="@+id/tv_user_initials"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="אות פרטי ומשפחה"
             android:gravity="center" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_user_role"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="5dp"
             android:textAlignment="center"/>
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_height="1dp"
+            android:background="@color/dark_gray" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

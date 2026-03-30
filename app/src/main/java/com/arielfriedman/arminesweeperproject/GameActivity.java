@@ -46,13 +46,15 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
     //Game variables
     int mineCount, flagCount;
-    long secondsCountDown = 180 * 1000; //* 1000 for millis
+    int secondsCountDown = 300;
     int endOfRoundMoney = 10;
+    int secondsDiffRemove = 20;
+    int minesDiffAdd = 5;
     int longClickMillis = 200;
     boolean lost = false;
     boolean trueFirstClick = true;
     private int round;
-    int totalPoints = 0;  //player will not be able to see points
+    int totalPoints = 0;  //player will not be able to see points (they are for seeing if player won)
     RunState runstate;
     private long millisRemaining;
 
@@ -84,6 +86,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        
         runstate = RunState.getInstance();
         InitViews();
 
@@ -97,7 +100,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             public void onHealthChanged(int health) {
                 healthCountText.setText("לבבות: " + health);
                 if (runstate.getHealth() <= 0) {
-                    gameLost();
+                    //gameLost();
                 }
             }
         };
@@ -106,15 +109,16 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         mineGridLayout.setColumnCount(COLS);
         mineGridLayout.setRowCount(ROWS);
 
-        //runstate.addItem(ItemFactory.createMineBombs()); //TEST AN ITEM
-        //runstate.addItem(ItemFactory.createChargeBombClick()); //TEST AN ITEM
+        // Wait for layout to be measured to calculate optimal tile size
+        mineGridLayout.post(() -> {
+            buildBoard(mineGridLayout);
+            flagCountText.setText(flagCount + " ⚑");
+            roundCountText.setText("סיבוב: " + round);
+            placeMines(mineCount);
+            calculateAllMineCounts();
+            timerHandler((long) secondsCountDown * 1000);
+        });
 
-        buildBoard(mineGridLayout);
-        flagCountText.setText(flagCount + " ⚑");
-        roundCountText.setText("סיבוב: " + round);
-        placeMines(mineCount);
-        calculateAllMineCounts();
-        timerHandler(secondsCountDown);
         moneyCountText.setText("כסף: " + runstate.getMoney());
         healthCountText.setText("לבבות: " + runstate.getHealth());
         getWindow().setDecorFitsSystemWindows(false);
@@ -131,7 +135,9 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected  void onRestart() {
         super.onRestart();
-        timerHandler(millisRemaining);
+        if (millisRemaining > 0) {
+            timerHandler(millisRemaining);
+        }
     }
 
     @Override
@@ -157,8 +163,11 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     public void setGameDiff() {
         round = runstate.getRound();
         int startingMines = runstate.getMineCount();
-        runstate.setMineCount(startingMines + 5*(round-1));
-        secondsCountDown += 10*(round-1);
+        runstate.setMineCount(startingMines + minesDiffAdd * (round-1));
+        secondsCountDown -= secondsDiffRemove * (round-1);
+        if (secondsCountDown < 60) {
+            secondsCountDown = 60;
+        }
     }
 
     public void buildBoard(GridLayout mineGridLayout) {
@@ -166,23 +175,21 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         mineCount = runstate.getMineCount();
         flagCount = mineCount;
 
-        //
-
-        // Dynamic tile size calculation to ensure it fits the screen
-      /*  DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int availableWidth = metrics.widthPixels + dpToPx(10);
-        int availableHeight = metrics.heightPixels - dpToPx(180); // overhead (headers + bars)
+        View gridContainer = findViewById(R.id.gridContainer);
+        int availableWidth = gridContainer.getWidth();
+        int availableHeight = gridContainer.getHeight();
 
         int tileWidth = availableWidth / COLS;
         int tileHeight = availableHeight / ROWS;
 
         int tileSize = Math.min(tileWidth, tileHeight);
-        // Clamp tileSize to reasonable values (original was 33dp)
-        //tileSize = Math.min(tileSize, dpToPx(33));
-        //tileSize = Math.max(tileSize, dpToPx(24)); */
-        int tileSize = dpToPx(30);
+        
+        // Fallback
+        if (tileSize <= 0) {
+            tileSize = dpToPx(30);
+        }
 
-        //
+        mineGridLayout.removeAllViews();
 
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
@@ -193,7 +200,10 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 manageShorterLongClicks(btn);
                 tileBtnArr[row][col] = btn;
 
-                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams(
+                        GridLayout.spec(row),
+                        GridLayout.spec(col)
+                );
                 params.width = tileSize;
                 params.height = tileSize;
                 btn.setLayoutParams(params);
@@ -271,9 +281,9 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             }
         }
         else if (tile.getIsMine()) {
-            btn.setText("X");
+            btn.setText("");
+            btn.setBackgroundResource(R.drawable.minesweeper_bomb_red);
             changeFlagCount(-1);
-            btn.setBackgroundColor(getColor(R.color.red));
             mineClicked(tile);
         }
         else {
