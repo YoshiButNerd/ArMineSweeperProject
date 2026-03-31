@@ -5,6 +5,57 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".TutorialActivity">
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:translationZ="10dp"
+        android:background="@color/trans_gray"
+        android:orientation="vertical"
+        app:layout_constraintVertical_bias="0.05"
+        app:layout_constraintWidth_percent="0.96"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tutorialTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="חוקי המשחק"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.01"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="7"
+            android:textColor="@color/dark_gray"
+            android:textSize="45sp"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:id="@+id/tutorialTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tutorial_txt"
+            android:textColor="@color/black"
+            android:background="@color/low_trans_gray"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:layout_marginTop="30dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/BasicButton"
+            android:id="@+id/tutorialBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="חזרה" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,6 +28,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     Button btnGoInfo;
     Button btnGoGame;
     Button btnGoLogin;
+    Button btnGoTutorial;
     Intent intent;
 
     public static final String SCREENPREFS = "LastScreenBeforeGame" ;
@@ -71,15 +72,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btnGoInfo = findViewById(R.id.goInfoBtn);
         btnGoGame = findViewById(R.id.goGameBtn);
         btnGoLogin = findViewById(R.id.goLoginBtn);
+        btnGoTutorial = findViewById(R.id.goTutorialBtn);
         btnGoInfo.setOnClickListener(this);
         btnGoGame.setOnClickListener(this);
         btnGoLogin.setOnClickListener(this);
+        btnGoTutorial.setOnClickListener(this);
         btnGoInfo.setSoundEffectsEnabled(false);
         btnGoGame.setSoundEffectsEnabled(false);
         btnGoLogin.setSoundEffectsEnabled(false);
+        btnGoTutorial.setSoundEffectsEnabled(false);
         addPressAnimation(btnGoGame);
         addPressAnimation(btnGoInfo);
         addPressAnimation(btnGoLogin);
+        addPressAnimation(btnGoTutorial);
     }
 
     private void addPressAnimation(View view) {
@@ -100,17 +105,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         SfxManager.play(this, R.raw.sfx_clickbtn);
-        if (v == btnGoInfo){
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("lobby_screen", "MainActivity");
+        editor.commit();
+        if (v == btnGoInfo) {
             intent = new Intent(MainActivity.this, InfoActivity.class);
-            intent.putExtra("PREVIOUS_ACTIVITY", "MainActivity");
         }
-        else if (v == btnGoGame){
+        else if (v == btnGoGame) {
             startNewRun();
             intent = new Intent(MainActivity.this, GameActivity.class);
             Log.d("MainActivity", "Set intent and runstate successfully");
         }
-        else if (v == btnGoLogin){
+        else if (v == btnGoLogin) {
             intent = new Intent(MainActivity.this, LoginActivity.class);
+        }
+        else if (v == btnGoTutorial) {
+            intent = new Intent(MainActivity.this, TutorialActivity.class);
         }
         startActivity(intent);
     }
@@ -122,9 +132,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         int musicVol = prefs.getInt("music_volume", 50);
         float volume = musicVol / 100f;
         MusicManager.getInstance().startMusic(this, R.raw.game_music, volume);
-        //save screen to come back to after a loss
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("lobby_screen", "MainActivity");
-        editor.commit();
     }
 }

@@ -1,6 +1,7 @@
 package com.arielfriedman.arminesweeperproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -57,11 +58,15 @@ public class InfoActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         SfxManager.play(this, R.raw.sfx_clickbtn);
-        previousActivity = getIntent().getStringExtra("PREVIOUS_ACTIVITY");
+        SharedPreferences prefs = getSharedPreferences("LastScreenBeforeGame", MODE_PRIVATE);
+        previousActivity = prefs.getString("lobby_screen", "MainActivity");
         if (previousActivity.equals("AdminMainActivity"))
             intent = new Intent(InfoActivity.this, AdminMainActivity.class);
         else if (previousActivity.equals("MainActivity"))
             intent = new Intent(InfoActivity.this, MainActivity.class);
+        else {
+            intent = new Intent(InfoActivity.this, LoginActivity.class);
+        }
         startActivity(intent);
     }
 }

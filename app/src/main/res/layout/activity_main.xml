@@ -63,6 +63,15 @@
 
         <com.google.android.material.button.MaterialButton
             style="@style/BasicButton"
+            android:id="@+id/goTutorialBtn"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="חוקי המשחק"
+            android:textSize="18sp"
+            android:layout_marginBottom="22dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/BasicButton"
             android:id="@+id/goInfoBtn"
             android:layout_width="match_parent"
             android:layout_height="54dp"

@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.3"
-        app:layout_constraintWidth_percent="0.9">
+        app:layout_constraintWidth_percent="0.95">
 
         <TextView
             android:id="@+id/AdminTitle"
@@ -49,6 +49,15 @@
             android:textSize="18sp" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/aGoTutorialBtn"
+            style="@style/BasicButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="חוקי המשחק"
+            android:textSize="18sp"
+            android:layout_marginBottom="22dp"/>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/aGoInfoBtn"
             style="@style/BasicButton"
             android:layout_width="match_parent"
@@ -58,7 +67,7 @@
             android:textSize="18sp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/goInfoUsersBtn"
+            android:id="@+id/aGoInfoUsersBtn"
             style="@style/BasicButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,7 +76,7 @@
             android:textSize="18sp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/goLoginBtn"
+            android:id="@+id/aGoLoginBtn"
             style="@style/BasicButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

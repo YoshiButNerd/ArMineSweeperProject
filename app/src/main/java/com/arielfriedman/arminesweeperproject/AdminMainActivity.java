@@ -28,6 +28,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     Button aBtnGoGame;
     Button aBtnGoLogin;
     Button aBtnGoUsersList;
+    Button aBtnGoTutorial;
     Intent intent;
 
     public static final String SCREENPREFS = "LastScreenBeforeGame" ;
@@ -69,20 +70,24 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
             sharedpreferences = getSharedPreferences(SCREENPREFS, Context.MODE_PRIVATE);
             aBtnGoInfo = findViewById(R.id.aGoInfoBtn);
             aBtnGoGame = findViewById(R.id.aGoGameBtn);
-            aBtnGoUsersList = findViewById(R.id.goInfoUsersBtn);
-            aBtnGoLogin = findViewById(R.id.goLoginBtn);
+            aBtnGoUsersList = findViewById(R.id.aGoInfoUsersBtn);
+            aBtnGoLogin = findViewById(R.id.aGoLoginBtn);
+            aBtnGoTutorial = findViewById(R.id.aGoTutorialBtn);
             aBtnGoInfo.setOnClickListener(this);
             aBtnGoGame.setOnClickListener(this);
             aBtnGoLogin.setOnClickListener(this);
             aBtnGoUsersList.setOnClickListener(this);
+            aBtnGoTutorial.setOnClickListener(this);
             aBtnGoInfo.setSoundEffectsEnabled(false);
             aBtnGoGame.setSoundEffectsEnabled(false);
             aBtnGoLogin.setSoundEffectsEnabled(false);
             aBtnGoUsersList.setSoundEffectsEnabled(false);
+            aBtnGoTutorial.setSoundEffectsEnabled(false);
             addPressAnimation(aBtnGoGame);
             addPressAnimation(aBtnGoInfo);
             addPressAnimation(aBtnGoLogin);
             addPressAnimation(aBtnGoUsersList);
+            addPressAnimation(aBtnGoTutorial);
         }
 
     private void addPressAnimation(View view) {
@@ -103,20 +108,25 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         @Override
         public void onClick(View v) {
             SfxManager.play(this, R.raw.sfx_clickbtn);
-            if (v == aBtnGoInfo){
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString("lobby_screen", "AdminMainActivity");
+            editor.commit();
+            if (v == aBtnGoInfo) {
                 intent = new Intent(AdminMainActivity.this, InfoActivity.class);
-                intent.putExtra("PREVIOUS_ACTIVITY", "AdminMainActivity");
             }
-            else if (v == aBtnGoGame){
+            else if (v == aBtnGoGame) {
                 startNewRun();
                 intent = new Intent(AdminMainActivity.this, GameActivity.class);
                 Log.d("MainActivity", "Set intent and runstate successfully");
             }
-            else if (v == aBtnGoLogin){
+            else if (v == aBtnGoLogin) {
                 intent = new Intent(AdminMainActivity.this, LoginActivity.class);
             }
-            else if (v == aBtnGoUsersList){
+            else if (v == aBtnGoUsersList) {
                 intent = new Intent(AdminMainActivity.this, UsersListActivity.class);
+            }
+            else if (v == aBtnGoTutorial) {
+                intent = new Intent(AdminMainActivity.this, TutorialActivity.class);
             }
             startActivity(intent);
         }
@@ -128,9 +138,5 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         int musicVol = prefs.getInt("music_volume", 50);
         float volume = musicVol / 100f;
         MusicManager.getInstance().startMusic(this, R.raw.game_music, volume);
-        //save screen to come back to after a loss
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString("lobby_screen", "AdminMainActivity");
-        editor.commit();
     }
 }
