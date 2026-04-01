@@ -312,7 +312,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             if (tile.getIsMine()) {
                 addPoints(1);
             }
-            btn.setText("⚑");
+            btn.setText("");
+            btn.setBackgroundResource(R.drawable.minesweeper_flag);
             changeFlagCount(-1);
         }
         else {
@@ -320,6 +321,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 addPoints(-1);
             }
             btn.setText("");
+            btn.setBackgroundColor(getColor(R.color.gray));
             changeFlagCount(1);
         }
         return true;

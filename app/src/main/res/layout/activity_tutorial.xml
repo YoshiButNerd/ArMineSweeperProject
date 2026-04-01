@@ -50,6 +50,25 @@
             android:textSize="17sp"
             android:layout_marginTop="30dp"/>
 
+        <TextView
+            android:id="@+id/tutorialTxtEx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="בדוגמה הבאה ניתן לראות איך הפצצות מסביב למשבצות משפיעות על מספר המשבצות מסביבם (במשחק לא תראו איזה משבצות פצצות)."
+            android:textColor="@color/black"
+            android:background="@color/low_trans_gray"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:layout_marginTop="30dp"/>
+
+        <ImageView
+            android:id="@+id/imagetutorial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/low_trans_gray"
+            android:layout_marginVertical="10dp"
+            app:srcCompat="@drawable/tutorial_image_minesweeper" />
+
         <com.google.android.material.button.MaterialButton
             style="@style/BasicButton"
             android:id="@+id/tutorialBack"
