@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="חנות"
         android:textStyle="bold"
-        android:textSize="40sp"
+        android:textSize="45sp"
         android:gravity="center"
         android:letterSpacing="0.02"
         android:shadowColor="#000000"
@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="16dp"
+        android:background="@color/low_trans_gray"
         android:layout_marginHorizontal="16dp"
         app:layout_constraintTop_toBottomOf="@id/shopTitle"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,6 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="כסף: 0"
+                android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:gravity="right"/>
@@ -69,6 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="לבבות: 3"
+                android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:gravity="right"/>
@@ -95,6 +98,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="Item 1"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/item2Btn"
             app:layout_constraintTop_toTopOf="parent"
@@ -106,6 +110,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="Item 2"
+
             android:layout_marginHorizontal="6dp"
             app:layout_constraintStart_toEndOf="@id/item1Btn"
             app:layout_constraintEnd_toStartOf="@id/item3Btn"
@@ -118,6 +123,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="Item 3"
+
             app:layout_constraintStart_toEndOf="@id/item2Btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

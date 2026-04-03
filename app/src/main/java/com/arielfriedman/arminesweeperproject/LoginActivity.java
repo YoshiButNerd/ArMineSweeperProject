@@ -40,7 +40,6 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
         static final String ADMINEMAIL = "gigaadmin@gmail.com";
         static final String ADMINPASS = "adminpass123";
         SharedPreferences sharedpreferences;
-        GestureDetector gestureDetector;
 
         public static final String SCREENPREFS = "LastScreenBeforeGame" ;
         SharedPreferences sharedgameprefs;
@@ -57,7 +56,6 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                 return insets;
             });
             Initviews();
-            handelSwipe();
         }
 
         public void Initviews() {
@@ -164,43 +162,6 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                     //SharedPreferencesUtil.signOutUser(LoginActivity.this);
                 }
             });
-        }
-
-        public void handelSwipe() {
-            gestureDetector = new GestureDetector(this,
-                    new GestureDetector.SimpleOnGestureListener() {
-                        @Override
-                        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-                            if (e1 != null && e2 != null && e1.getY() - e2.getY() > 50) {
-                                secretStartGame();
-                                return true;
-                            }
-
-                            return false;
-                        }
-                    });
-            View mainView = findViewById(R.id.main);
-
-            mainView.setOnTouchListener((v, event) -> {
-                gestureDetector.onTouchEvent(event);
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    v.performClick();
-                }
-                return false;
-            });
-        }
-
-        @Override
-        public boolean onTouchEvent(MotionEvent event) {
-            return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
-        }
-
-        public void secretStartGame() {
-            startNewRun();
-            Intent intent = new Intent(LoginActivity.this, GameActivity.class);
-            Log.d("LoginActivity", "Set intent and runstate successfully");
-            startActivity(intent);
         }
 
         public void startNewRun() {

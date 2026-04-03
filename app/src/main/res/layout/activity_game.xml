@@ -67,8 +67,19 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:gravity="start"
+            android:gravity="left"
             android:text="זמן: 03:00" />
+
+        <TextView
+            android:id="@+id/pointsText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="נקודות: 0" />
 
         <TextView
             android:id="@+id/flagText"
@@ -78,7 +89,7 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/green"
-            android:gravity="end"
+            android:gravity="right"
             android:text="0 ⚑" />
     </LinearLayout>
 

@@ -3,7 +3,6 @@ package com.arielfriedman.arminesweeperproject;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -16,7 +15,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.util.DisplayMetrics;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowInsets;
@@ -27,7 +26,6 @@ import android.widget.TextView;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.GameEventType;
-import com.arielfriedman.arminesweeperproject.gameHandler.ItemFactory;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 import com.arielfriedman.arminesweeperproject.model.Tile;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
@@ -54,7 +52,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     boolean lost = false;
     boolean trueFirstClick = true;
     private int round;
-    int totalPoints = 0;  //player will not be able to see points (they are for seeing if player won)
+    int totalPoints = 0;  // Player will not be able to see points (they are for seeing if player won)
     RunState runstate;
     private long millisRemaining;
 
@@ -65,12 +63,13 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     //UI + Other variables set up for later
     TextView flagCountText;
     TextView timerCountText;
-    //TextView pointsCountText;
+    TextView pointsCountText; // Only shown if an admin swipes screen
     TextView roundCountText;
     TextView moneyCountText;
     TextView healthCountText;
     CountDownTimer downTimer;
     GridLayout mineGridLayout;
+    GestureDetector gestureDetector;
     Intent intent;
 
     //Listener variable
@@ -121,9 +120,10 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
         moneyCountText.setText("כסף: " + runstate.getMoney());
         healthCountText.setText("לבבות: " + runstate.getHealth());
-        getWindow().setDecorFitsSystemWindows(false);
+        getWindow().setDecorFitsSystemWindows(false); // Removes navigation bar
         manageHidingNavigationBar();
         manageBackPress();
+        handleSwipe();
     }
 
     @Override
@@ -153,7 +153,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     public void InitViews() {
         flagCountText = findViewById(R.id.flagText);
         timerCountText = findViewById(R.id.timerText);
-        //pointsCountText = findViewById(R.id.pointsText);
+        pointsCountText = findViewById(R.id.pointsText);
+        pointsCountText.setVisibility(View.GONE);
         roundCountText = findViewById(R.id.roundText);
         moneyCountText = findViewById(R.id.moneyText);
         healthCountText = findViewById(R.id.healthText);
@@ -520,7 +521,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
     public void addPoints(int i) {
         totalPoints += i;
-        //pointsCountText.setText("נקודות: " + totalPoints);
+        pointsCountText.setText("נקודות: " + totalPoints);
         if (totalPoints >= WINPOINTS && !lost) {
             gameWin();
         }
@@ -593,11 +594,61 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
+    public void handleSwipe() {
+        SharedPreferences prefs = getSharedPreferences("LastScreenBeforeGame", MODE_PRIVATE);
+        String lobbyScreen = prefs.getString("lobby_screen", "MainActivity");
+        Log.d("GameActivity", "Swipe attempted");
+        if (!lobbyScreen.equals("AdminMainActivity")) return; // Only lets admins do this
+        gestureDetector = new GestureDetector(this,
+                new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                        if (e1 != null && e2 != null && e1.getY() - e2.getY() > 50) { // Needs Swipe Up!
+                            secretAdminPoints();
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+        View mainView = findViewById(R.id.main);
+
+        mainView.setOnTouchListener((v, event) -> {
+            if (gestureDetector != null) {
+                gestureDetector.onTouchEvent(event);
+            }
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.performClick();
+            }
+            return false;
+        });
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (gestureDetector != null) {
+            return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
+        }
+        return super.onTouchEvent(event);
+    }
+
+    public void secretAdminPoints() {
+        if (pointsCountText.getVisibility() == View.VISIBLE) {
+            pointsCountText.setVisibility(View.GONE);
+            Log.d("GameActivity", "Set points to invisible");
+        }
+        else {
+            pointsCountText.setVisibility(View.VISIBLE);
+            Log.d("GameActivity", "Set points to visible");
+        }
+
+    }
+
     private void manageShorterLongClicks(View tile) {
         final Handler handler = new Handler(Looper.getMainLooper());
         final boolean[] longPressed = {false}; // use array to mutate inside lambda
 
         tile.setOnTouchListener((v, event) -> {
+
             switch (event.getAction()) {
 
                 case MotionEvent.ACTION_DOWN:

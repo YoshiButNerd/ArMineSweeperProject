@@ -50,7 +50,7 @@ public class RunState {
     public void setNewRun() {
         this.money = 0;
         this.health = 3;
-        this.mineCount = 40;
+        this.mineCount = 35;
         this.round = 1;
         this.firstClicks = 1;
         this.items.clear();
@@ -63,7 +63,7 @@ public class RunState {
     private RunState() {
         this.money = 0;
         this.health = 3;
-        this.mineCount = 40;
+        this.mineCount = 35;
         this.round = 1;
         this.firstClicks = 1;
         items = new ArrayList<>();

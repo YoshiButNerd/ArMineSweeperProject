@@ -109,6 +109,7 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
                     SfxManager.play(this, R.raw.sfx_clickbtn);
                     RunState.getInstance().addItem(item);
                     moneyChange(-(item.getPrice()));
+                    btn.setBackgroundColor(getColor(R.color.light_gray));
                     btn.setEnabled(false);
                 }
                 else {
