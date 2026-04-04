@@ -23,6 +23,7 @@ import android.view.WindowInsetsController;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.GameEventType;
@@ -44,12 +45,13 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
     //Game variables
     int mineCount, flagCount;
-    int secondsCountDown = 300;
-    int endOfRoundMoney = 10;
+    int secondsCountDown = 300; //Is set to 60 if less than 60 (In SetGameDiff function)
+    int endOfRoundMoney = 8;
     int secondsDiffRemove = 20;
     int minesDiffAdd = 5;
     int longClickMillis = 200;
     boolean lost = false;
+    boolean won = false;
     boolean trueFirstClick = true;
     private int round;
     int totalPoints = 0;  // Player will not be able to see points (they are for seeing if player won)
@@ -92,14 +94,14 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         runStateListener = new RunState.StateListener() {
             @Override
             public void onMoneyChanged(int money) {
-                moneyCountText.setText("כסף: " + money);
+                moneyCountText.setText("מטבעות: " + money);
             }
 
             @Override
             public void onHealthChanged(int health) {
                 healthCountText.setText("לבבות: " + health);
                 if (runstate.getHealth() <= 0) {
-                    //gameLost();
+                    gameLost();
                 }
             }
         };
@@ -118,7 +120,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             timerHandler((long) secondsCountDown * 1000);
         });
 
-        moneyCountText.setText("כסף: " + runstate.getMoney());
+        moneyCountText.setText("מטבעות: " + runstate.getMoney());
         healthCountText.setText("לבבות: " + runstate.getHealth());
         getWindow().setDecorFitsSystemWindows(false); // Removes navigation bar
         manageHidingNavigationBar();
@@ -166,7 +168,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         int startingMines = runstate.getMineCount();
         runstate.setMineCount(startingMines + minesDiffAdd * (round-1));
         secondsCountDown -= secondsDiffRemove * (round-1);
-        if (secondsCountDown < 60) {
+        if (secondsCountDown < 60) { // Keep Round Winnable
             secondsCountDown = 60;
         }
     }
@@ -545,16 +547,23 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void gameWin() {
+        won = true;
         runstate.increaseRound();
-        runstate.changeMoney(endOfRoundMoney);
+        int moneyFromTime = (int)millisRemaining/1000/45;
+        runstate.changeMoney(endOfRoundMoney + moneyFromTime);
+        downTimer.cancel();
+        String moneyMsg = "הרווחת " + endOfRoundMoney + " מטבעות מניצחון הסיבוב,\nובנוסף הרווחת " + moneyFromTime + " מטבעות מהזמן שנשאר לך.\n(45 שניות = מטבע 1)";
         intent = new Intent(GameActivity.this, ShopActivity.class);
+        intent.putExtra("Money_MSG", moneyMsg);
         startActivity(intent);
     }
 
     public void gameLost() {
-        lost = true;
-        intent = new Intent(GameActivity.this, LossActivity.class);
-        startActivity(intent);
+        if (!won) {
+            lost = true;
+            intent = new Intent(GameActivity.this, LossActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void clearMinesAroundAndMove(Tile tile) {
@@ -645,7 +654,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
     private void manageShorterLongClicks(View tile) {
         final Handler handler = new Handler(Looper.getMainLooper());
-        final boolean[] longPressed = {false}; // use array to mutate inside lambda
+        final boolean[] longPressed = {false};
 
         tile.setOnTouchListener((v, event) -> {
 

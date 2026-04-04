@@ -26,7 +26,7 @@
             android:textSize="18sp"
             android:textColor="@color/white"
             android:gravity="start"
-            android:text="כסף: 0" />
+            android:text="מטבעות: 0" />
 
         <TextView
             android:id="@+id/healthText"
@@ -36,7 +36,7 @@
             android:textSize="18sp"
             android:textColor="@color/white"
             android:gravity="center"
-            android:text="לבבות: 0" />
+            android:text="לבבות: 3" />
 
         <TextView
             android:id="@+id/roundText"
@@ -46,7 +46,7 @@
             android:textSize="18sp"
             android:textColor="@color/white"
             android:gravity="end"
-            android:text="סיבוב: 0" />
+            android:text="סיבוב: 1" />
     </LinearLayout>
 
 
@@ -68,7 +68,7 @@
             android:textStyle="bold"
             android:textColor="@color/white"
             android:gravity="left"
-            android:text="זמן: 03:00" />
+            android:text="זמן: 05:00" />
 
         <TextView
             android:id="@+id/pointsText"
@@ -90,7 +90,7 @@
             android:textStyle="bold"
             android:textColor="@color/green"
             android:gravity="right"
-            android:text="0 ⚑" />
+            android:text="35 ⚑" />
     </LinearLayout>
 
 

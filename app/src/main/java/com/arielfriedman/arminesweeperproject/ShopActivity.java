@@ -51,6 +51,7 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
         manageItemBtns();
         manageHidingNavigationBar();
         manageBackPress();
+        sendMoneyAlert();
     }
 
     public void InitViews() {
@@ -66,7 +67,7 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
         btnGoNext.setSoundEffectsEnabled(false);
         moneyCountTxt = findViewById(R.id.moneyTxt);
         healthCountTxt = findViewById(R.id.healthTxt);
-        moneyCountTxt.setText("כסף: " + RunState.getInstance().getMoney());
+        moneyCountTxt.setText("מטבעות: " + RunState.getInstance().getMoney());
         healthCountTxt.setText("לבבות: " + RunState.getInstance().getHealth());
         btnGoNext.setOnClickListener(this);
         btnHeartUp.setOnClickListener(this);
@@ -113,7 +114,7 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
                     btn.setEnabled(false);
                 }
                 else {
-                    Toast.makeText(ShopActivity.this, "אין לך מספיק כסף" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ShopActivity.this, "אין לך מספיק מטבעות" , Toast.LENGTH_SHORT).show();
                 }
             });
             i++;
@@ -122,7 +123,7 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
 
     public void moneyChange(int i) {
         RunState.getInstance().changeMoney(i);
-        moneyCountTxt.setText("כסף: " + RunState.getInstance().getMoney());
+        moneyCountTxt.setText("מטבעות: " + RunState.getInstance().getMoney());
     }
 
     public void healthChange(int i) {
@@ -159,6 +160,15 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+    public void sendMoneyAlert() {
+        new AlertDialog.Builder(ShopActivity.this)
+                .setTitle("ניצחת את הסיבוב!")
+                .setMessage(getIntent().getStringExtra("Money_MSG"))
+                .setPositiveButton("אישור", (dialog, which) -> {
+                    dialog.dismiss();
+                }).show();
+    }
+
     @Override
     public void onClick(View view) {
         SfxManager.play(this, R.raw.sfx_clickbtn);
@@ -172,7 +182,7 @@ public class ShopActivity extends BaseActivity implements View.OnClickListener {
                 healthChange(1);
             }
             else {
-                Toast.makeText(ShopActivity.this, "אין לך מספיק כסף" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(ShopActivity.this, "אין לך מספיק מטבעות" , Toast.LENGTH_SHORT).show();
             }
         }
     }
