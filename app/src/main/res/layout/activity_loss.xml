@@ -38,11 +38,10 @@
     
         <ImageView
             android:id="@+id/imageLossBomb"
-            android:layout_width="150dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
-            app:srcCompat="@mipmap/minesweeperlogo" />
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_marginVertical="10dp"
+            app:srcCompat="@drawable/explosionminesweeper" />
     
         <com.google.android.material.button.MaterialButton
             style="@style/BasicButton"

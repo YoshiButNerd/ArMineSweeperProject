@@ -106,15 +106,20 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
 
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-
-                editor.putString("email", email);
-                editor.putString("password", password);
-
-                editor.commit();
+                if (email.isEmpty() || password.isEmpty()) {
+                    etPassword.setError("נדרש למלא את כל השדות");
+                    etPassword.requestFocus();
+                    return;
+                }
 
                 if (email.equals(ADMINEMAIL) && password.equals(ADMINPASS)) {
                     Log.d(TAG, "user is admin");
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                    editor.putString("email", email);
+                    editor.putString("password", password);
+
+                    editor.commit();
                     Intent registerIntent = new Intent(LoginActivity.this, AdminMainActivity.class);
                     startActivity(registerIntent);
                 }
@@ -143,7 +148,12 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                 public void onCompleted(String  uid) {
                     Log.d(TAG, "onCompleted: User logged in: " + uid.toString());
                     /// save the user data to shared preferences
-                    // SharedPreferencesUtil.saveUser(LoginActivity.this, user);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                    editor.putString("email", email);
+                    editor.putString("password", password);
+
+                    editor.commit();
                     /// Redirect to main activity and clear back stack to prevent user from going back to login screen
                     Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                     /// Clear the back stack (clear history) and start the MainActivity
@@ -155,7 +165,7 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                 public void onFailed(Exception e) {
                     Log.e(TAG, "onFailed: Failed to retrieve user data", e);
                     /// Show error message to user
-                    etPassword.setError("Invalid email or password");
+                    etPassword.setError("אימייל או סיסמה שגויים");
                     etPassword.requestFocus();
                     /// Sign out the user if failed to retrieve user data
                     /// This is to prevent the user from being logged in again

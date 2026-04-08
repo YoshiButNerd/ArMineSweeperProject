@@ -117,7 +117,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 registerUser(fName, lName, phone, email, password, isAdmin);
             }
             else {
-                Toast.makeText(RegisterActivity.this, "Not all fields are filled", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, "לא כל השדות מלאים", Toast.LENGTH_LONG).show();
             }
         } else if (v.getId() == btnLogin.getId()) {
             /// Navigate back to Login Activity
@@ -169,23 +169,23 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 Log.e(TAG, "createUserInDatabase: Failed to create user", e);
 
                 /// show error message to user
-                String message = "Registration failed. Please try again";
+                String message = "הרשמה נכשלה, תנסה שוב";
 
                 if (e instanceof FirebaseAuthWeakPasswordException) {
-                    message = "Password must be at least 6 characters";
+                    message = "סיסמה חייבת להיות לפחות 6 תווים";
                 }
                 else if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                    message = "Invalid email format";
+                    message = "תבנית אימייל שגויה";
                 }
                 else if (e instanceof FirebaseAuthUserCollisionException) {
-                    message = "This email is already registered";
+                    message = "אימייל כבר רשום";
                 }
                 else if (e instanceof FirebaseNetworkException) {
-                    message = "Network error, check your internet connection";
+                    message = "שגיאת רשת, תבדוק חיבור אינטרנט";
                 }
                 else if (e instanceof FirebaseAuthException) {
                     FirebaseAuthException authException = (FirebaseAuthException) e;
-                    message = "Authentication error: " + authException.getErrorCode();
+                    message = "שגיאת אימות: " + authException.getErrorCode();
                 }
                 Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_LONG).show();
             }
