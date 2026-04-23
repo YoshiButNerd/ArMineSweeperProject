@@ -41,7 +41,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     final static int ROWS = 20;
     final static int COLS = 10;
     final static int WINPOINTS = ROWS*COLS;
-    private static final String FORMAT = "%02d:%02d";
+    private static final String FORMAT = "%02d:%02d"; //Timer format
 
     //Game variables
     int mineCount, flagCount;

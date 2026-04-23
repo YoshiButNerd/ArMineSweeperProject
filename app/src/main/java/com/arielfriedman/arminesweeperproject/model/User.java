@@ -9,6 +9,8 @@ public class User {
     private String password;
     private boolean isAdmin;
 
+    private  int score;
+
 
     public User(String id, String fname, String lname, String phone, String email, String password, boolean isAdmin) {
         this.id = id;
@@ -18,6 +20,18 @@ public class User {
         this.email = email;
         this.password = password;
         this.isAdmin = isAdmin;
+        this.score=0;
+    }
+
+    public User(String id, String fname, String lname, String phone, String email, String password, boolean isAdmin, int score) {
+        this.id = id;
+        this.fname = fname;
+        this.lname = lname;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.isAdmin = isAdmin;
+        this.score = score;
     }
 
     public User() {
@@ -81,6 +95,14 @@ public class User {
         this.password = password;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -90,7 +112,8 @@ public class User {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", isAdmin='" + isAdmin + '\'' +
+                ", isAdmin=" + isAdmin +
+                ", score=" + score +
                 '}';
     }
 }
