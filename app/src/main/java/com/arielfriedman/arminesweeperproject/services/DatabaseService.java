@@ -284,11 +284,6 @@ public class DatabaseService {
                 });
     }
 
-
-  //  public void createNewUser(@NotNull final User user, @Nullable final DatabaseCallback<Void> callback) {
-  //      writeData(USERS_PATH + "/" + user.getId(), user, callback);
-  //  }
-
     /// get a user from the database
     /// @param uid the id of the user to get
     /// @param callback the callback to call when the operation is completed
@@ -318,125 +313,19 @@ public class DatabaseService {
         deleteData(USERS_PATH + "/" + uid, callback);
     }
 
-    /// get a user by email and password
-    /// @param email the email of the user
-    /// @param password the password of the user
-    /// @param callback the callback to call when the operation is completed
-    ///            the callback will receive the user object
-    ///          if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see User
-    public void getUserByEmailAndPassword(@NotNull final String email, @NotNull final String password, @NotNull final DatabaseCallback<User> callback) {
-        readData(USERS_PATH).orderByChild("email").equalTo(email).get()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.e(TAG, "Error getting data", task.getException());
-                        callback.onFailed(task.getException());
-                        return;
-                    }
-                    if (task.getResult().getChildrenCount() == 0) {
-                        callback.onFailed(new Exception("User not found"));
-                        return;
-                    }
-                    for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
-                        User user = dataSnapshot.getValue(User.class);
-                        if (user == null || !Objects.equals(user.getPassword(), password)) {
-                            callback.onFailed(new Exception("Invalid email or password"));
-                            return;
-                        }
 
-                        callback.onCompleted(user);
-                        return;
 
-                    }
-                });
-    }
-
-    /// check if an email already exists in the database
-    /// @param email the email to check
-    /// @param callback the callback to call when the operation is completed
-    public void checkIfEmailExists(@NotNull final String email, @NotNull final DatabaseCallback<Boolean> callback) {
-        readData(USERS_PATH).orderByChild("email").equalTo(email).get()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.e(TAG, "Error getting data", task.getException());
-                        callback.onFailed(task.getException());
-                        return;
-                    }
-                    boolean exists = task.getResult().getChildrenCount() > 0;
-                    callback.onCompleted(exists);
-                });
-    }
 
     public void updateUser(@NotNull final User user, @Nullable final DatabaseCallback<Void> callback) {
-        runTransaction(USERS_PATH + "/" + user.getId(), User.class, currentUser -> user, new DatabaseCallback<User>() {
-            @Override
-            public void onCompleted(User object) {
-                if (callback != null) {
-                    callback.onCompleted(null);
-                }
-            }
+        writeData(USERS_PATH + "/" + user.getId(), user, callback );
 
-            @Override
-            public void onFailed(Exception e) {
-                if (callback != null) {
-                    callback.onFailed(e);
-                }
-            }
-        });
+        }
+
+
+    public void updateScore(@NotNull final User user, @Nullable final DatabaseCallback<Void> callback) {
+        writeData(USERS_PATH + "/" + user.getId()+"/score/", user.getScore(), callback );
+
     }
-    // region Item section  (maybe add score and put it here?)
-
-  /*  /// create a new Item in the database
-    /// @param Item the Item object to create
-    /// @param callback the callback to call when the operation is completed
-    ///              the callback will receive void
-    ///             if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see Item
-    public void createNewItem(@NotNull final Item Item, @Nullable final DatabaseCallback<Void> callback) {
-        writeData(ItemS_PATH + "/" + Item.getId(), Item, callback);
-    }
-
-    /// get a Item from the database
-    /// @param ItemId the id of the Item to get
-    /// @param callback the callback to call when the operation is completed
-    ///               the callback will receive the Item object
-    ///              if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see Item
-    public void getItem(@NotNull final String ItemId, @NotNull final DatabaseCallback<Item> callback) {
-        getData(ItemS_PATH + "/" + ItemId, Item.class, callback);
-    }
-
-    /// get all the Items from the database
-    /// @param callback the callback to call when the operation is completed
-    ///              the callback will receive a list of Item objects
-    ///            if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see List
-    /// @see Item
-    public void getItemList(@NotNull final DatabaseCallback<List<Item>> callback) {
-        getDataList(ItemS_PATH, Item.class, callback);
-    }
-
-    /// generate a new id for a new Item in the database
-    /// @return a new id for the Item
-    /// @see #generateNewId(String)
-    /// @see Item
-    public String generateItemId() {
-        return generateNewId(ItemS_PATH);
-    }
-
-    /// delete a Item from the database
-    /// @param ItemId the id of the Item to delete
-    /// @param callback the callback to call when the operation is completed
-    public void deleteItem(@NotNull final String ItemId, @Nullable final DatabaseCallback<Void> callback) {
-        deleteData(ItemS_PATH + "/" + ItemId, callback);
-    }
-
-    // endregion Item section
-*/
 
 }
 

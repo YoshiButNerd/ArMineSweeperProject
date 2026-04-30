@@ -1,5 +1,7 @@
 package com.arielfriedman.arminesweeperproject;
 
+import static android.widget.Toast.LENGTH_LONG;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,8 +31,11 @@ import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.GameEventType;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 import com.arielfriedman.arminesweeperproject.model.Tile;
+import com.arielfriedman.arminesweeperproject.model.User;
+import com.arielfriedman.arminesweeperproject.services.DatabaseService;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -73,9 +78,13 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     GridLayout mineGridLayout;
     GestureDetector gestureDetector;
     Intent intent;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    String userId;
+    private DatabaseService databaseService;
 
     //Listener variable
     private RunState.StateListener runStateListener;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +96,24 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        
+
+        mAuth = FirebaseAuth.getInstance();
+        userId = mAuth.getUid();
+        databaseService = DatabaseService.getInstance();
+        databaseService.getUser(userId, new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User user2) {
+                user = user2;
+                Log.d("GameActivity", "Got user successfully");
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Log.d("GameActivity", "Failed to get user");
+            }
+        });
+
+
         runstate = RunState.getInstance();
         InitViews();
 
@@ -101,7 +127,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             public void onHealthChanged(int health) {
                 healthCountText.setText("לבבות: " + health);
                 if (runstate.getHealth() <= 0) {
-                    gameLost();
+                    //gameLost();
                 }
             }
         };
@@ -409,8 +435,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         int placed = 0;
         while (placed < mineCount) {
             if (tilesLeft <= 0) {   //if no room, escape the loop
-                changeFlagCount(-(mineCount-placed));
-                Log.d("GameActivity", "No room to move more mines");//change flagCount to match the deleted mines
+                changeFlagCount(-(mineCount-placed)); //change flagCount to match the deleted mines
+                Log.d("GameActivity", "No room to move more mines");
                 return;
             }
             int row = random.nextInt(ROWS);
@@ -458,7 +484,6 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         flagCountText.setText(flagCount + " ⚑");
     }
 
-    // could prob combine with the function above
     public void calculateAllRevealedMineCounts(){
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
@@ -549,13 +574,45 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     public void gameWin() {
         won = true;
         runstate.increaseRound();
-        int moneyFromTime = (int)millisRemaining/1000/45;
-        runstate.changeMoney(endOfRoundMoney + moneyFromTime);
-        downTimer.cancel();
-        String moneyMsg = "הרווחת " + endOfRoundMoney + " מטבעות מניצחון הסיבוב,\nובנוסף הרווחת " + moneyFromTime + " מטבעות מהזמן שנשאר לך.\n(45 שניות = מטבע 1)";
-        intent = new Intent(GameActivity.this, ShopActivity.class);
-        intent.putExtra("Money_MSG", moneyMsg);
-        startActivity(intent);
+        if (user.getScore() < runstate.getRound()) {
+            user.setScore(runstate.getRound());
+            databaseService.updateScore(user, new DatabaseService.DatabaseCallback<Void>() {
+                @Override
+                public void onCompleted(Void v) {
+                    Log.d("GameActivity", "User update successful");
+
+                    Toast.makeText(GameActivity.this,"update",LENGTH_LONG).show();
+
+                    int moneyFromTime = (int)millisRemaining/1000/45;
+                    runstate.changeMoney(endOfRoundMoney + moneyFromTime);
+                    downTimer.cancel();
+                    String moneyMsg = "הרווחת " + endOfRoundMoney + " מטבעות מניצחון הסיבוב,\nובנוסף הרווחת " + moneyFromTime + " מטבעות מהזמן שנשאר לך.\n(45 שניות = מטבע 1)";
+                    intent = new Intent(GameActivity.this, ShopActivity.class);
+                    intent.putExtra("Money_MSG", moneyMsg);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onFailed(Exception e) {
+                    Log.d("GameActivity", "User update failed");
+                }
+            });
+        }
+        else{
+
+            Toast.makeText(GameActivity.this,"failllll",LENGTH_LONG).show();
+            int moneyFromTime = (int)millisRemaining/1000/45;
+            runstate.changeMoney(endOfRoundMoney + moneyFromTime);
+            downTimer.cancel();
+            String moneyMsg = "הרווחת " + endOfRoundMoney + " מטבעות מניצחון הסיבוב,\nובנוסף הרווחת " + moneyFromTime + " מטבעות מהזמן שנשאר לך.\n(45 שניות = מטבע 1)";
+            intent = new Intent(GameActivity.this, ShopActivity.class);
+            intent.putExtra("Money_MSG", moneyMsg);
+            startActivity(intent);
+
+
+        }
+
+
     }
 
     public void gameLost() {
@@ -604,8 +661,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     public void handleSwipe() {
-        SharedPreferences prefs = getSharedPreferences("LastScreenBeforeGame", MODE_PRIVATE);
-        String lobbyScreen = prefs.getString("lobby_screen", "MainActivity");
+        SharedPreferences screenPrefs = getSharedPreferences("LastScreenBeforeGame", MODE_PRIVATE);
+        String lobbyScreen = screenPrefs.getString("lobby_screen", "MainActivity");
         Log.d("GameActivity", "Swipe attempted");
         if (!lobbyScreen.equals("AdminMainActivity")) return; // Only lets admins do this
         gestureDetector = new GestureDetector(this,

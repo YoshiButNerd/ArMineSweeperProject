@@ -31,7 +31,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     }
     public UserAdapter(ArrayList users) {
-        userList =users;
+        userList = users;
 
     }
 
@@ -50,6 +50,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.tvName.setText(user.getFullName());
         holder.tvEmail.setText(user.getEmail());
         holder.tvPhone.setText(user.getPhone());
+        holder.tvScore.setText("סיבוב שיא: " + user.getScore());
 
         // Set initials
         String initials = "";
@@ -114,7 +115,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvEmail, tvPhone, tvInitials;
+        TextView tvName, tvEmail, tvPhone, tvInitials, tvScore;
         Chip chipRole;
 
         public ViewHolder(@NonNull View itemView) {
@@ -123,6 +124,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             tvEmail = itemView.findViewById(R.id.tv_item_user_email);
             tvPhone = itemView.findViewById(R.id.tv_item_user_phone);
             tvInitials = itemView.findViewById(R.id.tv_user_initials);
+            tvScore = itemView.findViewById(R.id.tv_item_user_score);
             chipRole = itemView.findViewById(R.id.chip_user_role);
         }
     }

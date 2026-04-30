@@ -40,6 +40,14 @@
             android:gravity="center"/>
 
         <TextView
+            android:id="@+id/tv_item_user_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="סיבוב שיא: 0"
+            android:gravity="center"/>
+
+        <TextView
             android:id="@+id/tv_user_initials"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

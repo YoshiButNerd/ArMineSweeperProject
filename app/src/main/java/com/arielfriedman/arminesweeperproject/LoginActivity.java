@@ -112,17 +112,7 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                     return;
                 }
 
-                if (email.equals(ADMINEMAIL) && password.equals(ADMINPASS)) {
-                    Log.d(TAG, "user is admin");
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
 
-                    editor.putString("email", email);
-                    editor.putString("password", password);
-
-                    editor.commit();
-                    Intent registerIntent = new Intent(LoginActivity.this, AdminMainActivity.class);
-                    startActivity(registerIntent);
-                }
                 else {
                     /// log the email and password
                     Log.d(TAG, "onClick: Email: " + email);
@@ -135,7 +125,8 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                     /// Login user
                     loginUser(email, password);
                 }
-            } else if (v.getId() == btnGoRegister.getId()) {
+            }
+            else if (v.getId() == btnGoRegister.getId()) {
                 /// Navigate to Register Activity
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(registerIntent);
@@ -154,11 +145,22 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                     editor.putString("password", password);
 
                     editor.commit();
-                    /// Redirect to main activity and clear back stack to prevent user from going back to login screen
-                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                    /// Clear the back stack (clear history) and start the MainActivity
-                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(mainIntent);
+
+
+
+                    if (email.equals(ADMINEMAIL) && password.equals(ADMINPASS)) {
+
+
+                        Intent registerIntent = new Intent(LoginActivity.this, AdminMainActivity.class);
+                        startActivity(registerIntent);
+                    }
+                    else {
+                        /// Redirect to main activity and clear back stack to prevent user from going back to login screen
+                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                        /// Clear the back stack (clear history) and start the MainActivity
+                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(mainIntent);
+                    }
                 }
 
                 @Override
@@ -172,18 +174,5 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                     //SharedPreferencesUtil.signOutUser(LoginActivity.this);
                 }
             });
-        }
-
-        public void startNewRun() {
-            RunState runstate = RunState.getInstance();
-            runstate.setNewRun();
-            SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
-            int musicVol = prefs.getInt("music_volume", 50);
-            float volume = musicVol / 100f;
-            MusicManager.getInstance().startMusic(this, R.raw.game_music, volume);
-            //save screen to come back to after a loss
-            SharedPreferences.Editor editor = sharedgameprefs.edit();
-            editor.putString("lobby_screen", "LoginActivity");
-            editor.commit();
         }
     }

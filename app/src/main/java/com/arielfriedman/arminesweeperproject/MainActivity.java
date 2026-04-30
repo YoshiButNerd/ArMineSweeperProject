@@ -20,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
+import com.arielfriedman.arminesweeperproject.specialClasses.ButtonHandler;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.NotificationReceiver;
@@ -29,6 +30,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     Button btnGoGame;
     Button btnGoLogin;
     Button btnGoTutorial;
+    Button btnGoScoreList;
     Intent intent;
 
     public static final String SCREENPREFS = "LastScreenBeforeGame" ;
@@ -73,10 +75,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btnGoGame = findViewById(R.id.goGameBtn);
         btnGoLogin = findViewById(R.id.goLoginBtn);
         btnGoTutorial = findViewById(R.id.goTutorialBtn);
+        btnGoScoreList = findViewById(R.id.goScoreListBtn);
+        ButtonHandler.HandleButton(btnGoScoreList);
         btnGoInfo.setOnClickListener(this);
         btnGoGame.setOnClickListener(this);
         btnGoLogin.setOnClickListener(this);
         btnGoTutorial.setOnClickListener(this);
+        btnGoScoreList.setOnClickListener(this);
         btnGoInfo.setSoundEffectsEnabled(false);
         btnGoGame.setSoundEffectsEnabled(false);
         btnGoLogin.setSoundEffectsEnabled(false);
@@ -121,6 +126,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         else if (v == btnGoTutorial) {
             intent = new Intent(MainActivity.this, TutorialActivity.class);
+        }
+        else if (v == btnGoScoreList) {
+            intent = new Intent(MainActivity.this, ScoreListActivity.class);
         }
         startActivity(intent);
     }

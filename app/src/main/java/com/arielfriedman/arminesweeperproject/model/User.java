@@ -20,7 +20,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.isAdmin = isAdmin;
-        this.score=0;
+        this.score = 0;
     }
 
     public User(String id, String fname, String lname, String phone, String email, String password, boolean isAdmin, int score) {
