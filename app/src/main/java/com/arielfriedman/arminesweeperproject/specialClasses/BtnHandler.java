@@ -3,8 +3,8 @@ package com.arielfriedman.arminesweeperproject.specialClasses;
 import android.view.MotionEvent;
 import android.view.View;
 
-public final class ButtonHandler {
-    public static void HandleButton(View view) {
+public final class BtnHandler {
+    public static void handleBtn(View view) {
 
         //remove sfx
         view.setSoundEffectsEnabled(false);

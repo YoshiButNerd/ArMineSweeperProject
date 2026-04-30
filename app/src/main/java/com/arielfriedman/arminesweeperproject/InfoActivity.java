@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
+import com.arielfriedman.arminesweeperproject.specialClasses.BtnHandler;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
 public class InfoActivity extends BaseActivity implements View.OnClickListener {
@@ -35,24 +36,8 @@ public class InfoActivity extends BaseActivity implements View.OnClickListener {
 
     public void Initviews() {
         btnGoBack = findViewById(R.id.goBackBtn);
+        BtnHandler.handleBtn(btnGoBack);
         btnGoBack.setOnClickListener(this);
-        btnGoBack.setSoundEffectsEnabled(false);
-        addPressAnimation(btnGoBack);
-    }
-
-    private void addPressAnimation(View view) {
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).start();
-                } else if (event.getAction() == MotionEvent.ACTION_UP ||
-                        event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
-                }
-                return false;
-            }
-        });
     }
 
     @Override

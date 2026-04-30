@@ -5,6 +5,60 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".ScoreListActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/trans_gray"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_users_score_list"
+                android:layout_width="match_parent"
+                android:translationZ="10dp"
+                android:background="@color/low_trans_gray"
+                android:layout_height="0dp"
+                android:layout_weight="35" />
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="2"
+                android:layout_marginBottom="5dp"
+                android:layout_marginHorizontal="7dp">
+
+                <TextView
+                    android:id="@+id/tv_score_user_count"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="כמות המשתמשים"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
+
+                <com.google.android.material.button.MaterialButton
+                    style="@style/BasicButton"
+                    android:id="@+id/btnGoBackScore"
+                    android:layout_weight="5"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="חזור" />
+
+
+            </LinearLayout>
+        </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,21 +18,14 @@ import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
-
-//    public interface OnUserClickListener {
-//        void onUserClick(User user);
-//        void onLongUserClick(User user);
-//    }
-
     private final List<User> userList;
-//    private final OnUserClickListener onUserClickListener;
+
     public UserAdapter() {
         userList = new ArrayList<>();
-
     }
+
     public UserAdapter(ArrayList users) {
         userList = users;
-
     }
 
     @NonNull
@@ -69,20 +62,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         } else {
             holder.chipRole.setVisibility(View.GONE);
         }
-
-        holder.itemView.setOnClickListener(v -> {
-          //  if (onUserClickListener != null) {
-         //       onUserClickListener.onUserClick(user);
-         //   }
-        });
-
-        holder.itemView.setOnLongClickListener(v -> {
-        //    if (onUserClickListener != null) {
-        //        onUserClickListener.onLongUserClick(user);
-        //    }
-                return true;
-        });
-
     }
 
     @Override
@@ -99,19 +78,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public void addUser(User user) {
         userList.add(user);
         notifyItemInserted(userList.size() - 1);
-    }
-    public void updateUser(User user) {
-        int index = userList.indexOf(user);
-        if (index == -1) return;
-        userList.set(index, user);
-        notifyItemChanged(index);
-    }
-
-    public void removeUser(User user) {
-        int index = userList.indexOf(user);
-        if (index == -1) return;
-        userList.remove(index);
-        notifyItemRemoved(index);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

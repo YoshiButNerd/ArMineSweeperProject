@@ -580,9 +580,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 @Override
                 public void onCompleted(Void v) {
                     Log.d("GameActivity", "User update successful");
-
-                    Toast.makeText(GameActivity.this,"update",LENGTH_LONG).show();
-
+                    Toast.makeText(GameActivity.this,"שיא חדש!",LENGTH_LONG).show();
                     int moneyFromTime = (int)millisRemaining/1000/45;
                     runstate.changeMoney(endOfRoundMoney + moneyFromTime);
                     downTimer.cancel();
@@ -598,9 +596,8 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 }
             });
         }
-        else{
 
-            Toast.makeText(GameActivity.this,"failllll",LENGTH_LONG).show();
+        else {
             int moneyFromTime = (int)millisRemaining/1000/45;
             runstate.changeMoney(endOfRoundMoney + moneyFromTime);
             downTimer.cancel();
@@ -608,11 +605,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             intent = new Intent(GameActivity.this, ShopActivity.class);
             intent.putExtra("Money_MSG", moneyMsg);
             startActivity(intent);
-
-
         }
-
-
     }
 
     public void gameLost() {

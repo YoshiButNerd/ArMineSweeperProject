@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
+import com.arielfriedman.arminesweeperproject.specialClasses.BtnHandler;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
@@ -38,24 +39,8 @@ public class LossActivity extends BaseActivity implements View.OnClickListener {
 
     public void initViews() {
         btnHome = findViewById(R.id.returnHomeBtn);
-        btnHome.setSoundEffectsEnabled(false);
+        BtnHandler.handleBtn(btnHome);
         btnHome.setOnClickListener(this);
-        addPressAnimation(btnHome);
-    }
-
-    private void addPressAnimation(View view) {
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).start();
-                } else if (event.getAction() == MotionEvent.ACTION_UP ||
-                        event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
-                }
-                return false;
-            }
-        });
     }
 
     @Override

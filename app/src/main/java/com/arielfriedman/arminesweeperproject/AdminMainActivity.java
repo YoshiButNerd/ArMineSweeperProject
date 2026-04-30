@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
+import com.arielfriedman.arminesweeperproject.specialClasses.BtnHandler;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.NotificationReceiver;
@@ -45,6 +46,54 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
             return insets;
         });
         Initviews();
+        setNotifs();
+    }
+    public void Initviews() {
+        sharedpreferences = getSharedPreferences(SCREENPREFS, Context.MODE_PRIVATE);
+        aBtnGoInfo = findViewById(R.id.aGoInfoBtn);
+        aBtnGoGame = findViewById(R.id.aGoGameBtn);
+        aBtnGoUsersList = findViewById(R.id.aGoInfoUsersBtn);
+        aBtnGoLogin = findViewById(R.id.aGoLoginBtn);
+        aBtnGoTutorial = findViewById(R.id.aGoTutorialBtn);
+        BtnHandler.handleBtn(aBtnGoInfo);
+        BtnHandler.handleBtn(aBtnGoGame);
+        BtnHandler.handleBtn(aBtnGoLogin);
+        BtnHandler.handleBtn(aBtnGoUsersList);
+        BtnHandler.handleBtn(aBtnGoTutorial);
+        aBtnGoInfo.setOnClickListener(this);
+        aBtnGoGame.setOnClickListener(this);
+        aBtnGoLogin.setOnClickListener(this);
+        aBtnGoUsersList.setOnClickListener(this);
+        aBtnGoTutorial.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        SfxManager.play(this, R.raw.sfx_clickbtn);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString("lobby_screen", "AdminMainActivity");
+        editor.commit();
+        if (v == aBtnGoInfo) {
+            intent = new Intent(AdminMainActivity.this, InfoActivity.class);
+        }
+        else if (v == aBtnGoGame) {
+            startNewRun();
+            intent = new Intent(AdminMainActivity.this, GameActivity.class);
+            Log.d("MainActivity", "Set intent and runstate successfully");
+        }
+        else if (v == aBtnGoLogin) {
+            intent = new Intent(AdminMainActivity.this, LoginActivity.class);
+        }
+        else if (v == aBtnGoUsersList) {
+            intent = new Intent(AdminMainActivity.this, UsersListActivity.class);
+        }
+        else if (v == aBtnGoTutorial) {
+            intent = new Intent(AdminMainActivity.this, TutorialActivity.class);
+        }
+        startActivity(intent);
+    }
+
+    public void setNotifs() {
         requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
@@ -66,70 +115,6 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
                 pendingIntent
         );
     }
-        public void Initviews() {
-            sharedpreferences = getSharedPreferences(SCREENPREFS, Context.MODE_PRIVATE);
-            aBtnGoInfo = findViewById(R.id.aGoInfoBtn);
-            aBtnGoGame = findViewById(R.id.aGoGameBtn);
-            aBtnGoUsersList = findViewById(R.id.aGoInfoUsersBtn);
-            aBtnGoLogin = findViewById(R.id.aGoLoginBtn);
-            aBtnGoTutorial = findViewById(R.id.aGoTutorialBtn);
-            aBtnGoInfo.setOnClickListener(this);
-            aBtnGoGame.setOnClickListener(this);
-            aBtnGoLogin.setOnClickListener(this);
-            aBtnGoUsersList.setOnClickListener(this);
-            aBtnGoTutorial.setOnClickListener(this);
-            aBtnGoInfo.setSoundEffectsEnabled(false);
-            aBtnGoGame.setSoundEffectsEnabled(false);
-            aBtnGoLogin.setSoundEffectsEnabled(false);
-            aBtnGoUsersList.setSoundEffectsEnabled(false);
-            aBtnGoTutorial.setSoundEffectsEnabled(false);
-            addPressAnimation(aBtnGoGame);
-            addPressAnimation(aBtnGoInfo);
-            addPressAnimation(aBtnGoLogin);
-            addPressAnimation(aBtnGoUsersList);
-            addPressAnimation(aBtnGoTutorial);
-        }
-
-    private void addPressAnimation(View view) {
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).start();
-                } else if (event.getAction() == MotionEvent.ACTION_UP ||
-                        event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
-                }
-                return false;
-            }
-        });
-    }
-
-        @Override
-        public void onClick(View v) {
-            SfxManager.play(this, R.raw.sfx_clickbtn);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString("lobby_screen", "AdminMainActivity");
-            editor.commit();
-            if (v == aBtnGoInfo) {
-                intent = new Intent(AdminMainActivity.this, InfoActivity.class);
-            }
-            else if (v == aBtnGoGame) {
-                startNewRun();
-                intent = new Intent(AdminMainActivity.this, GameActivity.class);
-                Log.d("MainActivity", "Set intent and runstate successfully");
-            }
-            else if (v == aBtnGoLogin) {
-                intent = new Intent(AdminMainActivity.this, LoginActivity.class);
-            }
-            else if (v == aBtnGoUsersList) {
-                intent = new Intent(AdminMainActivity.this, UsersListActivity.class);
-            }
-            else if (v == aBtnGoTutorial) {
-                intent = new Intent(AdminMainActivity.this, TutorialActivity.class);
-            }
-            startActivity(intent);
-        }
 
     public void startNewRun() {
         RunState runState = RunState.getInstance();

@@ -20,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 import com.arielfriedman.arminesweeperproject.services.DatabaseService;
+import com.arielfriedman.arminesweeperproject.specialClasses.BtnHandler;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
@@ -75,26 +76,9 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
             /// set the click listener
             btnLogin.setOnClickListener(this);
             btnGoRegister.setOnClickListener(this);
-            btnLogin.setSoundEffectsEnabled(false);
-            btnGoRegister.setSoundEffectsEnabled(false);
-            addPressAnimation(btnGoRegister);
-            addPressAnimation(btnLogin);
+            BtnHandler.handleBtn(btnLogin);
+            BtnHandler.handleBtn(btnGoRegister);
         }
-
-    private void addPressAnimation(View view) {
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).start();
-                } else if (event.getAction() == MotionEvent.ACTION_UP ||
-                        event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
-                }
-                return false;
-            }
-        });
-    }
 
         @Override
         public void onClick(View v) {

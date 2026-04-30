@@ -20,6 +20,7 @@ import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.adapters.UserAdapter;
 import com.arielfriedman.arminesweeperproject.model.User;
 import com.arielfriedman.arminesweeperproject.services.DatabaseService;
+import com.arielfriedman.arminesweeperproject.specialClasses.BtnHandler;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class UsersListActivity extends BaseActivity implements View.OnClickListe
     private DatabaseService databaseService;
     Button btnGoBack;
     Intent intent;
-    ArrayList<User>users=new ArrayList<>();
+    ArrayList<User>users = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,23 +50,21 @@ public class UsersListActivity extends BaseActivity implements View.OnClickListe
     }
 
     public void Initviews() {
-        databaseService=DatabaseService.getInstance();
+        databaseService = DatabaseService.getInstance();
         RecyclerView usersList = findViewById(R.id.rv_users_list);
         tvUserCount = findViewById(R.id.tv_user_count);
         usersList.setLayoutManager(new LinearLayoutManager(this));
-        userAdapter=new UserAdapter(users);
+        userAdapter = new UserAdapter(users);
         usersList.setAdapter(userAdapter);
         btnGoBack = findViewById(R.id.btnGoBack);
+        BtnHandler.handleBtn(btnGoBack);
         btnGoBack.setOnClickListener(this);
-        btnGoBack.setSoundEffectsEnabled(false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         databaseService.getUserList(new DatabaseService.DatabaseCallback<List<User>>() {
-
-
             @Override
             public void onCompleted(List<User> users) {
                 userAdapter.setUserList(users);

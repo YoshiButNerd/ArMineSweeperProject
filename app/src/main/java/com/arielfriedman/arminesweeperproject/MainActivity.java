@@ -7,10 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -20,7 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
-import com.arielfriedman.arminesweeperproject.specialClasses.ButtonHandler;
+import com.arielfriedman.arminesweeperproject.specialClasses.BtnHandler;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.NotificationReceiver;
@@ -47,26 +44,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             return insets;
         });
         Initviews();
-        requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        Intent intent = new Intent(this, NotificationReceiver.class);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this,
-                0,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE
-        );
-
-        int interval = 60 * 60 * 24 * 1000;
-
-        alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis() + interval,
-                interval,
-                pendingIntent
-        );
+        setNotifs();
     }
 
     public void Initviews() {
@@ -76,35 +54,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btnGoLogin = findViewById(R.id.goLoginBtn);
         btnGoTutorial = findViewById(R.id.goTutorialBtn);
         btnGoScoreList = findViewById(R.id.goScoreListBtn);
-        ButtonHandler.HandleButton(btnGoScoreList);
+        BtnHandler.handleBtn(btnGoInfo);
+        BtnHandler.handleBtn(btnGoGame);
+        BtnHandler.handleBtn(btnGoLogin);
+        BtnHandler.handleBtn(btnGoTutorial);
+        BtnHandler.handleBtn(btnGoScoreList);
         btnGoInfo.setOnClickListener(this);
         btnGoGame.setOnClickListener(this);
         btnGoLogin.setOnClickListener(this);
         btnGoTutorial.setOnClickListener(this);
         btnGoScoreList.setOnClickListener(this);
-        btnGoInfo.setSoundEffectsEnabled(false);
-        btnGoGame.setSoundEffectsEnabled(false);
-        btnGoLogin.setSoundEffectsEnabled(false);
-        btnGoTutorial.setSoundEffectsEnabled(false);
-        addPressAnimation(btnGoGame);
-        addPressAnimation(btnGoInfo);
-        addPressAnimation(btnGoLogin);
-        addPressAnimation(btnGoTutorial);
-    }
-
-    private void addPressAnimation(View view) {
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).start();
-                } else if (event.getAction() == MotionEvent.ACTION_UP ||
-                        event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
-                }
-                return false;
-            }
-        });
     }
 
     @Override
@@ -131,6 +90,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             intent = new Intent(MainActivity.this, ScoreListActivity.class);
         }
         startActivity(intent);
+    }
+
+    public void setNotifs() {
+        requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        Intent intent = new Intent(this, NotificationReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE
+        );
+
+        int interval = 60 * 60 * 24 * 1000;
+
+        alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + interval,
+                interval,
+                pendingIntent
+        );
     }
 
     public void startNewRun() {
