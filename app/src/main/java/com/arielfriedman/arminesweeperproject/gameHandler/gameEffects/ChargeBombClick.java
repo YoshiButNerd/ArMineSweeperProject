@@ -4,7 +4,7 @@ import com.arielfriedman.arminesweeperproject.gameHandler.GameEventType;
 import com.arielfriedman.arminesweeperproject.gameHandler.ItemEffect;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 
-public class ChargeBombClick implements  ItemEffect{
+public class ChargeBombClick implements  ItemEffect {
     private int currentClicks = 0;
     private int firstClickAdd;
     private final int threshold;

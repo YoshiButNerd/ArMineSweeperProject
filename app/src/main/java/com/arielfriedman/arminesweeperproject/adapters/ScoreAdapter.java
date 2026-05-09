@@ -38,18 +38,9 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ViewHolder> 
         User user = userScoreList.get(position);
         if (user == null) return;
 
-        holder.tvName.setText(user.getFullName());
-        holder.tvScore.setText("סיבוב שיא: " + user.getScore());
-
-        // Set initials
-        String initials = "";
-        if (user.getFname() != null && !user.getFname().isEmpty()) {
-            initials += user.getFname().charAt(0);
-        }
-        if (user.getLname() != null && !user.getLname().isEmpty()) {
-            initials += user.getLname().charAt(0);
-        }
-        holder.tvInitials.setText(initials.toUpperCase());
+        holder.tvPlacement.setText(String.valueOf(position + 1));
+        holder.tvName.setText(user.getFullName() + ":");
+        holder.tvScore.setText(user.getScore() + "");
     }
 
     @Override
@@ -64,13 +55,13 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ViewHolder> 
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvInitials, tvScore;
+        TextView tvName, tvScore, tvPlacement;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tv_item_user_name);
-            tvInitials = itemView.findViewById(R.id.tv_user_initials);
             tvScore = itemView.findViewById(R.id.tv_item_user_score);
+            tvPlacement = itemView.findViewById(R.id.placementTxt);
         }
     }
 

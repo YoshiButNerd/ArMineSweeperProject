@@ -23,6 +23,7 @@ import com.arielfriedman.arminesweeperproject.specialClasses.BtnHandler;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ScoreListActivity extends BaseActivity implements View.OnClickListener {
@@ -66,6 +67,9 @@ public class ScoreListActivity extends BaseActivity implements View.OnClickListe
         databaseService.getUserList(new DatabaseService.DatabaseCallback<List<User>>() {
             @Override
             public void onCompleted(List<User> users) {
+                // Sort users by score in descending order (highest score first)
+                Collections.sort(users, (u1, u2) -> Integer.compare(u2.getScore(), u1.getScore()));
+                
                 scoreAdapter.setScoreList(users);
                 tvScoreUserCount.setText("Total users: " + users.size());
             }
