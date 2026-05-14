@@ -45,7 +45,7 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textColorHint="@color/dark_gray"
-                android:background="@color/low_trans_gray"
+                android:background="@color/low_trans_dark_blue"
                 android:layout_margin="20dp"/>
 
             <EditText
@@ -58,7 +58,7 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textColorHint="@color/dark_gray"
-                android:background="@color/low_trans_gray"
+                android:background="@color/low_trans_dark_blue"
                 android:layout_margin="20dp"/>
 
             <EditText
@@ -71,7 +71,7 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textColorHint="@color/dark_gray"
-                android:background="@color/low_trans_gray"
+                android:background="@color/low_trans_dark_blue"
                 android:layout_margin="20dp"/>
 
             <EditText
@@ -84,7 +84,7 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textColorHint="@color/dark_gray"
-                android:background="@color/low_trans_gray"
+                android:background="@color/low_trans_dark_blue"
                 android:layout_margin="20dp"/>
 
             <EditText
@@ -97,7 +97,7 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textColorHint="@color/dark_gray"
-                android:background="@color/low_trans_gray"
+                android:background="@color/low_trans_dark_blue"
                 android:layout_margin="20dp" />
 
             <com.google.android.material.button.MaterialButton

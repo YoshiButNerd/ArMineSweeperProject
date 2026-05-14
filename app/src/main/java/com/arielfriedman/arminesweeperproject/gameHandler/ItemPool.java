@@ -12,6 +12,7 @@ public class ItemPool {
         //Trigger
         allItems.add(ItemFactory.createGoldShower());
         allItems.add(ItemFactory.createGoldenBombs());
+        allItems.add(ItemFactory.createPowerHeart());
         //New Round
         allItems.add(ItemFactory.createMineMissile());
         allItems.add(ItemFactory.createGoldMissile());

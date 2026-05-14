@@ -3,6 +3,7 @@ package com.arielfriedman.arminesweeperproject.gameHandler;
 import com.arielfriedman.arminesweeperproject.Items.Item;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.ChargeBombClick;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.ChargeMineHealth;
+import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.HeartGivesHeart;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.MineGivesMoney;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.MinePrecentRemover;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.MineRemovesTiles;
@@ -22,7 +23,13 @@ public class ItemFactory {
     public static Item createGoldenBombs() { //Trigger
         return new Item(
                 "gold_bombs", "Golden Bombs", "כאשר מוקש מופעל הרווח +3 זהב",
-                5, 3, List.of(new MineGivesMoney(3))
+                5, 5, List.of(new MineGivesMoney(3))
+        );
+    }
+    public static Item createPowerHeart() { //Trigger
+        return new Item(
+                "power_heart", "Two of Hearts", "בכל פעם שמורווח לבבות, קבל +1 לבבות",
+                30, 1, List.of(new HeartGivesHeart(1))
         );
     }
     public static Item createMineMissile() { //New Round

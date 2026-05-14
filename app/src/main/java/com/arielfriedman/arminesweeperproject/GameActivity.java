@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.GameEventType;
+import com.arielfriedman.arminesweeperproject.gameHandler.ItemFactory;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;
 import com.arielfriedman.arminesweeperproject.model.Tile;
 import com.arielfriedman.arminesweeperproject.model.User;
@@ -127,7 +128,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             public void onHealthChanged(int health) {
                 healthCountText.setText("לבבות: " + health);
                 if (runstate.getHealth() <= 0) {
-                    //gameLost();
+                    gameLost();
                 }
             }
         };

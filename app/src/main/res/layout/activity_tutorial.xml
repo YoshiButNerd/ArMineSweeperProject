@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:text="@string/tutorial_txt"
             android:textColor="@color/black"
-            android:background="@color/low_trans_gray"
+            android:background="@color/low_trans_dark_blue"
             android:textStyle="bold"
             android:textSize="17sp"
             android:layout_marginTop="30dp"/>
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:text="בדוגמה הבאה ניתן לראות איך הפצצות מסביב למשבצות משפיעות על מספר המשבצות מסביבם (במשחק לא תראו איזה משבצות פצצות)."
             android:textColor="@color/black"
-            android:background="@color/low_trans_gray"
+            android:background="@color/low_trans_dark_blue"
             android:textStyle="bold"
             android:textSize="17sp"
             android:layout_marginTop="30dp"/>
@@ -65,7 +65,7 @@
             android:id="@+id/imagetutorial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/low_trans_gray"
+            android:background="@color/low_trans_dark_blue"
             android:layout_marginVertical="10dp"
             app:srcCompat="@drawable/tutorial_image_minesweeper" />
 

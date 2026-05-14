@@ -3,7 +3,7 @@
 
     <style name="BasicButton" parent="Widget.MaterialComponents.Button">
 
-        <item name="backgroundTint">@color/light_red</item>
+        <item name="backgroundTint">@color/dark_blue</item>
 
         <item name="android:translationZ">12dp</item>
 

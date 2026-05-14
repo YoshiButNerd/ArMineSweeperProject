@@ -54,7 +54,7 @@
         <TextView
             android:id="@+id/InfoTxt"
             android:textColor="@color/black"
-            android:background="@color/low_trans_gray"
+            android:background="@color/low_trans_dark_blue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/info_txt"

@@ -18,7 +18,7 @@
             android:id="@+id/rv_users_list"
             android:layout_width="match_parent"
             android:translationZ="10dp"
-            android:background="@color/low_trans_gray"
+            android:background="@color/low_trans_dark_blue"
             android:layout_height="0dp"
             android:layout_weight="35" />
 

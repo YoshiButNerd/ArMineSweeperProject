@@ -4,6 +4,7 @@ public enum GameEventType {
     ONOBTAIN,
     MONEYGAIN,
     HEALTHCHANGE,
+    HEALTHGAIN,
     MINECLICK,
     FIRSTCLICK,
     TILECLICK,

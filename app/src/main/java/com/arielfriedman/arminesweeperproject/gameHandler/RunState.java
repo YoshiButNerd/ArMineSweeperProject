@@ -114,9 +114,11 @@ public class RunState {
         notifyMoneyChanged();
     }
 
-    public void changeHealth(int amount){
+    public void changeHealth(int amount) {
         this.health += amount;
         triggerEvent(GameEventType.HEALTHCHANGE);
+        if (amount > 0)
+            triggerEvent(GameEventType.HEALTHGAIN);
         notifyHealthChanged();
     }
 
@@ -181,6 +183,11 @@ public class RunState {
     public void moneyItemGain(int amount) {
         this.money += amount;
         notifyMoneyChanged();
+    }
+
+    public void healthItemGain(int amount) {
+        this.health += amount;
+        notifyHealthChanged();
     }
 
     public boolean getMineBombs() {
