@@ -70,6 +70,7 @@
             android:gravity="left"
             android:text="זמן: 05:00" />
 
+        <!-- points is invisible unless admin swipes screen up -->
         <TextView
             android:id="@+id/pointsText"
             android:layout_width="0dp"

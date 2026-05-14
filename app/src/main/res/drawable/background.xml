@@ -1,18 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-<!-- Your repeating image -->
-<item>
-    <bitmap
-        android:src="@drawable/minesweeper_tile"
-        android:tileMode="repeat" />
-</item>
+    <!-- 1. THE BASE: A solid, premium Dark Slate (not black) -->
+    <item>
+        <shape>
+            <solid android:color="#121417" />
+        </shape>
+    </item>
 
-<!-- Overlay -->
-<item>
-    <shape>
-        <solid android:color="#33000000"/> <!-- dark overlay -->
-    </shape>
-</item>
+    <!-- 2. YOUR TILES: Set with low alpha so they are subtle -->
+    <item>
+        <bitmap
+            android:src="@drawable/minesweeper_tile"
+            android:tileMode="repeat"
+            android:alpha="0.3" />
+    </item>
+
+    <!-- 3. THE "STUDIO LIGHT": A soft blue-grey glow pinned to the top -->
+    <!-- This creates a "header" light source without a full screen gradient -->
+    <item android:bottom="400dp">
+        <shape>
+            <gradient
+                android:type="radial"
+                android:gradientRadius="100%p"
+                android:centerX="50%"
+                android:centerY="0%"
+                android:startColor="#335DADE2"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- 4. THE FINISHER: A subtle edge vignette to keep the focus in the center -->
+    <item>
+        <shape>
+            <stroke android:width="1dp" android:color="#1AFFFFFF" />
+            <gradient
+                android:type="radial"
+                android:gradientRadius="85%p"
+                android:startColor="#00000000"
+                android:endColor="#4D000000" />
+        </shape>
+    </item>
 
 </layer-list>

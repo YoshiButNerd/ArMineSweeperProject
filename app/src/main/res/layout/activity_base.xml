@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".baseActivity.BaseActivity"
-    android:background="@color/material_dynamic_neutral_variant80">
+    android:background="@color/base_background">
 
 
     <LinearLayout

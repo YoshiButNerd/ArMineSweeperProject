@@ -67,6 +67,15 @@
             android:textSize="18sp" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/aGoScoreUsersBtn"
+            style="@style/BasicButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="22dp"
+            android:text="רשימת שיאים"
+            android:textSize="18sp" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/aGoInfoUsersBtn"
             style="@style/BasicButton"
             android:layout_width="match_parent"

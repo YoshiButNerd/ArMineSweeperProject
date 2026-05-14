@@ -30,6 +30,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     Button aBtnGoLogin;
     Button aBtnGoUsersList;
     Button aBtnGoTutorial;
+    Button aBtnGoScoreUsersList;
     Intent intent;
 
     public static final String SCREENPREFS = "LastScreenBeforeGame" ;
@@ -55,16 +56,19 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         aBtnGoUsersList = findViewById(R.id.aGoInfoUsersBtn);
         aBtnGoLogin = findViewById(R.id.aGoLoginBtn);
         aBtnGoTutorial = findViewById(R.id.aGoTutorialBtn);
+        aBtnGoScoreUsersList = findViewById(R.id.aGoScoreUsersBtn);
         BtnHandler.handleBtn(aBtnGoInfo);
         BtnHandler.handleBtn(aBtnGoGame);
         BtnHandler.handleBtn(aBtnGoLogin);
         BtnHandler.handleBtn(aBtnGoUsersList);
         BtnHandler.handleBtn(aBtnGoTutorial);
+        BtnHandler.handleBtn(aBtnGoScoreUsersList);
         aBtnGoInfo.setOnClickListener(this);
         aBtnGoGame.setOnClickListener(this);
         aBtnGoLogin.setOnClickListener(this);
         aBtnGoUsersList.setOnClickListener(this);
         aBtnGoTutorial.setOnClickListener(this);
+        aBtnGoScoreUsersList.setOnClickListener(this);
     }
 
     @Override
@@ -89,6 +93,9 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         }
         else if (v == aBtnGoTutorial) {
             intent = new Intent(AdminMainActivity.this, TutorialActivity.class);
+        }
+        else if (v == aBtnGoScoreUsersList) {
+            intent = new Intent(AdminMainActivity.this, ScoreListActivity.class);
         }
         startActivity(intent);
     }

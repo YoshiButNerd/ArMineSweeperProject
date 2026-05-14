@@ -1,6 +1,7 @@
 package com.arielfriedman.arminesweeperproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +35,7 @@ public class ScoreListActivity extends BaseActivity implements View.OnClickListe
     private DatabaseService databaseService;
     Button btnGoBack;
     Intent intent;
+    String previousActivity;
     ArrayList<User> usersScore = new ArrayList<>();
 
     @Override
@@ -84,7 +86,14 @@ public class ScoreListActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         SfxManager.play(this, R.raw.sfx_clickbtn);
-        intent = new Intent(ScoreListActivity.this, MainActivity.class);
-        startActivity(intent);
+        SharedPreferences prefs = getSharedPreferences("LastScreenBeforeGame", MODE_PRIVATE);
+        previousActivity = prefs.getString("lobby_screen", "MainActivity");
+        if (previousActivity.equals("AdminMainActivity"))
+            intent = new Intent(ScoreListActivity.this, AdminMainActivity.class);
+        else if (previousActivity.equals("MainActivity"))
+            intent = new Intent(ScoreListActivity.this, MainActivity.class);
+        else {
+            intent = new Intent(ScoreListActivity.this, LoginActivity.class);
+        }
     }
 }

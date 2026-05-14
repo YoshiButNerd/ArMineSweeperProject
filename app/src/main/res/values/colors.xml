@@ -8,12 +8,13 @@
     <color name="gray">#808080</color>
     <color name="light_gray">#C0C0C0</color>
     <color name="trans_gray">#24808080</color>
-    <color name="low_trans_gray">#56808080</color>
+    <color name="low_trans_gray">#252E3D4A</color>
     <color name="minesweeper_gray">#C6C6C6</color>
     <color name="dark_gray">#1F1F1F</color>
 
     <color name="red">#E53935</color>
-    <color name="light_red">#FF4444</color>
+    <!-- #FF4444 -->
+    <color name="light_red">#4A5A6D</color>
     <color name="lighter_red">#FF4F40</color>
 
     <color name="green">#20C20E</color>
@@ -23,5 +24,6 @@
 
 
     <color name="background">@color/material_dynamic_neutral_variant90</color>
+    <color name="base_background">#25323D</color>
 
 </resources>
