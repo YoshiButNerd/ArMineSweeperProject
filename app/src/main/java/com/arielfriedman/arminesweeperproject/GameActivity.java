@@ -98,7 +98,6 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             return insets;
         });
 
-        mAuth = FirebaseAuth.getInstance();
         userId = mAuth.getUid();
         databaseService = DatabaseService.getInstance();
         databaseService.getUser(userId, new DatabaseService.DatabaseCallback<User>() {

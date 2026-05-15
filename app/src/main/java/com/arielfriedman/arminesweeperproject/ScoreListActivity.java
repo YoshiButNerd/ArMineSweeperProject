@@ -95,5 +95,6 @@ public class ScoreListActivity extends BaseActivity implements View.OnClickListe
         else {
             intent = new Intent(ScoreListActivity.this, LoginActivity.class);
         }
+        startActivity(intent);
     }
 }

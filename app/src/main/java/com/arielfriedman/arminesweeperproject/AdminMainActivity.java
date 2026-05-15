@@ -22,6 +22,7 @@ import com.arielfriedman.arminesweeperproject.specialClasses.BtnHandler;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.NotificationReceiver;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class AdminMainActivity extends BaseActivity implements View.OnClickListener{
 
@@ -86,6 +87,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
             Log.d("MainActivity", "Set intent and runstate successfully");
         }
         else if (v == aBtnGoLogin) {
+            FirebaseAuth.getInstance().signOut();
             intent = new Intent(AdminMainActivity.this, LoginActivity.class);
         }
         else if (v == aBtnGoUsersList) {

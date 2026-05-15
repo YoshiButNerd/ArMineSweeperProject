@@ -24,5 +24,6 @@
 
     <color name="background">@color/material_dynamic_neutral_variant90</color>
     <color name="base_background">#25323D</color>
+    <color name="settings_background">#32414D</color>
 
 </resources>
