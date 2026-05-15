@@ -1,6 +1,6 @@
 package com.arielfriedman.arminesweeperproject.gameHandler;
 
-import com.arielfriedman.arminesweeperproject.Items.Item;
+import com.arielfriedman.arminesweeperproject.model.Item;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.ChargeBombClick;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.ChargeMineHealth;
 import com.arielfriedman.arminesweeperproject.gameHandler.gameEffects.HeartGivesHeart;

@@ -95,22 +95,6 @@ public class DatabaseService {
         });
     }
 
-    /// remove data from the database at a specific path
-    /// @param path the path to remove the data from
-    /// @param callback the callback to call when the operation is completed
-    /// @see DatabaseCallback
-    private void deleteData(@NotNull final String path, @Nullable final DatabaseCallback<Void> callback) {
-        readData(path).removeValue((error, ref) -> {
-            if (error != null) {
-                if (callback == null) return;
-                callback.onFailed(error.toException());
-            } else {
-                if (callback == null) return;
-                callback.onCompleted(null);
-            }
-        });
-    }
-
     /// read data from the database at a specific path
     /// @param path the path to read the data from
     /// @return a DatabaseReference object to read the data from
@@ -159,61 +143,6 @@ public class DatabaseService {
             callback.onCompleted(tList);
         });
     }
-
-    /// generate a new id for a new object in the database
-    /// @param path the path to generate the id for
-    /// @return a new id for the object
-    /// @see String
-    /// @see DatabaseReference#push()
-
-    private String generateNewId(@NotNull final String path) {
-        return databaseReference.child(path).push().getKey();
-    }
-
-
-    /// run a transaction on the data at a specific path </br>
-    /// good for incrementing a value or modifying an object in the database
-    /// @param path the path to run the transaction on
-    /// @param clazz the class of the object to return
-    /// @param function the function to apply to the current value of the data
-    /// @param callback the callback to call when the operation is completed
-    /// @see DatabaseReference#runTransaction(Transaction.Handler)
-    private <T> void runTransaction(@NotNull final String path, @NotNull final Class<T> clazz, @NotNull UnaryOperator<T> function, @NotNull final DatabaseCallback<T> callback) {
-        readData(path).runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                T currentValue = currentData.getValue(clazz);
-                if (currentValue == null) {
-                    currentValue = function.apply(null);
-                } else {
-                    currentValue = function.apply(currentValue);
-                }
-                currentData.setValue(currentValue);
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                if (error != null) {
-                    Log.e(TAG, "Transaction failed", error.toException());
-                    callback.onFailed(error.toException());
-                    return;
-                }
-                T result = currentData != null ? currentData.getValue(clazz) : null;
-                callback.onCompleted(result);
-            }
-        });
-
-    }
-
-    // endregion of private methods for reading and writing data
-
-    // public methods to interact with the database
-
-    // region User Section
-
-
 
     /// create a new user in the database
     /// @param user the user object to create
@@ -305,22 +234,6 @@ public class DatabaseService {
     public void getUserList(@NotNull final DatabaseCallback<List<User>> callback) {
         getDataList(USERS_PATH, User.class, callback);
     }
-
-    /// delete a user from the database
-    /// @param uid the user id to delete
-    /// @param callback the callback to call when the operation is completed
-    public void deleteUser(@NotNull final String uid, @Nullable final DatabaseCallback<Void> callback) {
-        deleteData(USERS_PATH + "/" + uid, callback);
-    }
-
-
-
-
-    public void updateUser(@NotNull final User user, @Nullable final DatabaseCallback<Void> callback) {
-        writeData(USERS_PATH + "/" + user.getId(), user, callback );
-
-        }
-
 
     public void updateScore(@NotNull final User user, @Nullable final DatabaseCallback<Void> callback) {
         writeData(USERS_PATH + "/" + user.getId()+"/score/", user.getScore(), callback );

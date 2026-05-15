@@ -1,4 +1,4 @@
-package com.arielfriedman.arminesweeperproject.Items;
+package com.arielfriedman.arminesweeperproject.model;
 
 import com.arielfriedman.arminesweeperproject.gameHandler.GameEventType;
 import com.arielfriedman.arminesweeperproject.gameHandler.ItemEffect;

@@ -16,7 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.arielfriedman.arminesweeperproject.Items.Item;
+import com.arielfriedman.arminesweeperproject.model.Item;
 import com.arielfriedman.arminesweeperproject.baseActivity.BaseActivity;
 import com.arielfriedman.arminesweeperproject.gameHandler.ItemPool;
 import com.arielfriedman.arminesweeperproject.gameHandler.RunState;

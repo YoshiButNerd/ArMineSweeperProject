@@ -1,6 +1,6 @@
 package com.arielfriedman.arminesweeperproject.gameHandler;
 
-import com.arielfriedman.arminesweeperproject.Items.Item;
+import com.arielfriedman.arminesweeperproject.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;
