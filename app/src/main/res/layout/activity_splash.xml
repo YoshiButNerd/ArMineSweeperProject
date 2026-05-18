@@ -38,7 +38,7 @@
             android:id="@+id/imageView"
             android:layout_width="177dp"
             android:layout_height="190dp"
-            app:srcCompat="@mipmap/minesweeperlogo"
+            app:srcCompat="@drawable/minesweeperbaselogo"
             android:layout_marginTop="10dp"/>
 
         <ProgressBar
