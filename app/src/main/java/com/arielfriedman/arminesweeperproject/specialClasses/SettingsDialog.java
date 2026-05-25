@@ -61,6 +61,7 @@ public class SettingsDialog extends AppCompatDialogFragment {
             dismiss();
         });
 
+        //build the dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
 

@@ -89,6 +89,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         else if (v == aBtnGoLogin) {
             FirebaseAuth.getInstance().signOut();
             intent = new Intent(AdminMainActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         }
         else if (v == aBtnGoUsersList) {
             intent = new Intent(AdminMainActivity.this, UsersListActivity.class);

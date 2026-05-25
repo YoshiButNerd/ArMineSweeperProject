@@ -84,6 +84,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         else if (v == btnGoLogin) {
             FirebaseAuth.getInstance().signOut();
             intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         }
         else if (v == btnGoTutorial) {
             intent = new Intent(MainActivity.this, TutorialActivity.class);

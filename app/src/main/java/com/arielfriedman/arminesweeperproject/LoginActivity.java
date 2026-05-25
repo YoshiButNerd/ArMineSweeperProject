@@ -153,9 +153,6 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                     /// Show error message to user
                     etPassword.setError("אימייל או סיסמה שגויים");
                     etPassword.requestFocus();
-                    /// Sign out the user if failed to retrieve user data
-                    /// This is to prevent the user from being logged in again
-                    //SharedPreferencesUtil.signOutUser(LoginActivity.this);
                 }
             });
         }

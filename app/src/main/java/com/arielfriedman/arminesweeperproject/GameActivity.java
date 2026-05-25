@@ -288,7 +288,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         btn.setEnabled(false);
 
 
-        if (runstate.getFirstClicks() > 0) { //add an if and a bool if its true first click
+        if (runstate.getFirstClicks() > 0) {
             runstate.changeFirstClicks(-1);
             if (tile.getIsMine()) {
                 tile.setMine(false);
@@ -373,7 +373,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
             }
         }
         Log.d("GameActivity", countMines + " mines detected around click");
-        calculateAllMineCounts();
+        calculateAllMineCounts(); //fix count of all tiles
         row = tile.getRow();
         col = tile.getCol();
         for (int iRow = -1; iRow <= 1; iRow++) {  //Click the tiles around
@@ -712,13 +712,13 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
                 case MotionEvent.ACTION_DOWN:
                     longPressed[0] = false; // reset
-                    handler.postDelayed(() -> {
+                    handler.postDelayed(() -> { //delay by longClickMillis
                         longPressed[0] = true;
                         v.performLongClick(); }, longClickMillis); // fast long press
                     return true;
 
                 case MotionEvent.ACTION_UP:
-                    handler.removeCallbacksAndMessages(null); // cancel pending long press
+                    handler.removeCallbacksAndMessages(null); // cancel long press
                     if (!longPressed[0]) {
                         v.performClick(); // normal click
                     }
