@@ -24,11 +24,6 @@ import com.arielfriedman.arminesweeperproject.specialClasses.BtnHandler;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.MusicManager;
 import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxManager;
 
-/// Activity for logging in the user
-    /// This activity is used to log in the user
-    /// It contains fields for the user to enter their email and password
-    /// It also contains a button to log in the user
-    /// When the user is logged in, they are redirected to the main activity
     public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
         private static final String TAG = "LoginActivity";
@@ -49,7 +44,6 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             EdgeToEdge.enable(this);
-            /// set the layout for the activity
             setContentLayout(R.layout.activity_login);
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
                 Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -62,7 +56,6 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
         public void Initviews() {
             sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
             sharedgameprefs = getSharedPreferences(SCREENPREFS, Context.MODE_PRIVATE);
-            /// get the views
             databaseService = DatabaseService.getInstance();
             etEmail = findViewById(R.id.etLoginEmail);
             etPassword = findViewById(R.id.etLoginPassword);
@@ -72,8 +65,6 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
             String pass2 = sharedpreferences.getString("password", "");
             etEmail.setText(email2);
             etPassword.setText(pass2);
-
-            /// set the click listener
             btnLogin.setOnClickListener(this);
             btnGoRegister.setOnClickListener(this);
             BtnHandler.handleBtn(btnLogin);
@@ -86,43 +77,37 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
             if (v.getId() == btnLogin.getId()) {
                 Log.d(TAG, "onClick: Login button clicked");
 
-                /// get the email and password entered by the user
+                // get the email and password entered by the user
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
 
                 if (email.isEmpty() || password.isEmpty()) {
                     etPassword.setError("נדרש למלא את כל השדות");
                     etPassword.requestFocus();
-                    return;
                 }
 
-
                 else {
-                    /// log the email and password
+                    // log the email and password
                     Log.d(TAG, "onClick: Email: " + email);
                     Log.d(TAG, "onClick: Password: " + password);
 
-                    Log.d(TAG, "onClick: Validating input...");
-                    /// Validate input
-                    Log.d(TAG, "onClick: Logging in user...");
-
-                    /// Login user
                     loginUser(email, password);
                 }
             }
             else if (v.getId() == btnGoRegister.getId()) {
-                /// Navigate to Register Activity
+                // Navigate to Register Activity
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(registerIntent);
             }
         }
+
         private void loginUser(String email, String password) {
             databaseService.LoginUser(email, password, new DatabaseService.DatabaseCallback<String>() {
-                /// Callback method called when the operation is completed
+                // Callback method called when the operation is completed
                 @Override
                 public void onCompleted(String  uid) {
                     Log.d(TAG, "onCompleted: User logged in: " + uid.toString());
-                    /// save the user data to shared preferences
+                    // save the user data to shared preferences
                     SharedPreferences.Editor editor = sharedpreferences.edit();
 
                     editor.putString("email", email);
@@ -139,9 +124,9 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                         startActivity(registerIntent);
                     }
                     else {
-                        /// Redirect to main activity and clear back stack to prevent user from going back to login screen
+                        // Redirect to main activity and clear back stack to prevent user from going back to login screen
                         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                        /// Clear the back stack (clear history) and start the MainActivity
+                        // (clear history) and start the MainActivity
                         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(mainIntent);
                     }
@@ -150,7 +135,7 @@ import com.arielfriedman.arminesweeperproject.specialClasses.MusicHandler.SfxMan
                 @Override
                 public void onFailed(Exception e) {
                     Log.e(TAG, "onFailed: Failed to retrieve user data", e);
-                    /// Show error message to user
+                    // Show error message to user
                     etPassword.setError("אימייל או סיסמה שגויים");
                     etPassword.requestFocus();
                 }

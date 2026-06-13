@@ -50,10 +50,10 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     private static final String FORMAT = "%02d:%02d"; //Timer format
 
     //Game variables
-    int mineCount, flagCount;
+    int mineCount, flagCount, startingMines;
     int secondsCountDown = 300; //Is set to 60 if less than 60 (In SetGameDiff function)
-    int endOfRoundMoney = 8;
     int secondsDiffRemove = 20;
+    int endOfRoundMoney = 8;
     int minesDiffAdd = 5;
     int longClickMillis = 200;
     boolean lost = false;
@@ -82,10 +82,10 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     String userId;
     private DatabaseService databaseService;
+    private User user;
 
     //Listener variable
     private RunState.StateListener runStateListener;
-    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,8 +148,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
         moneyCountText.setText("מטבעות: " + runstate.getMoney());
         healthCountText.setText("לבבות: " + runstate.getHealth());
-        getWindow().setDecorFitsSystemWindows(false); // Removes navigation bar
-        manageHidingNavigationBar();
+        manageHidingNavigationBar(); //Hides navigation bar until user swipes from top
         manageBackPress();
         handleSwipe();
     }
@@ -191,7 +190,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
 
     public void setGameDiff() {
         round = runstate.getRound();
-        int startingMines = runstate.getMineCount();
+        startingMines = runstate.getMineCount();
         runstate.setMineCount(startingMines + minesDiffAdd * (round-1));
         secondsCountDown -= secondsDiffRemove * (round-1);
         if (secondsCountDown < 60) { // Keep Round Winnable
@@ -212,7 +211,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
         int tileHeight = availableHeight / ROWS;
 
         int tileSize = Math.min(tileWidth, tileHeight);
-        
+
         // Fallback
         if (tileSize <= 0) {
             tileSize = dpToPx(30);
@@ -413,7 +412,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     public void clearMineBricks() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
-                if (!tilesArr[row][col].getWasRevealed()) continue;
+                if (tilesArr[row][col].getWasRevealed()) continue;
                 int count = calculateTileMineCount(tilesArr[row][col]);
                 if (row == 0 || row == ROWS-1) { //If at row edge account for missing tiles
                     count += 3;
@@ -421,12 +420,38 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
                 if (col == 0 || col == COLS-1) { //If at Column edge account for missing tiles
                     count += 3;
                 }
+                if (tilesArr[row][col].getIsMine()) //calculateTileMineCount calculates the tile itself if its a mine
+                    count--;
+                if ((row == 0 || row == ROWS-1) && (col == 0 || col == COLS-1)) // make corners give +5
+                    count--;
                 if (count >= 8) {
-                    clearMinesAroundAndMove(tilesArr[row][col]);
+                    moveMinesAround(tilesArr[row][col]);
                     // another mine brick may be created
                 }
             }
         }
+    }
+
+    public void moveMinesAround(Tile tile) {
+        int row = tile.getRow();
+        int col = tile.getCol();
+        int countMines = 0;
+        for (int iRow = -1; iRow <= 1; iRow++) {  //Remove mine status from tiles around and calc how many mines there were
+            for (int iCol = -1; iCol <= 1; iCol++) {
+                int tileRow = row + iRow;
+                int tileCol = col + iCol;
+                if (tileRow >= 0 && tileRow < ROWS && tileCol >= 0 && tileCol < COLS && tilesArr[tileRow][tileCol].getIsMine()) {
+                    if (!tilesArr[tileRow][tileCol].getWasRevealed()) {
+                        countMines++;
+                    }
+                    tilesArr[tileRow][tileCol].setMine(false);
+                }
+            }
+        }
+        placeMines(countMines);
+        Log.d("GameActivity", countMines + " detected mines moved (if there was room)");
+        calculateAllMineCounts();
+        calculateAllRevealedMineCounts();
     }
 
     public void placeMines(int mineCount) {
@@ -574,6 +599,7 @@ public class GameActivity extends BaseActivity implements View.OnClickListener, 
     public void gameWin() {
         won = true;
         runstate.increaseRound();
+        runstate.setMineCount(startingMines);
         if (user.getScore() < runstate.getRound()) {
             user.setScore(runstate.getRound());
             databaseService.updateScore(user, new DatabaseService.DatabaseCallback<Void>() {

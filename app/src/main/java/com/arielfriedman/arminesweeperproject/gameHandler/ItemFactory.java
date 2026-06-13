@@ -52,7 +52,7 @@ public class ItemFactory {
     }
     public static Item createChargeBombClick() { //Charge
         return new Item(
-                "bomb_click", "Power of the Fist", "כל 80 משבצות שנלחצו, הלחיצה הבאה שלך תנקה את כל האריחים סביבך, ותשמיד מוקשים",
+                "bomb_click", "Power of the Fist", "כל 80 משבצות שנלחצו, הלחיצה הבאה שלך תנקה את כל המשבצות סביבה, ותשמיד מוקשים",
                 15, 10, List.of(new ChargeBombClick(80, 1))
         );
     }

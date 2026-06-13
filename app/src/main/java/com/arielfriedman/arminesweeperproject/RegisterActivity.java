@@ -26,11 +26,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
-/// Activity for registering the user
-/// This activity is used to register the user
-/// It contains fields for the user to enter their information
-/// It also contains a button to register the user
-/// When the user is registered, they are redirected to the main activity
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "RegisterActivity";
@@ -46,7 +41,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        /// set the layout for the activity
         setContentLayout(R.layout.activity_register);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -60,7 +54,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         databaseService = DatabaseService.getInstance();
-        /// get the views
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etFName = findViewById(R.id.etFname);
@@ -68,7 +61,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         etPhone = findViewById(R.id.etPhone);
         btnRegister = findViewById(R.id.btnRegister);
         btnLogin = findViewById(R.id.btnLogin);
-        /// set the click listener
         btnRegister.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
         BtnHandler.handleBtn(btnRegister);
@@ -81,7 +73,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         if (v.getId() == btnRegister.getId()) {
             Log.d(TAG, "onClick: Register button clicked");
 
-            /// get the input from the user
+            // get the input from the user
             String email = etEmail.getText().toString();
             String password = etPassword.getText().toString();
             String fName = etFName.getText().toString();
@@ -90,13 +82,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             boolean isAdmin = false;
             int score = 0;
 
-            /// Validate input
+            // Validate input
             Log.d(TAG, "onClick: Validating input...");
 
-            boolean isValid = validator(fName, lName, phone, email, password);
+            boolean isValid = validator(fName, lName, phone, email, password); // Checks if empty
 
             Log.d(TAG, "onClick: Registering user...");
-            /// Register user
+            // Register user
             if (isValid) {
                 registerUser(fName, lName, phone, email, password, isAdmin, score);
             }
@@ -104,23 +96,23 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 Toast.makeText(RegisterActivity.this, "לא כל השדות מלאים", Toast.LENGTH_LONG).show();
             }
         } else if (v.getId() == btnLogin.getId()) {
-            /// Navigate back to Login Activity
+            // Navigate back to Login Activity
             Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(loginIntent);
         }
     }
 
 
-    /// Register the user
+    // Register the user
     private void registerUser(String fname, String lname, String phone, String email, String password, boolean isAdmin, int score) {
         Log.d(TAG, "registerUser: Registering user...");
 
 
-        /// create a new user object
+        // create a new user object
         User user = new User("4545", fname, lname, phone, email, password, false, score);
 
 
-        /// proceed to create the user
+        // proceed to create the user
         createUserInDatabase(user);
 
     }
@@ -131,8 +123,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onCompleted(String uid) {
                 Log.d("TAG", "createUserInDatabase: User created successfully");
-                /// save the user to shared preferences
-                user.setId(uid);
+                // save the user to shared preferences
                 SharedPreferences.Editor editor = sharedpreferences.edit();
 
                 editor.putString("email", user.getEmail());
@@ -140,9 +131,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                 editor.commit();
                 Log.d("TAG", "createUserInDatabase: Redirecting to LoginActivity");
-                /// Redirect to LoginActivity and clear back stack to prevent user from going back to register screen
+                // Redirect to LoginActivity and clear back stack to prevent user from going back to register screen
                 Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
-                /// clear the back stack (clear history) and start the LoginActivity
+                // clear the back stack (clear history) and start the LoginActivity
                 loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                 startActivity(loginIntent);
@@ -152,7 +143,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             public void onFailed(Exception e) {
                 Log.e(TAG, "createUserInDatabase: Failed to create user", e);
 
-                /// show error message to user
+                // show error message to user
                 String message = "הרשמה נכשלה, תנסה שוב";
 
                 if (e instanceof FirebaseAuthWeakPasswordException) {

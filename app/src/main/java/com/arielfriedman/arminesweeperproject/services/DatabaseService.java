@@ -22,51 +22,27 @@ import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 
-/// a service to interact with the Firebase Realtime Database.
-/// this class is a singleton, use getInstance() to get an instance of this class
-/// @see #getInstance()
-/// @see FirebaseDatabase
 public class DatabaseService {
 
-    /// tag for logging
-    /// @see Log
     private static final String TAG = "DatabaseService";
 
-    /// paths for different data types in the database
-    /// @see DatabaseService#readData(String)
     private static final String USERS_PATH = "users";
 
-    /// callback interface for database operations
-    /// @param <T> the type of the object to return
-    /// @see DatabaseCallback#onCompleted(Object)
-    /// @see DatabaseCallback#onFailed(Exception)
     public interface DatabaseCallback<T> {
-        /// called when the operation is completed successfully
         public void onCompleted(T object);
 
-        /// called when the operation fails with an exception
         public void onFailed(Exception e);
     }
 
-    /// the instance of this class
-    /// @see #getInstance()
     private static DatabaseService instance;
 
-    /// the reference to the database
-    /// @see DatabaseReference
-    /// @see FirebaseDatabase#getReference()
     private final DatabaseReference databaseReference;
 
-    /// use getInstance() to get an instance of this class
-    /// @see DatabaseService#getInstance()
     private DatabaseService() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
     }
 
-    /// get an instance of this class
-    /// @return an instance of this class
-    /// @see DatabaseService
     public static DatabaseService getInstance() {
         if (instance == null) {
             instance = new DatabaseService();
@@ -74,15 +50,6 @@ public class DatabaseService {
         return instance;
     }
 
-
-    // region private generic methods
-    // to write and read data from the database
-
-    /// write data to the database at a specific path
-    /// @param path the path to write the data to
-    /// @param data the data to write (can be any object, but must be serializable, i.e. must have a default constructor and all fields must have getters and setters)
-    /// @param callback the callback to call when the operation is completed
-    /// @see DatabaseCallback
     private void writeData(@NotNull final String path, @NotNull final Object data, final @Nullable DatabaseCallback<Void> callback) {
         readData(path).setValue(data, (error, ref) -> {
             if (error != null) {
@@ -95,22 +62,11 @@ public class DatabaseService {
         });
     }
 
-    /// read data from the database at a specific path
-    /// @param path the path to read the data from
-    /// @return a DatabaseReference object to read the data from
-    /// @see DatabaseReference
-
     private DatabaseReference readData(@NotNull final String path) {
         return databaseReference.child(path);
     }
 
 
-    /// get data from the database at a specific path
-    /// @param path the path to get the data from
-    /// @param clazz the class of the object to return
-    /// @param callback the callback to call when the operation is completed
-    /// @see DatabaseCallback
-    /// @see Class
     private <T> void getData(@NotNull final String path, @NotNull final Class<T> clazz, @NotNull final DatabaseCallback<T> callback) {
         readData(path).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -123,10 +79,6 @@ public class DatabaseService {
         });
     }
 
-    /// get a list of data from the database at a specific path
-    /// @param path the path to get the data from
-    /// @param clazz the class of the objects to return
-    /// @param callback the callback to call when the operation is completed
     private <T> void getDataList(@NotNull final String path, @NotNull final Class<T> clazz, @NotNull final DatabaseCallback<List<T>> callback) {
         readData(path).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -143,14 +95,6 @@ public class DatabaseService {
             callback.onCompleted(tList);
         });
     }
-
-    /// create a new user in the database
-    /// @param user the user object to create
-    /// @param callback the callback to call when the operation is completed
-    ///              the callback will receive void
-    ///            if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see User
 
     public void createNewUser(@NotNull final User user,
                               @Nullable final DatabaseCallback<String> callback) {
@@ -181,14 +125,6 @@ public class DatabaseService {
     }
 
 
-    /// Login with email and password
-    /// @param email , password
-    /// @param callback the callback to call when the operation is completed
-    ///              the callback will receive String (user id)
-    ///            if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see FirebaseAuth
-
     public static void LoginUser(@NotNull final String email,final String password,
                           @Nullable final DatabaseCallback<String> callback) {
 
@@ -213,24 +149,10 @@ public class DatabaseService {
                 });
     }
 
-    /// get a user from the database
-    /// @param uid the id of the user to get
-    /// @param callback the callback to call when the operation is completed
-    ///               the callback will receive the user object
-    ///             if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see User
     public void getUser(@NotNull final String uid, @NotNull final DatabaseCallback<User> callback) {
         getData(USERS_PATH + "/" + uid, User.class, callback);
     }
 
-    /// get all the users from the database
-    /// @param callback the callback to call when the operation is completed
-    ///              the callback will receive a list of user objects
-    ///            if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see List
-    /// @see User
     public void getUserList(@NotNull final DatabaseCallback<List<User>> callback) {
         getDataList(USERS_PATH, User.class, callback);
     }

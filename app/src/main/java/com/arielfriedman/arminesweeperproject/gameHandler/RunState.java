@@ -47,28 +47,27 @@ public class RunState {
     }
     //
 
-    public void setNewRun() {
+    private void setNewRunValues() {
         this.money = 0;
         this.health = 3;
         this.mineCount = 30;
         this.round = 1;
         this.firstClicks = 1;
-        this.items.clear();
+
         //booleans for special items
         this.mineBombs = false;
+    }
+
+    public void setNewRun() {
+        setNewRunValues();
+        this.items.clear();
         notifyMoneyChanged();
         notifyHealthChanged();
     }
 
     private RunState() {
-        this.money = 0;
-        this.health = 3;
-        this.mineCount = 30;
-        this.round = 1;
-        this.firstClicks = 1;
+        setNewRunValues();
         items = new ArrayList<>();
-        //booleans for special items
-        this.mineBombs = false;
     }
 
     public static RunState getInstance() {
@@ -124,7 +123,8 @@ public class RunState {
 
     public void changeFirstClicks(int amount) {
         this.firstClicks += amount;
-        triggerEvent(GameEventType.FIRSTCLICK);
+        if (amount < 0)
+            triggerEvent(GameEventType.FIRSTCLICK);
     }
 
     public void changeMines(int amount){
@@ -133,7 +133,7 @@ public class RunState {
 
     public void addItem(Item item) {
         items.add(item);
-        triggerEvent(GameEventType.ONOBTAIN);
+        item.trigger(GameEventType.ONOBTAIN, this);
     }
 
     public int getMineCount() {
@@ -159,7 +159,7 @@ public class RunState {
     }
 
     public void triggerEvent(GameEventType event) {
-        items.sort((a, b) -> Integer.compare(b.getPriority(), a.getPriority()));
+        items.sort((a, b) -> Integer.compare(b.getPriority(), a.getPriority())); // Sorts items from high priority to low
 
         for (Item item : new ArrayList<>(items)) {
             item.trigger(event, this);
